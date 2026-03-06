@@ -23,14 +23,14 @@ function genTemp() {
 }
 
 const circuits = [
-  { key: '1', name: 'HK-01 Nordflügel EG-OG1', supply: 55.3, return_: 40.2, setpoint: 55, valve: 78, pump: 82, mode: 'auto', status: 'running', curve: '1.4' },
-  { key: '2', name: 'HK-02 Südflügel EG-OG1', supply: 54.1, return_: 39.8, setpoint: 55, valve: 65, pump: 75, mode: 'auto', status: 'running', curve: '1.4' },
-  { key: '3', name: 'HK-03 Nordflügel OG2-OG3', supply: 53.8, return_: 41.0, setpoint: 54, valve: 72, pump: 70, mode: 'auto', status: 'running', curve: '1.2' },
-  { key: '4', name: 'HK-04 Südflügel OG2-OG3', supply: 52.5, return_: 38.5, setpoint: 54, valve: 58, pump: 68, mode: 'auto', status: 'running', curve: '1.2' },
-  { key: '5', name: 'HK-05 RLT-Nachheizung', supply: 50.2, return_: 37.8, setpoint: 50, valve: 45, pump: 60, mode: 'auto', status: 'running', curve: '1.0' },
-  { key: '6', name: 'HK-06 FBH Empfangsbereich', supply: 35.0, return_: 28.5, setpoint: 35, valve: 88, pump: 55, mode: 'auto', status: 'running', curve: '0.6' },
-  { key: '7', name: 'HK-07 Trinkwarmwasser', supply: 60.2, return_: 45.3, setpoint: 60, valve: 92, pump: 90, mode: 'auto', status: 'running', curve: '-' },
-  { key: '8', name: 'HK-08 Sonderzone UG', supply: 40.0, return_: 33.0, setpoint: 40, valve: 30, pump: 42, mode: 'manual', status: 'running', curve: '0.8' },
+  { key: '1', name: 'HK-01 北翼 EG-OG1', supply: 55.3, return_: 40.2, setpoint: 55, valve: 78, pump: 82, mode: 'auto', status: 'running', curve: '1.4' },
+  { key: '2', name: 'HK-02 南翼 EG-OG1', supply: 54.1, return_: 39.8, setpoint: 55, valve: 65, pump: 75, mode: 'auto', status: 'running', curve: '1.4' },
+  { key: '3', name: 'HK-03 北翼 OG2-OG3', supply: 53.8, return_: 41.0, setpoint: 54, valve: 72, pump: 70, mode: 'auto', status: 'running', curve: '1.2' },
+  { key: '4', name: 'HK-04 南翼 OG2-OG3', supply: 52.5, return_: 38.5, setpoint: 54, valve: 58, pump: 68, mode: 'auto', status: 'running', curve: '1.2' },
+  { key: '5', name: 'HK-05 RLT 再加热', supply: 50.2, return_: 37.8, setpoint: 50, valve: 45, pump: 60, mode: 'auto', status: 'running', curve: '1.0' },
+  { key: '6', name: 'HK-06 地暖 前台区域', supply: 35.0, return_: 28.5, setpoint: 35, valve: 88, pump: 55, mode: 'auto', status: 'running', curve: '0.6' },
+  { key: '7', name: 'HK-07 生活热水', supply: 60.2, return_: 45.3, setpoint: 60, valve: 92, pump: 90, mode: 'auto', status: 'running', curve: '-' },
+  { key: '8', name: 'HK-08 地下层特殊区域', supply: 40.0, return_: 33.0, setpoint: 40, valve: 30, pump: 42, mode: 'manual', status: 'running', curve: '0.8' },
 ]
 
 export default function HeatingPage() {
@@ -45,9 +45,9 @@ export default function HeatingPage() {
     { title: t.heat.supplyTemp, dataIndex: 'supply', key: 'supply', width: 85, render: (v: number) => <Text style={{ color: '#f5222d' }}>{v.toFixed(1)}°C</Text> },
     { title: t.heat.returnTemp, dataIndex: 'return_', key: 'return_', width: 85, render: (v: number) => `${v.toFixed(1)}°C` },
     { title: t.heat.setpoint, dataIndex: 'setpoint', key: 'setpoint', width: 75, render: (v: number) => `${v}°C` },
-    { title: 'Heizkurve', dataIndex: 'curve', key: 'curve', width: 80, render: (v: string) => v === '-' ? '-' : `${v}` },
+    { title: '供热曲线', dataIndex: 'curve', key: 'curve', width: 80, render: (v: string) => v === '-' ? '-' : `${v}` },
     { title: t.heat.valvePos, dataIndex: 'valve', key: 'valve', width: 100, render: (v: number) => <Progress percent={v} size="small" style={{ width: 80 }} /> },
-    { title: 'Pumpe', dataIndex: 'pump', key: 'pump', width: 80, render: (v: number) => `${v}%` },
+    { title: '水泵', dataIndex: 'pump', key: 'pump', width: 80, render: (v: number) => `${v}%` },
     { title: t.common.mode, dataIndex: 'mode', key: 'mode', width: 80, render: (v: string) => <Tag color={v === 'auto' ? 'blue' : 'orange'}>{v === 'auto' ? t.common.auto : t.common.manual}</Tag> },
     { title: t.common.status, dataIndex: 'status', key: 'status', width: 80, render: () => <Tag color="green">{t.common.running}</Tag> },
     { title: t.common.operation, key: 'op', width: 170, render: (_: any, r: any) => (
@@ -68,11 +68,11 @@ export default function HeatingPage() {
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.heat.supplyTemp} value={55.3} suffix="°C" valueStyle={{ color: '#f5222d' }} prefix={<FireOutlined />} /><Text type="secondary">{t.heat.setpoint}: 55°C</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.heat.returnTemp} value={40.2} suffix="°C" /><Text type="secondary">{t.heat.tempDiff}: 15.1°C</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.heat.boilerStatus} value={t.common.running} valueStyle={{ color: '#52c41a' }} /><Text type="secondary">{t.heat.loadRate}: 68% · Kessel 1+2</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.heat.boilerStatus} value={t.common.running} valueStyle={{ color: '#52c41a' }} /><Text type="secondary">{t.heat.loadRate}: 68% · 1号+2号锅炉</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.heat.circuitsRunning} value="8/8" valueStyle={{ color: '#13c2c2' }} prefix={<DashboardOutlined />} /><Text type="secondary">{t.heat.outdoorTemp}: 3.2°C</Text></Card></Col>
       </Row>
 
-      <Card title={t.heat.trendTitle} extra={<Text type="secondary">Witterungsgeführte Vorlauftemperatur</Text>}>
+      <Card title={t.heat.trendTitle} extra={<Text type="secondary">气候补偿供水温度</Text>}>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={trend}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -88,20 +88,20 @@ export default function HeatingPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.heat.circuitStatus} extra={<Text type="secondary">8 Heizkreise · Siemens RVS Regler</Text>}>
+      <Card title={t.heat.circuitStatus} extra={<Text type="secondary">8个供暖回路 · Siemens RVS 控制器</Text>}>
         <Table columns={cols} dataSource={circuits} pagination={false} size="small" scroll={{ x: 1100 }} />
       </Card>
 
-      <Card title="Kesselanlage" size="small">
+      <Card title="锅炉设备" size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
-          <Descriptions.Item label="Kessel 1">Viessmann Vitocrossal 300 · 200kW · <Tag color="green">Betrieb</Tag></Descriptions.Item>
-          <Descriptions.Item label="Kessel 2">Viessmann Vitocrossal 300 · 200kW · <Tag color="green">Betrieb</Tag></Descriptions.Item>
-          <Descriptions.Item label="Brennstoff">Erdgas H · 12.3 m³/h</Descriptions.Item>
-          <Descriptions.Item label="Abgastemperatur">128°C / 135°C</Descriptions.Item>
-          <Descriptions.Item label="Betriebsstunden">12,450h / 8,230h</Descriptions.Item>
-          <Descriptions.Item label="Nächste Wartung">2026-04-15</Descriptions.Item>
-          <Descriptions.Item label="Pufferspeicher">2.000L · 58°C</Descriptions.Item>
-          <Descriptions.Item label="Außentemperatur">3.2°C · Prognose: 5°C</Descriptions.Item>
+          <Descriptions.Item label="1号锅炉">Viessmann Vitocrossal 300 · 200kW · <Tag color="green">运行</Tag></Descriptions.Item>
+          <Descriptions.Item label="2号锅炉">Viessmann Vitocrossal 300 · 200kW · <Tag color="green">运行</Tag></Descriptions.Item>
+          <Descriptions.Item label="燃料">天然气 H · 12.3 m³/h</Descriptions.Item>
+          <Descriptions.Item label="排烟温度">128°C / 135°C</Descriptions.Item>
+          <Descriptions.Item label="运行时数">12,450h / 8,230h</Descriptions.Item>
+          <Descriptions.Item label="下次维保">2026-04-15</Descriptions.Item>
+          <Descriptions.Item label="蓄热水箱">2.000L · 58°C</Descriptions.Item>
+          <Descriptions.Item label="室外温度">3.2°C · 预测: 5°C</Descriptions.Item>
         </Descriptions>
       </Card>
 

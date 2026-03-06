@@ -2,7 +2,7 @@
 
 import { useI18n } from '@/components/i18n-provider'
 import { useState, useMemo } from 'react'
-import { Card, Statistic, Table, Tag, Row, Col, Typography, Button, Space, Modal, Badge, Descriptions, message } from 'antd'
+import { Card, Statistic, Table, Tag, Row, Col, Typography, Button, Space, Modal, Badge, message } from 'antd'
 import {
   AlertOutlined, ThunderboltOutlined, TeamOutlined, ClockCircleOutlined,
   ExportOutlined, ReloadOutlined, SettingOutlined, CheckCircleOutlined,
@@ -26,7 +26,7 @@ function genEnergy() {
 }
 
 function genWeekly() {
-  const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+  const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
   return days.map((d, i) => ({
     day: d,
     thisWeek: Math.round(i < 5 ? 920 + Math.random() * 180 : 280 + Math.random() * 120),
@@ -35,39 +35,39 @@ function genWeekly() {
 }
 
 const systemModules = [
-  { name: 'DDC / Automation', count: 12, online: 12 },
-  { name: 'RLT / AHU', count: 6, online: 6 },
-  { name: 'Heizkreise', count: 8, online: 8 },
-  { name: 'Kältemaschinen', count: 3, online: 2 },
-  { name: 'DALI Gateway', count: 4, online: 3 },
-  { name: 'Energiezähler', count: 14, online: 14 },
+  { name: 'DDC 自控站', count: 12, online: 12 },
+  { name: 'RLT 空调机组', count: 6, online: 6 },
+  { name: '供暖回路', count: 8, online: 8 },
+  { name: '冷水机组', count: 3, online: 2 },
+  { name: 'DALI 网关', count: 4, online: 3 },
+  { name: '能耗计量表', count: 14, online: 14 },
 ]
 
 const alarms = [
-  { key: '1', time: '14:23:05', module: 'RLT-OG2', content: 'Zuluftventilator FU-Störung (F31)', level: 'A', device: 'AHU-03' },
-  { key: '2', time: '13:45:12', module: 'Kälte', content: 'Kaltwasser-VL Temp. >14°C (Grenzwert: 12°C)', level: 'B', device: 'KM-02' },
-  { key: '3', time: '12:10:30', module: 'Raum OG3', content: 'CO₂ >1000ppm Konferenzraum 3.12', level: 'C', device: 'DDC-OG3-02' },
-  { key: '4', time: '11:30:00', module: 'Heizung', content: 'Brennerstörung Kessel 1 - Flammenüberwachung', level: 'B', device: 'Kessel-01' },
-  { key: '5', time: '10:52:18', module: 'DALI', content: 'Bus-Kommunikationsfehler Gateway OG1', level: 'C', device: 'DALI-GW-02' },
-  { key: '6', time: '09:15:44', module: 'Kälte', content: 'Kühlturm-Ventilator Übertemperatur', level: 'B', device: 'KT-01' },
+  { key: '1', time: '14:23:05', module: 'RLT-OG2', content: '送风机变频器故障 (F31)', level: 'A', device: 'AHU-03' },
+  { key: '2', time: '13:45:12', module: '制冷', content: '冷水供水温度 >14°C (阈值: 12°C)', level: 'B', device: 'KM-02' },
+  { key: '3', time: '12:10:30', module: 'OG3 房间', content: '会议室 3.12 CO₂ >1000ppm', level: 'C', device: 'DDC-OG3-02' },
+  { key: '4', time: '11:30:00', module: '供暖', content: '1号锅炉燃烧器故障 - 火焰监控异常', level: 'B', device: 'Kessel-01' },
+  { key: '5', time: '10:52:18', module: 'DALI', content: 'OG1 网关总线通讯故障', level: 'C', device: 'DALI-GW-02' },
+  { key: '6', time: '09:15:44', module: '制冷', content: '冷却塔风机过温 (热继电器)', level: 'B', device: 'KT-01' },
 ]
 
 const rooms = [
-  { key: '1', name: 'EG - Empfang', temp: 22.3, humidity: 44, co2: 485, persons: 3, setpoint: 22 },
-  { key: '2', name: 'OG1 - Großraumbüro', temp: 22.8, humidity: 47, co2: 620, persons: 28, setpoint: 22 },
-  { key: '3', name: 'OG1 - Besprechung 1.04', temp: 23.4, humidity: 51, co2: 780, persons: 12, setpoint: 23 },
-  { key: '4', name: 'OG2 - Büro 2.01', temp: 22.1, humidity: 43, co2: 520, persons: 4, setpoint: 22 },
-  { key: '5', name: 'OG2 - Konferenz 2.10', temp: 24.2, humidity: 56, co2: 940, persons: 18, setpoint: 23 },
-  { key: '6', name: 'OG3 - Büro 3.05', temp: 21.9, humidity: 42, co2: 410, persons: 2, setpoint: 22 },
-  { key: '7', name: 'OG3 - Konferenz 3.12', temp: 25.1, humidity: 58, co2: 1050, persons: 22, setpoint: 23 },
-  { key: '8', name: 'UG - Serverraum', temp: 21.0, humidity: 38, co2: 390, persons: 0, setpoint: 21 },
+  { key: '1', name: 'EG - 前台接待', temp: 22.3, humidity: 44, co2: 485, persons: 3, setpoint: 22 },
+  { key: '2', name: 'OG1 - 开放办公区', temp: 22.8, humidity: 47, co2: 620, persons: 28, setpoint: 22 },
+  { key: '3', name: 'OG1 - 会议室 1.04', temp: 23.4, humidity: 51, co2: 780, persons: 12, setpoint: 23 },
+  { key: '4', name: 'OG2 - 办公室 2.01', temp: 22.1, humidity: 43, co2: 520, persons: 4, setpoint: 22 },
+  { key: '5', name: 'OG2 - 会议室 2.10', temp: 24.2, humidity: 56, co2: 940, persons: 18, setpoint: 23 },
+  { key: '6', name: 'OG3 - 办公室 3.05', temp: 21.9, humidity: 42, co2: 410, persons: 2, setpoint: 22 },
+  { key: '7', name: 'OG3 - 会议室 3.12', temp: 25.1, humidity: 58, co2: 1050, persons: 22, setpoint: 23 },
+  { key: '8', name: 'UG - 机房', temp: 21.0, humidity: 38, co2: 390, persons: 0, setpoint: 21 },
 ]
 
 const energyDistribution = [
-  { name: 'HVAC', value: 48, color: '#1677ff' },
-  { name: 'Beleuchtung', value: 22, color: '#faad14' },
-  { name: 'IT / Server', value: 18, color: '#52c41a' },
-  { name: 'Sonstige', value: 12, color: '#d9d9d9' },
+  { name: '暖通空调', value: 48, color: '#1677ff' },
+  { name: '照明', value: 22, color: '#faad14' },
+  { name: 'IT/服务器', value: 18, color: '#52c41a' },
+  { name: '其他', value: 12, color: '#d9d9d9' },
 ]
 
 export default function DashboardPage() {
@@ -105,8 +105,8 @@ export default function DashboardPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <Title level={4} style={{ margin: 0 }}>Bürogebäude Westpark — {t.nav.dashboard}</Title>
-          <Text type="secondary">{t.dash.realtimeOverview} · Westpark-Allee 12, München · ~8.500 m²</Text>
+          <Title level={4} style={{ margin: 0 }}>西园办公大楼 — {t.nav.dashboard}</Title>
+          <Text type="secondary">{t.dash.realtimeOverview} · 慕尼黑·西园大道12号 · 约8,500 m²</Text>
         </div>
         <Space>
           <Button icon={<ReloadOutlined />} onClick={() => message.info(t.actions.refresh)}>{t.actions.refresh}</Button>
@@ -167,7 +167,7 @@ export default function DashboardPage() {
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="thisWeek" name={t.common.current} fill="#1677ff" radius={[4,4,0,0]} />
-                <Bar dataKey="lastWeek" name="KW09" fill="#d9d9d9" radius={[4,4,0,0]} />
+                <Bar dataKey="lastWeek" name="上周" fill="#d9d9d9" radius={[4,4,0,0]} />
               </BarChart>
             </ResponsiveContainer>
           </Card>
@@ -181,7 +181,7 @@ export default function DashboardPage() {
           </Card>
         </Col>
         <Col xs={24} lg={8}>
-          <Card title="Energieverteilung">
+          <Card title="能耗分布">
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
                 <Pie data={energyDistribution} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3} dataKey="value" label={({ name, value }) => `${name} ${value}%`}>

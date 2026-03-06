@@ -16,14 +16,14 @@ const ifaces = [
 ]
 
 const events = [
-  { key: '1', time: '14:23:05', iface: 'DALI-2 / IP', event: 'Verbindung verloren - Gateway OG3 (192.168.10.63) nicht erreichbar', level: 'error' },
-  { key: '2', time: '14:20:00', iface: 'BACnet/IP', event: 'Device DDC-OG2-02 Timeout (30s) - Retry erfolgreich nach 5s', level: 'warning' },
-  { key: '3', time: '13:45:10', iface: 'Modbus TCP', event: 'CRC-Fehler bei PLC-Kälte Register 40001-40010 (1x Retry OK)', level: 'warning' },
-  { key: '4', time: '13:00:00', iface: 'M-Bus', event: 'Ablesung abgeschlossen: 14 Zähler, 168 Datenpunkte', level: 'info' },
-  { key: '5', time: '12:30:15', iface: 'BACnet/IP', event: 'COV Subscription erneuert: DDC-OG1-01 (128 Objekte)', level: 'info' },
-  { key: '6', time: '12:00:00', iface: 'KNX/IP', event: 'Gruppentelegramm empfangen: 320 Adressen aktiv', level: 'info' },
-  { key: '7', time: '11:15:30', iface: 'OPC UA', event: 'Session verlängert: Siemens S7-1500 (Cert-based Auth)', level: 'info' },
-  { key: '8', time: '08:00:00', iface: 'Alle', event: 'Tagesstatistik: 98 Geräte online, 2.710 Datenpunkte aktiv, 0.02% Fehlerrate', level: 'info' },
+  { key: '1', time: '14:23:05', iface: 'DALI-2 / IP', event: '连接丢失 - OG3网关 (192.168.10.63) 不可达', level: 'error' },
+  { key: '2', time: '14:20:00', iface: 'BACnet/IP', event: '设备 DDC-OG2-02 超时 (30s) - 5s后重试成功', level: 'warning' },
+  { key: '3', time: '13:45:10', iface: 'Modbus TCP', event: 'PLC-Kälte 寄存器 40001-40010 CRC校验错误 (重试1次成功)', level: 'warning' },
+  { key: '4', time: '13:00:00', iface: 'M-Bus', event: '抄表完成: 14块表计, 168个数据点', level: 'info' },
+  { key: '5', time: '12:30:15', iface: 'BACnet/IP', event: 'COV订阅已更新: DDC-OG1-01 (128个对象)', level: 'info' },
+  { key: '6', time: '12:00:00', iface: 'KNX/IP', event: '组报文已接收: 320个地址活跃', level: 'info' },
+  { key: '7', time: '11:15:30', iface: 'OPC UA', event: '会话已延续: Siemens S7-1500 (证书认证)', level: 'info' },
+  { key: '8', time: '08:00:00', iface: 'Alle', event: '日统计: 98台设备在线, 2710个数据点活跃, 0.02%错误率', level: 'info' },
 ]
 
 export default function InterfacesPage() {
@@ -45,8 +45,8 @@ export default function InterfacesPage() {
     { title: t.common.status, dataIndex: 'status', key: 'status', width: 80, render: (v: string) => <Tag color={v === 'online' ? 'green' : 'red'}>{v === 'online' ? t.status.online : t.status.offline}</Tag> },
     { title: t.common.operation, key: 'op', width: 180, render: (_: any, r: any) => (
       <Space>
-        <Button size="small" type="link" icon={<ReloadOutlined />} onClick={() => message.info(`${r.name} wird neu gestartet...`)}>{t.iface.restartIface}</Button>
-        <Button size="small" type="link" icon={<SearchOutlined />} onClick={() => message.info(`Scan auf ${r.name}...`)}>{t.iface.scanDevices}</Button>
+        <Button size="small" type="link" icon={<ReloadOutlined />} onClick={() => message.info(`${r.name} 正在重启...`)}>{t.iface.restartIface}</Button>
+        <Button size="small" type="link" icon={<SearchOutlined />} onClick={() => message.info(`扫描 ${r.name}...`)}>{t.iface.scanDevices}</Button>
       </Space>
     )},
   ]
@@ -68,26 +68,26 @@ export default function InterfacesPage() {
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.totalProtocols} value={ifaces.length} prefix={<ApiOutlined />} /><Text type="secondary">{t.iface.configured}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.onlineDevices} value={totalDevices} valueStyle={{ color: '#52c41a' }} prefix={<CheckCircleOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.offlineIface} value={offlineIfaces} valueStyle={{ color: offlineIfaces > 0 ? '#f5222d' : '#52c41a' }} prefix={<WarningOutlined />} /><Text type="secondary">{offlineIfaces > 0 ? t.iface.needFix : 'Alle OK'}</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.offlineIface} value={offlineIfaces} valueStyle={{ color: offlineIfaces > 0 ? '#f5222d' : '#52c41a' }} prefix={<WarningOutlined />} /><Text type="secondary">{offlineIfaces > 0 ? t.iface.needFix : '全部正常'}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.dataThroughput} value={totalRate} suffix={t.iface.msgPerSec} /></Card></Col>
       </Row>
 
-      <Card title={t.iface.ifaceStatus} extra={<Text type="secondary">{onlineIfaces}/{ifaces.length} aktiv</Text>}>
+      <Card title={t.iface.ifaceStatus} extra={<Text type="secondary">{onlineIfaces}/{ifaces.length} 活跃</Text>}>
         <Table columns={ifaceCols} dataSource={ifaces} pagination={false} size="small" scroll={{ x: 1000 }} />
       </Card>
 
-      <Card title={t.iface.eventLog} extra={<Text type="secondary">Heute</Text>}>
+      <Card title={t.iface.eventLog} extra={<Text type="secondary">今日</Text>}>
         <Table columns={eventCols} dataSource={events} pagination={false} size="small" scroll={{ x: 800 }} />
       </Card>
 
-      <Card title="Netzwerk-Infrastruktur" size="small">
+      <Card title="网络基础设施" size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
-          <Descriptions.Item label="GA-Netzwerk">VLAN 10 · 192.168.10.0/24 · 1 Gbit</Descriptions.Item>
-          <Descriptions.Item label="Management">VLAN 20 · 192.168.20.0/24</Descriptions.Item>
-          <Descriptions.Item label="Switch">Cisco Catalyst 2960-L · 2× PoE</Descriptions.Item>
-          <Descriptions.Item label="BACnet Router">Loytec LGATE-950 · 2 Stück</Descriptions.Item>
-          <Descriptions.Item label="Modbus Gateway">HMS Anybus X-gw · 1 Stück</Descriptions.Item>
-          <Descriptions.Item label="Firewall">GA-Netz isoliert · nur Port 443 nach außen</Descriptions.Item>
+          <Descriptions.Item label="楼宇自控网络">VLAN 10 · 192.168.10.0/24 · 1 Gbit</Descriptions.Item>
+          <Descriptions.Item label="管理网络">VLAN 20 · 192.168.20.0/24</Descriptions.Item>
+          <Descriptions.Item label="交换机">Cisco Catalyst 2960-L · 2× PoE</Descriptions.Item>
+          <Descriptions.Item label="BACnet 路由器">Loytec LGATE-950 · 2台</Descriptions.Item>
+          <Descriptions.Item label="Modbus 网关">HMS Anybus X-gw · 1台</Descriptions.Item>
+          <Descriptions.Item label="防火墙">自控网络隔离 · 仅443端口对外</Descriptions.Item>
         </Descriptions>
       </Card>
     </div>

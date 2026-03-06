@@ -8,13 +8,13 @@ import { SettingOutlined, DatabaseOutlined, SafetyOutlined, CloudUploadOutlined,
 const { Title, Text } = Typography
 
 const backups = [
-  { key: '1', time: '2026-03-06 02:00', type: 'auto', size: '268 MB', items: 'DB + Trends + Config', status: 'success' },
-  { key: '2', time: '2026-03-05 02:00', type: 'auto', size: '265 MB', items: 'DB + Trends + Config', status: 'success' },
-  { key: '3', time: '2026-03-04 02:00', type: 'auto', size: '264 MB', items: 'DB + Trends + Config', status: 'success' },
-  { key: '4', time: '2026-03-03 14:30', type: 'manual', size: '262 MB', items: 'Vollsicherung', status: 'success' },
-  { key: '5', time: '2026-03-03 02:00', type: 'auto', size: '261 MB', items: 'DB + Trends + Config', status: 'success' },
-  { key: '6', time: '2026-03-02 02:00', type: 'auto', size: '258 MB', items: 'DB + Trends + Config', status: 'failed' },
-  { key: '7', time: '2026-03-01 02:00', type: 'auto', size: '256 MB', items: 'DB + Trends + Config', status: 'success' },
+  { key: '1', time: '2026-03-06 02:00', type: 'auto', size: '268 MB', items: '数据库+趋势+配置', status: 'success' },
+  { key: '2', time: '2026-03-05 02:00', type: 'auto', size: '265 MB', items: '数据库+趋势+配置', status: 'success' },
+  { key: '3', time: '2026-03-04 02:00', type: 'auto', size: '264 MB', items: '数据库+趋势+配置', status: 'success' },
+  { key: '4', time: '2026-03-03 14:30', type: 'manual', size: '262 MB', items: '完整备份', status: 'success' },
+  { key: '5', time: '2026-03-03 02:00', type: 'auto', size: '261 MB', items: '数据库+趋势+配置', status: 'success' },
+  { key: '6', time: '2026-03-02 02:00', type: 'auto', size: '258 MB', items: '数据库+趋势+配置', status: 'failed' },
+  { key: '7', time: '2026-03-01 02:00', type: 'auto', size: '256 MB', items: '数据库+趋势+配置', status: 'success' },
 ]
 
 export default function SettingsPage() {
@@ -24,7 +24,7 @@ export default function SettingsPage() {
   const backupCols = [
     { title: t.set.backupTime, dataIndex: 'time', key: 'time' },
     { title: t.set.backupType, dataIndex: 'type', key: 'type', width: 80, render: (v: string) => <Tag color={v === 'auto' ? 'blue' : 'green'}>{v === 'auto' ? t.set.autoBackup : t.set.manualBackup}</Tag> },
-    { title: 'Inhalt', dataIndex: 'items', key: 'items' },
+    { title: '内容', dataIndex: 'items', key: 'items' },
     { title: t.set.backupSize, dataIndex: 'size', key: 'size', width: 80 },
     { title: t.common.status, dataIndex: 'status', key: 'status', width: 80, render: (v: string) => <Tag color={v === 'success' ? 'green' : 'red'}>{v === 'success' ? t.set.success : t.set.failed}</Tag> },
     { title: t.common.operation, key: 'op', width: 120, render: (_: any, r: any) => <Space><Button size="small" type="link">{t.common.download}</Button>{r.status === 'success' && <Button size="small" type="link">Restore</Button>}</Space> },
@@ -51,35 +51,35 @@ export default function SettingsPage() {
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 2 }}>
           <Descriptions.Item label="BMS Software">Siemens Desigo CC v6.0.2</Descriptions.Item>
           <Descriptions.Item label="Server">Linux Ubuntu 22.04 / 8 Core Xeon / 32GB ECC</Descriptions.Item>
-          <Descriptions.Item label="Datenbank">PostgreSQL 16.2 · 42 GB (Trend: 38 GB)</Descriptions.Item>
-          <Descriptions.Item label="Betriebszeit">428 Tage (seit 2025-01-03)</Descriptions.Item>
-          <Descriptions.Item label="CPU-Auslastung">18% (Ø 24h: 22%)</Descriptions.Item>
-          <Descriptions.Item label="Arbeitsspeicher">12.4 / 32 GB (39%)</Descriptions.Item>
-          <Descriptions.Item label="Festplatte">142 / 500 GB SSD RAID-1 (28%)</Descriptions.Item>
-          <Descriptions.Item label="Netzwerk">1 Gbit LAN · GA-VLAN 10</Descriptions.Item>
-          <Descriptions.Item label="TLS-Zertifikat">Let's Encrypt · gültig bis 2026-06-15</Descriptions.Item>
-          <Descriptions.Item label="Lizenz">Desigo CC Enterprise · 3.000 Datenpunkte</Descriptions.Item>
-          <Descriptions.Item label="Firmware DDC">Siemens PXC v3.02.18 (9 Geräte)</Descriptions.Item>
-          <Descriptions.Item label="USV">APC Smart-UPS 3000 · 45 min Autonomie</Descriptions.Item>
+          <Descriptions.Item label="数据库">PostgreSQL 16.2 · 42 GB (趋势数据: 38 GB)</Descriptions.Item>
+          <Descriptions.Item label="运行时间">428 天 (自2025-01-03起)</Descriptions.Item>
+          <Descriptions.Item label="CPU使用率">18% (24h均值: 22%)</Descriptions.Item>
+          <Descriptions.Item label="内存">12.4 / 32 GB (39%)</Descriptions.Item>
+          <Descriptions.Item label="硬盘">142 / 500 GB SSD RAID-1 (28%)</Descriptions.Item>
+          <Descriptions.Item label="网络">1 Gbit LAN · GA-VLAN 10</Descriptions.Item>
+          <Descriptions.Item label="TLS证书">Let's Encrypt · 有效期至 2026-06-15</Descriptions.Item>
+          <Descriptions.Item label="许可证">Desigo CC Enterprise · 3.000 数据点</Descriptions.Item>
+          <Descriptions.Item label="DDC固件">Siemens PXC v3.02.18 (9台设备)</Descriptions.Item>
+          <Descriptions.Item label="UPS不间断电源">APC Smart-UPS 3000 · 45分钟自主供电</Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Card title={t.set.dataBackup} extra={<Button type="primary" icon={<CloudUploadOutlined />} onClick={() => { setBackupModal(true); setTimeout(() => { setBackupModal(false); message.success('Sicherung abgeschlossen (268 MB)') }, 2000) }}>{t.set.backupNow}</Button>}>
+      <Card title={t.set.dataBackup} extra={<Button type="primary" icon={<CloudUploadOutlined />} onClick={() => { setBackupModal(true); setTimeout(() => { setBackupModal(false); message.success('备份完成 (268 MB)') }, 2000) }}>{t.set.backupNow}</Button>}>
         <Table columns={backupCols} dataSource={backups} pagination={false} size="small" />
       </Card>
 
-      <Card title="Wartungsplan" size="small">
+      <Card title="维保计划" size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
-          <Descriptions.Item label="Filterwechsel RLT">2026-03-20 (fällig)</Descriptions.Item>
-          <Descriptions.Item label="Kesselwartung">2026-04-15</Descriptions.Item>
-          <Descriptions.Item label="Kältemaschine">2026-05-10</Descriptions.Item>
-          <Descriptions.Item label="USV Batterietest">2026-04-01</Descriptions.Item>
-          <Descriptions.Item label="Server-Wartung">2026-06-01</Descriptions.Item>
-          <Descriptions.Item label="Brandschutzklappen">2026-09-15</Descriptions.Item>
+          <Descriptions.Item label="RLT过滤器更换">2026-03-20 (到期)</Descriptions.Item>
+          <Descriptions.Item label="锅炉维保">2026-04-15</Descriptions.Item>
+          <Descriptions.Item label="冷水机组">2026-05-10</Descriptions.Item>
+          <Descriptions.Item label="UPS电池测试">2026-04-01</Descriptions.Item>
+          <Descriptions.Item label="服务器维护">2026-06-01</Descriptions.Item>
+          <Descriptions.Item label="防火阀检测">2026-09-15</Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Modal title={t.set.backupNow} open={backupModal} footer={null} closable={false}><p>Datensicherung läuft... (DB + Trends + Config)</p></Modal>
+      <Modal title={t.set.backupNow} open={backupModal} footer={null} closable={false}><p>数据备份进行中... (数据库+趋势+配置)</p></Modal>
     </div>
   )
 }

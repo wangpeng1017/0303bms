@@ -24,13 +24,13 @@ function genTrend7d() {
 }
 
 const archives = [
-  { key: '1', name: '2026-03 Monatsbericht', period: '2026-03-01 ~ 06', size: '2.8 MB', records: '215,400', points: 1376, status: 'partial' },
-  { key: '2', name: '2026-02 Monatsbericht', period: '2026-02-01 ~ 28', size: '14.2 MB', records: '1,156,432', points: 1376, status: 'archived' },
-  { key: '3', name: '2026-01 Monatsbericht', period: '2026-01-01 ~ 31', size: '15.8 MB', records: '1,389,012', points: 1376, status: 'archived' },
-  { key: '4', name: '2025-12 Monatsbericht', period: '2025-12-01 ~ 31', size: '15.1 MB', records: '1,324,800', points: 1376, status: 'archived' },
-  { key: '5', name: '2025-11 Monatsbericht', period: '2025-11-01 ~ 30', size: '13.9 MB', records: '1,248,000', points: 1376, status: 'archived' },
-  { key: '6', name: '2025-10 Monatsbericht', period: '2025-10-01 ~ 31', size: '14.5 MB', records: '1,310,400', points: 1376, status: 'archived' },
-  { key: '7', name: '2025 Q3 Quartalsbericht', period: '2025-07 ~ 09', size: '42.1 MB', records: '3,801,600', points: 1376, status: 'archived' },
+  { key: '1', name: '2026-03 月度报告', period: '2026-03-01 ~ 06', size: '2.8 MB', records: '215,400', points: 1376, status: 'partial' },
+  { key: '2', name: '2026-02 月度报告', period: '2026-02-01 ~ 28', size: '14.2 MB', records: '1,156,432', points: 1376, status: 'archived' },
+  { key: '3', name: '2026-01 月度报告', period: '2026-01-01 ~ 31', size: '15.8 MB', records: '1,389,012', points: 1376, status: 'archived' },
+  { key: '4', name: '2025-12 月度报告', period: '2025-12-01 ~ 31', size: '15.1 MB', records: '1,324,800', points: 1376, status: 'archived' },
+  { key: '5', name: '2025-11 月度报告', period: '2025-11-01 ~ 30', size: '13.9 MB', records: '1,248,000', points: 1376, status: 'archived' },
+  { key: '6', name: '2025-10 月度报告', period: '2025-10-01 ~ 31', size: '14.5 MB', records: '1,310,400', points: 1376, status: 'archived' },
+  { key: '7', name: '2025 Q3 季度报告', period: '2025-07 ~ 09', size: '42.1 MB', records: '3,801,600', points: 1376, status: 'archived' },
 ]
 
 export default function TrendsPage() {
@@ -43,10 +43,10 @@ export default function TrendsPage() {
   const archCols = [
     { title: t.common.name, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
     { title: t.common.period, dataIndex: 'period', key: 'period' },
-    { title: 'Trendpunkte', dataIndex: 'points', key: 'points', width: 100, render: (v: number) => v.toLocaleString() },
+    { title: '趋势点位', dataIndex: 'points', key: 'points', width: 100, render: (v: number) => v.toLocaleString() },
     { title: t.common.records, dataIndex: 'records', key: 'records', width: 110 },
     { title: t.common.size, dataIndex: 'size', key: 'size', width: 80 },
-    { title: t.common.status, dataIndex: 'status', key: 'status', width: 90, render: (v: string) => <Tag color={v === 'archived' ? 'green' : 'blue'}>{v === 'archived' ? t.trend.archived : 'Aktuell'}</Tag> },
+    { title: t.common.status, dataIndex: 'status', key: 'status', width: 90, render: (v: string) => <Tag color={v === 'archived' ? 'green' : 'blue'}>{v === 'archived' ? t.trend.archived : '当前'}</Tag> },
     { title: t.common.operation, key: 'op', width: 120, render: () => <Space><Button size="small" icon={<DownloadOutlined />} type="link">CSV</Button><Button size="small" type="link">PDF</Button></Space> },
   ]
 
@@ -61,21 +61,21 @@ export default function TrendsPage() {
             {value:'humidity',label:t.trend.humidity},
             {value:'co2',label:'CO₂'},
             {value:'energy',label:t.trend.energy},
-            {value:'supply_temp',label:'Vorlauf-Temp'},
-            {value:'valve_pos',label:'Ventilstellung'},
+            {value:'supply_temp',label:'供水温度'},
+            {value:'valve_pos',label:'阀位'},
           ]} style={{width:140}} />
-          <Button type="primary" icon={<DownloadOutlined />} onClick={() => message.success('CSV exportiert')}>{t.trend.exportCsv}</Button>
+          <Button type="primary" icon={<DownloadOutlined />} onClick={() => message.success('CSV已导出')}>{t.trend.exportCsv}</Button>
         </Space>
       </div>
 
       <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.trendPoints} value={1376} prefix={<LineChartOutlined />} /><Text type="secondary">98 Geräte · 6 Protokolle</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.sampleInterval} value="15 min" /><Text type="secondary">COV + 15min Polling</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.archiveData} value={totalArchiveSize} prefix={<DatabaseOutlined />} /><Text type="secondary">{totalRecords} Einträge</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.trendPoints} value={1376} prefix={<LineChartOutlined />} /><Text type="secondary">98台设备 · 6种协议</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.sampleInterval} value="15 min" /><Text type="secondary">COV + 15分钟轮询</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.archiveData} value={totalArchiveSize} prefix={<DatabaseOutlined />} /><Text type="secondary">{totalRecords} 条记录</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.exportFormat} value="CSV / PDF / Excel" /><Text type="secondary">{t.trend.downloadable}</Text></Card></Col>
       </Row>
 
-      <Card title={t.trend.trendCurve7d} extra={<Text type="secondary">OG1 Großraumbüro Nord · KW10</Text>}>
+      <Card title={t.trend.trendCurve7d} extra={<Text type="secondary">OG1 北侧开放办公区 · 第10周</Text>}>
         <ResponsiveContainer width="100%" height={340}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -91,18 +91,18 @@ export default function TrendsPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.trend.archiveManage} extra={<Text type="secondary">Aufbewahrung: 5 Jahre</Text>}>
+      <Card title={t.trend.archiveManage} extra={<Text type="secondary">保存期限: 5年</Text>}>
         <Table columns={archCols} dataSource={archives} pagination={false} size="small" />
       </Card>
 
-      <Card title="Archivierungs-Einstellungen" size="small">
+      <Card title="归档设置" size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
           <Descriptions.Item label="Datenbank">PostgreSQL 16.2 + TimescaleDB</Descriptions.Item>
-          <Descriptions.Item label="Aufbewahrung">5 Jahre (Rohwerte: 1 Jahr, Aggregation: 5 Jahre)</Descriptions.Item>
-          <Descriptions.Item label="Komprimierung">TimescaleDB Native · ~60% Einsparung</Descriptions.Item>
-          <Descriptions.Item label="Abtastrate">15 min Standard / COV für kritische Werte</Descriptions.Item>
-          <Descriptions.Item label="Tägliche Rotation">02:30 Uhr (nach Backup)</Descriptions.Item>
-          <Descriptions.Item label="Speicherprognose">~180 MB/Monat · 500 GB reicht ~18 Jahre</Descriptions.Item>
+          <Descriptions.Item label="保存期限">5年 (原始数据: 1年, 聚合数据: 5年)</Descriptions.Item>
+          <Descriptions.Item label="压缩">TimescaleDB 原生压缩 · 节省约60%</Descriptions.Item>
+          <Descriptions.Item label="采样率">标准 15分钟 / 关键值 COV</Descriptions.Item>
+          <Descriptions.Item label="每日轮转">02:30 (备份后)</Descriptions.Item>
+          <Descriptions.Item label="存储预测">~180 MB/月 · 500 GB 可用约18年</Descriptions.Item>
         </Descriptions>
       </Card>
     </div>

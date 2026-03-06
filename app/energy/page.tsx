@@ -22,7 +22,7 @@ function genTrend() {
 }
 
 function genMonthly() {
-  const months = ['Okt', 'Nov', 'Dez', 'Jan', 'Feb', 'Mär']
+  const months = ['10月', '11月', '12月', '1月', '2月', '3月']
   const heatingFactor = [0.6, 0.85, 1.0, 1.0, 0.9, 0.7]
   return months.map((m, i) => ({
     month: m,
@@ -33,20 +33,20 @@ function genMonthly() {
 }
 
 const meters = [
-  { key: '1', id: 'EZ-001', name: 'Hauptzähler Strom', type: 'elec', value: '148.5 kW', daily: '2,847 kWh', floor: 'Gebäude', manufacturer: 'Siemens PAC3200', status: 'online' },
-  { key: '2', id: 'EZ-002', name: 'Unterzähler EG', type: 'elec', value: '28.3 kW', daily: '542 kWh', floor: 'EG', manufacturer: 'Siemens 7KT1260', status: 'online' },
-  { key: '3', id: 'EZ-003', name: 'Unterzähler OG1', type: 'elec', value: '42.1 kW', daily: '806 kWh', floor: 'OG1', manufacturer: 'Siemens 7KT1260', status: 'online' },
-  { key: '4', id: 'EZ-004', name: 'Unterzähler OG2', type: 'elec', value: '35.8 kW', daily: '688 kWh', floor: 'OG2', manufacturer: 'Siemens 7KT1260', status: 'online' },
-  { key: '5', id: 'EZ-005', name: 'Unterzähler OG3', type: 'elec', value: '22.5 kW', daily: '432 kWh', floor: 'OG3', manufacturer: 'Siemens 7KT1260', status: 'online' },
-  { key: '6', id: 'EZ-006', name: 'Unterzähler UG/Technik', type: 'elec', value: '19.8 kW', daily: '379 kWh', floor: 'UG', manufacturer: 'Siemens 7KT1260', status: 'online' },
-  { key: '7', id: 'WMZ-001', name: 'Hauptzähler Wärme', type: 'heat', value: '85.2 kW', daily: '1,540 kWh', floor: 'Gebäude', manufacturer: 'Kamstrup MULTICAL 803', status: 'online' },
-  { key: '8', id: 'WMZ-002', name: 'WMZ Heizkreis Nord', type: 'heat', value: '32.5 kW', daily: '580 kWh', floor: 'Nord', manufacturer: 'Kamstrup MULTICAL 603', status: 'online' },
-  { key: '9', id: 'WMZ-003', name: 'WMZ Heizkreis Süd', type: 'heat', value: '28.1 kW', daily: '510 kWh', floor: 'Süd', manufacturer: 'Kamstrup MULTICAL 603', status: 'online' },
-  { key: '10', id: 'WMZ-004', name: 'WMZ Trinkwarmwasser', type: 'heat', value: '12.8 kW', daily: '245 kWh', floor: 'UG', manufacturer: 'Kamstrup MULTICAL 603', status: 'online' },
-  { key: '11', id: 'WZ-001', name: 'Hauptwasserzähler', type: 'water', value: '2.3 m³/h', daily: '38.5 m³', floor: 'Gebäude', manufacturer: 'Sensus iPERL', status: 'online' },
-  { key: '12', id: 'WZ-002', name: 'Kantine/Küche', type: 'water', value: '0.8 m³/h', daily: '12.2 m³', floor: 'EG', manufacturer: 'Sensus iPERL', status: 'online' },
-  { key: '13', id: 'KZ-001', name: 'Kältemengenzähler', type: 'heat', value: '42.0 kW', daily: '620 kWh', floor: 'Gebäude', manufacturer: 'Kamstrup MULTICAL 803', status: 'online' },
-  { key: '14', id: 'GZ-001', name: 'Gaszähler', type: 'heat', value: '12.3 m³/h', daily: '185 m³', floor: 'UG', manufacturer: 'Elster BK-G25', status: 'online' },
+  { key: '1', id: 'EZ-001', name: '电力总表', type: 'elec', value: '148.5 kW', daily: '2,847 kWh', floor: '全楼', manufacturer: 'Siemens PAC3200', status: 'online' },
+  { key: '2', id: 'EZ-002', name: 'EG层分表', type: 'elec', value: '28.3 kW', daily: '542 kWh', floor: 'EG', manufacturer: 'Siemens 7KT1260', status: 'online' },
+  { key: '3', id: 'EZ-003', name: 'OG1层分表', type: 'elec', value: '42.1 kW', daily: '806 kWh', floor: 'OG1', manufacturer: 'Siemens 7KT1260', status: 'online' },
+  { key: '4', id: 'EZ-004', name: 'OG2层分表', type: 'elec', value: '35.8 kW', daily: '688 kWh', floor: 'OG2', manufacturer: 'Siemens 7KT1260', status: 'online' },
+  { key: '5', id: 'EZ-005', name: 'OG3层分表', type: 'elec', value: '22.5 kW', daily: '432 kWh', floor: 'OG3', manufacturer: 'Siemens 7KT1260', status: 'online' },
+  { key: '6', id: 'EZ-006', name: 'UG层/设备分表', type: 'elec', value: '19.8 kW', daily: '379 kWh', floor: 'UG', manufacturer: 'Siemens 7KT1260', status: 'online' },
+  { key: '7', id: 'WMZ-001', name: '热力总表', type: 'heat', value: '85.2 kW', daily: '1,540 kWh', floor: '全楼', manufacturer: 'Kamstrup MULTICAL 803', status: 'online' },
+  { key: '8', id: 'WMZ-002', name: '北翼供暖热表', type: 'heat', value: '32.5 kW', daily: '580 kWh', floor: '北翼', manufacturer: 'Kamstrup MULTICAL 603', status: 'online' },
+  { key: '9', id: 'WMZ-003', name: '南翼供暖热表', type: 'heat', value: '28.1 kW', daily: '510 kWh', floor: '南翼', manufacturer: 'Kamstrup MULTICAL 603', status: 'online' },
+  { key: '10', id: 'WMZ-004', name: '生活热水热表', type: 'heat', value: '12.8 kW', daily: '245 kWh', floor: 'UG', manufacturer: 'Kamstrup MULTICAL 603', status: 'online' },
+  { key: '11', id: 'WZ-001', name: '水表总表', type: 'water', value: '2.3 m³/h', daily: '38.5 m³', floor: '全楼', manufacturer: 'Sensus iPERL', status: 'online' },
+  { key: '12', id: 'WZ-002', name: '食堂/厨房', type: 'water', value: '0.8 m³/h', daily: '12.2 m³', floor: 'EG', manufacturer: 'Sensus iPERL', status: 'online' },
+  { key: '13', id: 'KZ-001', name: '冷量计', type: 'heat', value: '42.0 kW', daily: '620 kWh', floor: '全楼', manufacturer: 'Kamstrup MULTICAL 803', status: 'online' },
+  { key: '14', id: 'GZ-001', name: '燃气表', type: 'heat', value: '12.3 m³/h', daily: '185 m³', floor: 'UG', manufacturer: 'Elster BK-G25', status: 'online' },
 ]
 
 export default function EnergyPage() {
@@ -59,9 +59,9 @@ export default function EnergyPage() {
   const meterCols = [
     { title: t.nrg.meterId, dataIndex: 'id', key: 'id', width: 90 },
     { title: t.nrg.meterName, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
-    { title: 'Hersteller', dataIndex: 'manufacturer', key: 'manufacturer', width: 150, render: (v: string) => <Text type="secondary" style={{ fontSize: 11 }}>{v}</Text> },
+    { title: '制造商', dataIndex: 'manufacturer', key: 'manufacturer', width: 150, render: (v: string) => <Text type="secondary" style={{ fontSize: 11 }}>{v}</Text> },
     { title: t.nrg.meterType, dataIndex: 'type', key: 'type', width: 70, render: (v: string) => <Tag color={v === 'elec' ? 'blue' : v === 'heat' ? 'red' : 'cyan'}>{v === 'elec' ? t.nrg.elec : v === 'heat' ? t.nrg.heat : t.nrg.water}</Tag> },
-    { title: 'Bereich', dataIndex: 'floor', key: 'floor', width: 80 },
+    { title: '区域', dataIndex: 'floor', key: 'floor', width: 80 },
     { title: t.nrg.currentVal, dataIndex: 'value', key: 'value', width: 100 },
     { title: t.nrg.dailyAccum, dataIndex: 'daily', key: 'daily', width: 100 },
     { title: t.common.status, dataIndex: 'status', key: 'status', width: 70, render: (v: string) => <Tag color={v === 'online' ? 'green' : 'red'}>{v === 'online' ? t.status.online : t.status.offline}</Tag> },
@@ -70,7 +70,7 @@ export default function EnergyPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div><Title level={4} style={{ margin: 0 }}>{t.nav.energy}</Title><Text type="secondary">{t.nrg.subtitle} · {meters.length} Zähler · M-Bus / BACnet</Text></div>
+        <div><Title level={4} style={{ margin: 0 }}>{t.nav.energy}</Title><Text type="secondary">{t.nrg.subtitle} · {meters.length} 块表计 · M-Bus / BACnet</Text></div>
         <Space>
           <Button icon={<ExportOutlined />} onClick={() => setExportModal(true)}>{t.nrg.exportReport}</Button>
           <Button type="primary" onClick={() => setTargetModal(true)}>{t.nrg.setTarget}</Button>
@@ -96,7 +96,7 @@ export default function EnergyPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.nrg.monthlyCompare} extra={<Text type="secondary">Heizperiode Okt 2025 - Mär 2026</Text>}>
+      <Card title={t.nrg.monthlyCompare} extra={<Text type="secondary">供暖季 2025年10月 - 2026年3月</Text>}>
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={monthly}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -109,24 +109,24 @@ export default function EnergyPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.nrg.meterStatus} extra={<Text type="secondary">{meters.length} Zähler · alle online</Text>}>
+      <Card title={t.nrg.meterStatus} extra={<Text type="secondary">{meters.length} 块表计 · 全部在线</Text>}>
         <Table columns={meterCols} dataSource={meters} pagination={{ pageSize: 8, size: 'small' }} size="small" scroll={{ x: 1000 }} />
       </Card>
 
-      <Card title="Energie-KPI" size="small">
+      <Card title="能效指标" size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
-          <Descriptions.Item label="Strom/m²·a">142 kWh</Descriptions.Item>
-          <Descriptions.Item label="Wärme/m²·a">85 kWh</Descriptions.Item>
-          <Descriptions.Item label="Wasser/m²·a">0.45 m³</Descriptions.Item>
-          <Descriptions.Item label="CO₂-Emission">~185 t/a</Descriptions.Item>
-          <Descriptions.Item label="Energieeffizienzklasse">B (EnEV)</Descriptions.Item>
-          <Descriptions.Item label="Primärenergie">218 kWh/m²·a</Descriptions.Item>
-          <Descriptions.Item label="Spitzenlast Strom">185 kW</Descriptions.Item>
-          <Descriptions.Item label="Spitzenlast Wärme">320 kW</Descriptions.Item>
+          <Descriptions.Item label="电力/m²·a">142 kWh</Descriptions.Item>
+          <Descriptions.Item label="热力/m²·a">85 kWh</Descriptions.Item>
+          <Descriptions.Item label="用水/m²·a">0.45 m³</Descriptions.Item>
+          <Descriptions.Item label="CO₂排放">~185 t/a</Descriptions.Item>
+          <Descriptions.Item label="能效等级">B (EnEV)</Descriptions.Item>
+          <Descriptions.Item label="一次能源">218 kWh/m²·a</Descriptions.Item>
+          <Descriptions.Item label="电力峰值负荷">185 kW</Descriptions.Item>
+          <Descriptions.Item label="热力峰值负荷">320 kW</Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Modal title={t.nrg.setTarget} open={targetModal} onOk={() => { setTargetModal(false); message.success('Zielwerte gespeichert') }} onCancel={() => setTargetModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
+      <Modal title={t.nrg.setTarget} open={targetModal} onOk={() => { setTargetModal(false); message.success('目标值已保存') }} onCancel={() => setTargetModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
         <Form layout="vertical">
           <Form.Item label={`${t.nrg.elec} (kWh/Tag)`}><InputNumber style={{ width: '100%' }} defaultValue={3200} /></Form.Item>
           <Form.Item label={`${t.nrg.heat} (kWh/Tag)`}><InputNumber style={{ width: '100%' }} defaultValue={1800} /></Form.Item>
@@ -134,9 +134,9 @@ export default function EnergyPage() {
         </Form>
       </Modal>
 
-      <Modal title={t.nrg.exportReport} open={exportModal} onOk={() => { setExportModal(false); message.success('Bericht exportiert') }} onCancel={() => setExportModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
-        <p>Exportformat: PDF / Excel / CSV</p>
-        <p style={{ color: '#8c8c8c' }}>Zeitraum: Aktueller Monat (März 2026)</p>
+      <Modal title={t.nrg.exportReport} open={exportModal} onOk={() => { setExportModal(false); message.success('报告已导出') }} onCancel={() => setExportModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
+        <p>导出格式: PDF / Excel / CSV</p>
+        <p style={{ color: '#8c8c8c' }}>时段: 当前月份 (2026年3月)</p>
       </Modal>
     </div>
   )

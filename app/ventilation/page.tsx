@@ -22,14 +22,14 @@ function genAir() {
 }
 
 const ahus = [
-  { key: '1', name: 'RLT-01 EG Empfang/Foyer', supply: 4200, exhaust: 3900, supplyTemp: 21.5, co2: 485, filter: 82, hrEff: 78, mode: 'auto', status: 'running', freq: 38 },
-  { key: '2', name: 'RLT-02 OG1 Großraumbüro', supply: 6800, exhaust: 6400, supplyTemp: 21.2, co2: 620, filter: 65, hrEff: 81, mode: 'auto', status: 'running', freq: 42 },
-  { key: '3', name: 'RLT-03 OG2 Büro/Konferenz', supply: 5500, exhaust: 5200, supplyTemp: 21.8, co2: 580, filter: 38, hrEff: 76, mode: 'auto', status: 'running', freq: 35 },
-  { key: '4', name: 'RLT-04 OG3 Büro/Konferenz', supply: 4800, exhaust: 4500, supplyTemp: 22.0, co2: 540, filter: 71, hrEff: 79, mode: 'auto', status: 'running', freq: 32 },
-  { key: '5', name: 'RLT-05 UG Tiefgarage', supply: 2200, exhaust: 2800, supplyTemp: 15.0, co2: 0, filter: 55, hrEff: 0, mode: 'auto', status: 'running', freq: 25 },
-  { key: '6', name: 'RLT-06 UG Serverraum', supply: 1800, exhaust: 1800, supplyTemp: 18.5, co2: 390, filter: 92, hrEff: 0, mode: 'manual', status: 'running', freq: 45 },
-  { key: '7', name: 'RLT-07 Kantine/Küche', supply: 3200, exhaust: 4500, supplyTemp: 20.5, co2: 0, filter: 45, hrEff: 72, mode: 'auto', status: 'running', freq: 40 },
-  { key: '8', name: 'RLT-08 Technikzentrale', supply: 0, exhaust: 0, supplyTemp: 0, co2: 0, filter: 12, hrEff: 0, mode: 'auto', status: 'stopped', freq: 0 },
+  { key: '1', name: 'RLT-01 EG 前台/门厅', supply: 4200, exhaust: 3900, supplyTemp: 21.5, co2: 485, filter: 82, hrEff: 78, mode: 'auto', status: 'running', freq: 38 },
+  { key: '2', name: 'RLT-02 OG1 开放办公区', supply: 6800, exhaust: 6400, supplyTemp: 21.2, co2: 620, filter: 65, hrEff: 81, mode: 'auto', status: 'running', freq: 42 },
+  { key: '3', name: 'RLT-03 OG2 办公/会议', supply: 5500, exhaust: 5200, supplyTemp: 21.8, co2: 580, filter: 38, hrEff: 76, mode: 'auto', status: 'running', freq: 35 },
+  { key: '4', name: 'RLT-04 OG3 办公/会议', supply: 4800, exhaust: 4500, supplyTemp: 22.0, co2: 540, filter: 71, hrEff: 79, mode: 'auto', status: 'running', freq: 32 },
+  { key: '5', name: 'RLT-05 UG 地下车库', supply: 2200, exhaust: 2800, supplyTemp: 15.0, co2: 0, filter: 55, hrEff: 0, mode: 'auto', status: 'running', freq: 25 },
+  { key: '6', name: 'RLT-06 UG 机房', supply: 1800, exhaust: 1800, supplyTemp: 18.5, co2: 390, filter: 92, hrEff: 0, mode: 'manual', status: 'running', freq: 45 },
+  { key: '7', name: 'RLT-07 食堂/厨房', supply: 3200, exhaust: 4500, supplyTemp: 20.5, co2: 0, filter: 45, hrEff: 72, mode: 'auto', status: 'running', freq: 40 },
+  { key: '8', name: 'RLT-08 设备中心', supply: 0, exhaust: 0, supplyTemp: 0, co2: 0, filter: 12, hrEff: 0, mode: 'auto', status: 'stopped', freq: 0 },
 ]
 
 export default function VentilationPage() {
@@ -48,7 +48,7 @@ export default function VentilationPage() {
     { title: t.vent.unit, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
     { title: `${t.vent.supplyAir} (m³/h)`, dataIndex: 'supply', key: 'supply', width: 100, render: (v: number) => v > 0 ? v.toLocaleString() : '-' },
     { title: `${t.vent.exhaustAir} (m³/h)`, dataIndex: 'exhaust', key: 'exhaust', width: 100, render: (v: number) => v > 0 ? v.toLocaleString() : '-' },
-    { title: 'Zuluft °C', dataIndex: 'supplyTemp', key: 'supplyTemp', width: 80, render: (v: number) => v > 0 ? `${v}°C` : '-' },
+    { title: '送风温度 °C', dataIndex: 'supplyTemp', key: 'supplyTemp', width: 80, render: (v: number) => v > 0 ? `${v}°C` : '-' },
     { title: 'CO₂ (ppm)', dataIndex: 'co2', key: 'co2', width: 80, render: (v: number) => v > 0 ? <Text style={{ color: v > 800 ? '#f5222d' : v > 600 ? '#fa8c16' : '#52c41a' }}>{v}</Text> : '-' },
     { title: 'VFD Hz', dataIndex: 'freq', key: 'freq', width: 70, render: (v: number) => v > 0 ? `${v} Hz` : '-' },
     { title: 'WRG %', dataIndex: 'hrEff', key: 'hrEff', width: 70, render: (v: number) => v > 0 ? `${v}%` : '-' },
@@ -66,18 +66,18 @@ export default function VentilationPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div><Title level={4} style={{ margin: 0 }}>{t.nav.ventilation}</Title><Text type="secondary">{t.vent.subtitle} · 8 RLT-Geräte · Wärmerückgewinnung</Text></div>
+        <div><Title level={4} style={{ margin: 0 }}>{t.nav.ventilation}</Title><Text type="secondary">{t.vent.subtitle} · 8台空调机组 · 热回收</Text></div>
         <Text type="secondary"><ClockCircleOutlined /> {new Date().toLocaleString()}</Text>
       </div>
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.totalSupply} value={totalSupply.toLocaleString()} suffix="m³/h" prefix={<CloudOutlined />} valueStyle={{ color: '#1677ff' }} /></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.totalExhaust} value={totalExhaust.toLocaleString()} suffix="m³/h" /></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.avgCo2} value={avgCo2} suffix="ppm" valueStyle={{ color: avgCo2 > 800 ? '#f5222d' : '#52c41a' }} prefix={<ExperimentOutlined />} /><Text type="secondary">Grenzwert: 1.000 ppm</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.filterWarning} value={filterWarnings} valueStyle={{ color: filterWarnings > 0 ? '#fa8c16' : '#52c41a' }} prefix={<AlertOutlined />} /><Text type="secondary">{filterWarnings > 0 ? t.vent.needReplace : 'Alle OK'}</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.avgCo2} value={avgCo2} suffix="ppm" valueStyle={{ color: avgCo2 > 800 ? '#f5222d' : '#52c41a' }} prefix={<ExperimentOutlined />} /><Text type="secondary">限值: 1000 ppm</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.filterWarning} value={filterWarnings} valueStyle={{ color: filterWarnings > 0 ? '#fa8c16' : '#52c41a' }} prefix={<AlertOutlined />} /><Text type="secondary">{filterWarnings > 0 ? t.vent.needReplace : '全部正常'}</Text></Card></Col>
       </Row>
 
-      <Card title={t.vent.trendTitle} extra={<Text type="secondary">Gesamtluftwechselrate: ~3,2 /h</Text>}>
+      <Card title={t.vent.trendTitle} extra={<Text type="secondary">总换气次数: ~3.2 次/h</Text>}>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={trend}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -93,24 +93,24 @@ export default function VentilationPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.vent.ahuStatus} extra={<Space><Text>{t.vent.co2Link}</Text><Switch defaultChecked /><Text type="secondary">{runningAhus.length}/{ahus.length} aktiv</Text></Space>}>
+      <Card title={t.vent.ahuStatus} extra={<Space><Text>{t.vent.co2Link}</Text><Switch defaultChecked /><Text type="secondary">{runningAhus.length}/{ahus.length} 活跃</Text></Space>}>
         <Table columns={cols} dataSource={ahus} pagination={false} size="small" scroll={{ x: 1300 }} />
       </Card>
 
-      <Card title="RLT-Anlagendetails" size="small">
+      <Card title="空调机组详情" size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
-          <Descriptions.Item label="Hersteller">Kampmann / Wolf GmbH</Descriptions.Item>
-          <Descriptions.Item label="Filterklasse">F7 (Zuluft) / G4 (Abluft)</Descriptions.Item>
-          <Descriptions.Item label="WRG-Typ">Kreuzstrom-Plattenwärmetauscher</Descriptions.Item>
-          <Descriptions.Item label="WRG Effizienz Ø">77.2%</Descriptions.Item>
-          <Descriptions.Item label="Gesamtleistung VFD">8× Siemens SINAMICS G120</Descriptions.Item>
-          <Descriptions.Item label="Nächste Filterwartung">2026-03-20</Descriptions.Item>
+          <Descriptions.Item label="制造商">Kampmann / Wolf GmbH</Descriptions.Item>
+          <Descriptions.Item label="过滤器等级">F7 (送风) / G4 (排风)</Descriptions.Item>
+          <Descriptions.Item label="热回收类型">交叉流板式换热器</Descriptions.Item>
+          <Descriptions.Item label="热回收平均效率">77.2%</Descriptions.Item>
+          <Descriptions.Item label="变频器总功率">8× Siemens SINAMICS G120</Descriptions.Item>
+          <Descriptions.Item label="下次过滤器维保">2026-03-20</Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Modal title={`${t.vent.changeFilter} - ${selectedUnit}`} open={filterModal} onOk={() => { setFilterModal(false); message.success(`${selectedUnit} Filter-Reset durchgeführt`) }} onCancel={() => setFilterModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
-        <p>Filterwechsel bestätigen: {selectedUnit}</p>
-        <p style={{ color: '#8c8c8c' }}>Differenzdruck-Zähler wird zurückgesetzt. Nächster planmäßiger Wechsel in 6 Monaten.</p>
+      <Modal title={`${t.vent.changeFilter} - ${selectedUnit}`} open={filterModal} onOk={() => { setFilterModal(false); message.success(`${selectedUnit} 过滤器已复位`) }} onCancel={() => setFilterModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
+        <p>确认更换过滤器: {selectedUnit}</p>
+        <p style={{ color: '#8c8c8c' }}>压差计数器将被重置。下次计划更换时间为6个月后。</p>
       </Modal>
     </div>
   )

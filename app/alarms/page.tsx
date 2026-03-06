@@ -8,27 +8,27 @@ import { AlertOutlined, WarningOutlined, InfoCircleOutlined, CheckCircleOutlined
 const { Title, Text } = Typography
 
 const alarmList = [
-  { key: '1', time: '14:23:05', device: 'RLT-03 / VFD', deviceAddr: 'DDC-OG2-01.DI5', content: 'Zuluftventilator FU-Störung (Fehlercode F31)', level: 'A', status: 'active', floor: 'OG2' },
-  { key: '2', time: '13:45:12', device: 'KM-02 / VL-Temp', deviceAddr: 'PLC-Kälte.AI3', content: 'Kaltwasser-Vorlauf >14°C (Grenzwert: 12°C)', level: 'B', status: 'active', floor: 'UG' },
-  { key: '3', time: '12:10:30', device: 'Raum 3.12 / CO₂', deviceAddr: 'DDC-OG3-02.AI2', content: 'CO₂-Konzentration >1000ppm (aktuell: 1050ppm)', level: 'C', status: 'active', floor: 'OG3' },
-  { key: '4', time: '11:30:00', device: 'Kessel-01 / Brenner', deviceAddr: 'PLC-Heizung.DI8', content: 'Brennerstörung Flammenüberwachung - Entriegelung erforderlich', level: 'B', status: 'acknowledged', floor: 'UG' },
-  { key: '5', time: '10:52:18', device: 'DALI-GW-OG1', deviceAddr: '192.168.10.61', content: 'Bus-Kommunikationsfehler - Gruppe 3 nicht erreichbar', level: 'C', status: 'active', floor: 'OG1' },
-  { key: '6', time: '09:15:44', device: 'Kühlturm KT-01', deviceAddr: 'PLC-Kälte.DI12', content: 'Ventilator-Motor Übertemperatur (Thermokontakt)', level: 'B', status: 'acknowledged', floor: 'Dach' },
-  { key: '7', time: '08:42:10', device: 'DDC-OG2-02', deviceAddr: '192.168.10.122', content: 'Kommunikations-Timeout (>30s keine Antwort)', level: 'B', status: 'recovered', floor: 'OG2' },
-  { key: '8', time: '07:30:00', device: 'HK-07 TWW', deviceAddr: 'PLC-Heizung.AI15', content: 'Trinkwarmwasser <55°C (Legionellen-Grenzwert)', level: 'A', status: 'recovered', floor: 'UG' },
-  { key: '9', time: '06:15:22', device: 'Raum 2.10 / Temp', deviceAddr: 'DDC-OG2-02.AI1', content: 'Raumtemperatur >26°C (Nacht-Auskühlung fehlgeschlagen)', level: 'C', status: 'recovered', floor: 'OG2' },
-  { key: '10', time: '02:00:00', device: 'BMS Server', deviceAddr: 'Server-01', content: 'Automatisches Backup fehlgeschlagen (Disk 92%)', level: 'B', status: 'recovered', floor: 'UG' },
+  { key: '1', time: '14:23:05', device: 'RLT-03 / VFD', deviceAddr: 'DDC-OG2-01.DI5', content: '送风机变频器故障 (故障码 F31)', level: 'A', status: 'active', floor: 'OG2' },
+  { key: '2', time: '13:45:12', device: 'KM-02 / VL-Temp', deviceAddr: 'PLC-Kälte.AI3', content: '冷水供水温度 >14°C (限值: 12°C)', level: 'B', status: 'active', floor: 'UG' },
+  { key: '3', time: '12:10:30', device: 'Raum 3.12 / CO₂', deviceAddr: 'DDC-OG3-02.AI2', content: 'CO₂浓度 >1000ppm (当前: 1050ppm)', level: 'C', status: 'active', floor: 'OG3' },
+  { key: '4', time: '11:30:00', device: 'Kessel-01 / Brenner', deviceAddr: 'PLC-Heizung.DI8', content: '燃烧器火焰监控故障 - 需要手动复位', level: 'B', status: 'acknowledged', floor: 'UG' },
+  { key: '5', time: '10:52:18', device: 'DALI-GW-OG1', deviceAddr: '192.168.10.61', content: '总线通讯故障 - 第3组不可达', level: 'C', status: 'active', floor: 'OG1' },
+  { key: '6', time: '09:15:44', device: 'Kühlturm KT-01', deviceAddr: 'PLC-Kälte.DI12', content: '风机电机过温 (热继电器)', level: 'B', status: 'acknowledged', floor: '屋顶' },
+  { key: '7', time: '08:42:10', device: 'DDC-OG2-02', deviceAddr: '192.168.10.122', content: '通讯超时 (>30s 无响应)', level: 'B', status: 'recovered', floor: 'OG2' },
+  { key: '8', time: '07:30:00', device: 'HK-07 TWW', deviceAddr: 'PLC-Heizung.AI15', content: '生活热水 <55°C (军团菌限值)', level: 'A', status: 'recovered', floor: 'UG' },
+  { key: '9', time: '06:15:22', device: 'Raum 2.10 / Temp', deviceAddr: 'DDC-OG2-02.AI1', content: '室温 >26°C (夜间散热失败)', level: 'C', status: 'recovered', floor: 'OG2' },
+  { key: '10', time: '02:00:00', device: 'BMS Server', deviceAddr: 'Server-01', content: '自动备份失败 (磁盘占用 92%)', level: 'B', status: 'recovered', floor: 'UG' },
 ]
 
 const thresholds = [
-  { key: '1', param: 'Raumtemperatur', lower: 18, upper: 28, unit: '°C', level: 'B', hysteresis: 1.0 },
-  { key: '2', param: 'CO₂-Konzentration', lower: 0, upper: 1000, unit: 'ppm', level: 'B', hysteresis: 50 },
-  { key: '3', param: 'Relative Luftfeuchte', lower: 30, upper: 70, unit: '%', level: 'C', hysteresis: 5 },
-  { key: '4', param: 'Vorlauftemperatur Heizung', lower: 30, upper: 70, unit: '°C', level: 'A', hysteresis: 2.0 },
-  { key: '5', param: 'Vorlauftemperatur Kälte', lower: 4, upper: 14, unit: '°C', level: 'A', hysteresis: 1.0 },
-  { key: '6', param: 'Trinkwarmwasser', lower: 55, upper: 65, unit: '°C', level: 'A', hysteresis: 2.0 },
-  { key: '7', param: 'Differenzdruck Filter', lower: 0, upper: 250, unit: 'Pa', level: 'C', hysteresis: 20 },
-  { key: '8', param: 'Außentemperatur', lower: -20, upper: 40, unit: '°C', level: 'C', hysteresis: 2.0 },
+  { key: '1', param: '室内温度', lower: 18, upper: 28, unit: '°C', level: 'B', hysteresis: 1.0 },
+  { key: '2', param: 'CO₂浓度', lower: 0, upper: 1000, unit: 'ppm', level: 'B', hysteresis: 50 },
+  { key: '3', param: '相对湿度', lower: 30, upper: 70, unit: '%', level: 'C', hysteresis: 5 },
+  { key: '4', param: '供暖供水温度', lower: 30, upper: 70, unit: '°C', level: 'A', hysteresis: 2.0 },
+  { key: '5', param: '制冷供水温度', lower: 4, upper: 14, unit: '°C', level: 'A', hysteresis: 1.0 },
+  { key: '6', param: '生活热水', lower: 55, upper: 65, unit: '°C', level: 'A', hysteresis: 2.0 },
+  { key: '7', param: '过滤器压差', lower: 0, upper: 250, unit: 'Pa', level: 'C', hysteresis: 20 },
+  { key: '8', param: '室外温度', lower: -20, upper: 40, unit: '°C', level: 'C', hysteresis: 2.0 },
 ]
 
 export default function AlarmsPage() {
@@ -44,8 +44,8 @@ export default function AlarmsPage() {
   const cols = [
     { title: t.common.time, dataIndex: 'time', key: 'time', width: 90 },
     { title: t.common.device, dataIndex: 'device', key: 'device', width: 140 },
-    { title: 'Adresse', dataIndex: 'deviceAddr', key: 'addr', width: 130, render: (v: string) => <Text code style={{ fontSize: 10 }}>{v}</Text> },
-    { title: 'Etage', dataIndex: 'floor', key: 'floor', width: 60 },
+    { title: '地址', dataIndex: 'deviceAddr', key: 'addr', width: 130, render: (v: string) => <Text code style={{ fontSize: 10 }}>{v}</Text> },
+    { title: '楼层', dataIndex: 'floor', key: 'floor', width: 60 },
     { title: t.common.content, dataIndex: 'content', key: 'content' },
     { title: t.common.level, dataIndex: 'level', key: 'level', width: 110, render: (v: string) => {
       const map: Record<string, {color: string, icon: React.ReactNode, label: string}> = {
@@ -74,7 +74,7 @@ export default function AlarmsPage() {
     { title: t.alm.lowerLimit, dataIndex: 'lower', key: 'lower', width: 90 },
     { title: t.alm.upperLimit, dataIndex: 'upper', key: 'upper', width: 90 },
     { title: t.common.unit, dataIndex: 'unit', key: 'unit', width: 60 },
-    { title: 'Hysterese', dataIndex: 'hysteresis', key: 'hyst', width: 80 },
+    { title: '滞后值', dataIndex: 'hysteresis', key: 'hyst', width: 80 },
     { title: t.alm.alarmLevel, dataIndex: 'level', key: 'level', width: 80, render: (v: string) => <Tag color={v === 'A' ? 'red' : v === 'B' ? 'orange' : 'blue'}>{v}</Tag> },
     { title: t.common.operation, key: 'op', width: 80, render: () => <Button size="small" type="link">{t.actions.edit}</Button> },
   ]
@@ -97,20 +97,20 @@ export default function AlarmsPage() {
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.alm.acknowledged} value={ackCount} valueStyle={{ color: '#52c41a' }} prefix={<CheckCircleOutlined />} /><Text type="secondary">{t.alm.responded}</Text></Card></Col>
       </Row>
 
-      <Card title={t.alm.alarmList} extra={<Text type="secondary">{alarmList.length} Einträge · Heute</Text>}>
+      <Card title={t.alm.alarmList} extra={<Text type="secondary">{alarmList.length} 条记录 · 今日</Text>}>
         <Table columns={cols} dataSource={alarmList} pagination={false} size="small" scroll={{ x: 1200 }} />
       </Card>
 
-      <Card title={t.alm.thresholdConfig} extra={<Text type="secondary">{thresholds.length} Parameter konfiguriert</Text>}>
+      <Card title={t.alm.thresholdConfig} extra={<Text type="secondary">{thresholds.length} 个参数已配置</Text>}>
         <Table columns={thCols} dataSource={thresholds} pagination={false} size="small" />
       </Card>
 
-      <Modal title={t.alm.configThreshold} open={thresholdModal} onOk={() => { setThresholdModal(false); message.success('Grenzwerte gespeichert') }} onCancel={() => setThresholdModal(false)} okText={t.actions.save} cancelText={t.actions.cancel} width={500}>
+      <Modal title={t.alm.configThreshold} open={thresholdModal} onOk={() => { setThresholdModal(false); message.success('阈值已保存') }} onCancel={() => setThresholdModal(false)} okText={t.actions.save} cancelText={t.actions.cancel} width={500}>
         <Form layout="vertical">
           <Form.Item label={t.alm.param}><Select options={thresholds.map(th => ({ value: th.param, label: `${th.param} (${th.unit})` }))} /></Form.Item>
           <Space style={{ width: '100%' }}><Form.Item label={t.alm.lowerLimit} style={{ flex: 1 }}><InputNumber style={{ width: '100%' }} /></Form.Item><Form.Item label={t.alm.upperLimit} style={{ flex: 1 }}><InputNumber style={{ width: '100%' }} /></Form.Item></Space>
           <Form.Item label="Hysterese"><InputNumber style={{ width: '100%' }} /></Form.Item>
-          <Form.Item label={t.alm.alarmLevel}><Select options={[{value:'A',label:'A - Kritisch'},{value:'B',label:'B - Wichtig'},{value:'C',label:'C - Hinweis'}]} /></Form.Item>
+          <Form.Item label={t.alm.alarmLevel}><Select options={[{value:'A',label:'A - 紧急'},{value:'B',label:'B - 重要'},{value:'C',label:'C - 提示'}]} /></Form.Item>
         </Form>
       </Modal>
     </div>
