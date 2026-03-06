@@ -7,7 +7,7 @@ import { LanguageSelector } from "@/components/language-selector";
 
 export const metadata: Metadata = {
   title: "MSR BMS - Building Management System",
-  description: "Building Management System Demo",
+  description: "Building Management System",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
-                      <h1 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#1f1f1f' }}>MSR BMS Demo</h1>
+                      <h1 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#1f1f1f' }}>MSR BMS</h1>
                       <p style={{ margin: 0, fontSize: 12, color: '#8c8c8c' }}>Building Automation Management System</p>
                     </div>
                     <LanguageSelector />

@@ -94,7 +94,7 @@ export function Sidebar() {
         padding: '12px 0', textAlign: 'center',
         borderTop: '1px solid #f0f0f0', fontSize: 11, color: '#8c8c8c',
       }}>
-        v1.0.0 | Demo
+        v1.0.0
       </div>
     </Sider>
   )

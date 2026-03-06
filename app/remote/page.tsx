@@ -2,34 +2,43 @@
 
 import { useI18n } from '@/components/i18n-provider'
 import { useState } from 'react'
-import { Card, Statistic, Table, Tag, Row, Col, Typography, Button, Space, Modal, message } from 'antd'
-import { LaptopOutlined, WifiOutlined, CloudUploadOutlined, SafetyOutlined, ClockCircleOutlined } from '@ant-design/icons'
+import { Card, Statistic, Table, Tag, Row, Col, Typography, Button, Space, Modal, Descriptions, message } from 'antd'
+import { LaptopOutlined, WifiOutlined, CloudUploadOutlined, SafetyOutlined } from '@ant-design/icons'
 
 const { Title, Text } = Typography
 
 const connections = [
-  { key: '1', name: 'VPN-Engineer-01', target: 'DDC Network', latency: '12ms', status: 'connected', since: '13:00' },
-  { key: '2', name: 'VPN-Support-01', target: 'Monitoring', latency: '45ms', status: 'connected', since: '14:00' },
-  { key: '3', name: 'VPN-Vendor-01', target: 'Chiller PLC', latency: '-', status: 'disconnected', since: '-' },
+  { key: '1', name: 'VPN-Weber-MSR', user: 'Weber, Michael', target: 'DDC Netzwerk (VLAN 10)', ip: '10.8.0.2', latency: '8ms', since: '07:45', status: 'connected' },
+  { key: '2', name: 'VPN-Müller-MSR', user: 'Müller, Sabine', target: 'DDC Netzwerk (VLAN 10)', ip: '10.8.0.3', latency: '12ms', since: '09:00', status: 'connected' },
+  { key: '3', name: 'VPN-Siemens-Service', user: 'Siemens Service', target: 'DDC-OG2-02 (Wartung)', ip: '-', latency: '-', since: '-', status: 'disconnected' },
+  { key: '4', name: 'VPN-Kampmann-RLT', user: 'Kampmann Service', target: 'RLT-Steuerung (Port 502)', ip: '-', latency: '-', since: '-', status: 'disconnected' },
 ]
 
 const updates = [
-  { key: '1', component: 'DDC Firmware', current: 'v3.2.1', available: 'v3.3.0', severity: 'security' },
-  { key: '2', component: 'BMS Server', current: 'v1.0.0', available: 'v1.1.0', severity: 'recommended' },
-  { key: '3', component: 'DALI Gateway', current: 'v2.0.0', available: 'v2.0.0', severity: 'latest' },
-  { key: '4', component: 'KNX Module', current: 'v1.5.2', available: 'v1.5.3', severity: 'optional' },
+  { key: '1', component: 'DDC Firmware (PXC)', current: 'v3.02.18', available: 'v3.03.02', severity: 'security', affected: '9 Geräte', note: 'BACnet Security Patch' },
+  { key: '2', component: 'Desigo CC Server', current: 'v6.0.2', available: 'v6.0.4', severity: 'recommended', affected: 'Server', note: 'Stability + Performance' },
+  { key: '3', component: 'DALI-2 Gateway FW', current: 'v2.1.0', available: 'v2.1.0', severity: 'latest', affected: '4 Gateways', note: '-' },
+  { key: '4', component: 'KNX IP Router', current: 'v1.5.2', available: 'v1.5.3', severity: 'optional', affected: '2 Router', note: 'Minor Bugfix' },
+  { key: '5', component: 'Loytec BACnet Router', current: 'v8.2.0', available: 'v8.3.1', severity: 'recommended', affected: '2 Router', note: 'BACnet Rev.14 Support' },
+  { key: '6', component: 'HMS Modbus Gateway', current: 'v4.0.1', available: 'v4.0.1', severity: 'latest', affected: '1 Gateway', note: '-' },
 ]
 
 export default function RemotePage() {
   const { t } = useI18n()
   const [vpnModal, setVpnModal] = useState(false)
 
+  const activeConn = connections.filter(c => c.status === 'connected').length
+  const pendingUpdates = updates.filter(u => u.current !== u.available).length
+
   const connCols = [
     { title: t.rmt.connection, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
+    { title: 'Benutzer', dataIndex: 'user', key: 'user', width: 140 },
     { title: t.rmt.target, dataIndex: 'target', key: 'target' },
-    { title: t.rmt.latency, dataIndex: 'latency', key: 'latency' },
-    { title: t.common.status, dataIndex: 'status', key: 'status', render: (v: string) => <Tag color={v === 'connected' ? 'green' : 'default'}>{v === 'connected' ? t.common.connected : t.status.offline}</Tag> },
-    { title: t.common.operation, key: 'op', render: (_: any, r: any) => (
+    { title: 'VPN IP', dataIndex: 'ip', key: 'ip', width: 90 },
+    { title: t.rmt.latency, dataIndex: 'latency', key: 'latency', width: 70 },
+    { title: 'Seit', dataIndex: 'since', key: 'since', width: 60 },
+    { title: t.common.status, dataIndex: 'status', key: 'status', width: 100, render: (v: string) => <Tag color={v === 'connected' ? 'green' : 'default'}>{v === 'connected' ? t.common.connected : t.status.offline}</Tag> },
+    { title: t.common.operation, key: 'op', width: 120, render: (_: any, r: any) => (
       <Button size="small" type={r.status === 'connected' ? 'default' : 'primary'} danger={r.status === 'connected'} onClick={() => message.info(r.status === 'connected' ? t.rmt.disconnectVpn : t.rmt.connectVpn)}>
         {r.status === 'connected' ? t.rmt.disconnectVpn : t.rmt.connectVpn}
       </Button>
@@ -38,9 +47,11 @@ export default function RemotePage() {
 
   const updateCols = [
     { title: t.rmt.component, dataIndex: 'component', key: 'component', render: (v: string) => <Text strong>{v}</Text> },
-    { title: t.rmt.currentVer, dataIndex: 'current', key: 'current' },
-    { title: t.rmt.availableVer, dataIndex: 'available', key: 'available' },
-    { title: t.rmt.severity, dataIndex: 'severity', key: 'severity', render: (v: string) => {
+    { title: 'Betrifft', dataIndex: 'affected', key: 'affected', width: 100 },
+    { title: t.rmt.currentVer, dataIndex: 'current', key: 'current', width: 90 },
+    { title: t.rmt.availableVer, dataIndex: 'available', key: 'available', width: 90 },
+    { title: 'Hinweis', dataIndex: 'note', key: 'note' },
+    { title: t.rmt.severity, dataIndex: 'severity', key: 'severity', width: 120, render: (v: string) => {
       const map: Record<string, {color: string, label: string}> = {
         security: { color: 'red', label: t.rmt.securityUpdate },
         recommended: { color: 'orange', label: t.rmt.recommended },
@@ -50,25 +61,45 @@ export default function RemotePage() {
       const m = map[v] || { color: 'default', label: v }
       return <Tag color={m.color}>{m.label}</Tag>
     }},
-    { title: t.common.operation, key: 'op', render: (_: any, r: any) => r.current !== r.available ? <Button size="small" type="primary" ghost onClick={() => message.info(`Updating ${r.component}...`)}>{t.actions.update}</Button> : <Text type="secondary">{t.rmt.latest}</Text> },
+    { title: t.common.operation, key: 'op', width: 100, render: (_: any, r: any) => r.current !== r.available ? <Button size="small" type="primary" ghost onClick={() => message.info(`Update: ${r.component}...`)}>{t.actions.update}</Button> : <Text type="secondary">{t.rmt.latest}</Text> },
   ]
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div><Title level={4} style={{ margin: 0 }}>{t.nav.remote}</Title><Text type="secondary">{t.rmt.subtitle}</Text></div>
+        <div><Title level={4} style={{ margin: 0 }}>{t.nav.remote}</Title><Text type="secondary">{t.rmt.subtitle} · OpenVPN · TLS 1.3</Text></div>
         <Button type="primary" icon={<WifiOutlined />} onClick={() => setVpnModal(true)}>{t.rmt.connectVpn}</Button>
       </div>
+
       <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.activeConn} value={2} prefix={<LaptopOutlined />} valueStyle={{ color: '#52c41a' }} /></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.remoteSessions} value={2} prefix={<WifiOutlined />} /><Text type="secondary">{t.rmt.inProgress}</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.pendingUpdates} value={3} valueStyle={{ color: '#fa8c16' }} prefix={<CloudUploadOutlined />} /><Text type="secondary">{t.rmt.components}</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.securityStatus} value={t.status.normal} valueStyle={{ color: '#52c41a' }} prefix={<SafetyOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.activeConn} value={activeConn} prefix={<LaptopOutlined />} valueStyle={{ color: '#52c41a' }} /></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.remoteSessions} value={activeConn} prefix={<WifiOutlined />} /><Text type="secondary">{t.rmt.inProgress}</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.pendingUpdates} value={pendingUpdates} valueStyle={{ color: pendingUpdates > 0 ? '#fa8c16' : '#52c41a' }} prefix={<CloudUploadOutlined />} /><Text type="secondary">davon 1 Sicherheitsupdate</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.securityStatus} value={t.status.normal} valueStyle={{ color: '#52c41a' }} prefix={<SafetyOutlined />} /><Text type="secondary">Letzter Pentest: 2026-01-15</Text></Card></Col>
       </Row>
-      <Card title={t.rmt.remoteConn}><Table columns={connCols} dataSource={connections} pagination={false} size="small" /></Card>
-      <Card title={t.rmt.updateManage}><Table columns={updateCols} dataSource={updates} pagination={false} size="small" /></Card>
-      <Modal title={t.rmt.connectVpn} open={vpnModal} onOk={() => { setVpnModal(false); message.success('VPN Connected') }} onCancel={() => setVpnModal(false)} okText={t.actions.connect} cancelText={t.actions.cancel}>
-        <p>Connect to BMS VPN Gateway?</p>
+
+      <Card title={t.rmt.remoteConn} extra={<Text type="secondary">{activeConn} aktive Verbindungen</Text>}>
+        <Table columns={connCols} dataSource={connections} pagination={false} size="small" scroll={{ x: 900 }} />
+      </Card>
+
+      <Card title={t.rmt.updateManage} extra={<Text type="secondary">{pendingUpdates} Updates verfügbar</Text>}>
+        <Table columns={updateCols} dataSource={updates} pagination={false} size="small" scroll={{ x: 900 }} />
+      </Card>
+
+      <Card title="IT-Sicherheit" size="small">
+        <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
+          <Descriptions.Item label="VPN Server">OpenVPN 2.6 · Port 1194/UDP</Descriptions.Item>
+          <Descriptions.Item label="Verschlüsselung">AES-256-GCM · TLS 1.3</Descriptions.Item>
+          <Descriptions.Item label="Authentifizierung">Zertifikat + 2FA (TOTP)</Descriptions.Item>
+          <Descriptions.Item label="Firewall">GA-Netz isoliert · Whitelist</Descriptions.Item>
+          <Descriptions.Item label="Vendor-Zugang">Zeitbegrenzt · nur zugewiesene Geräte</Descriptions.Item>
+          <Descriptions.Item label="Letzter Pentest">2026-01-15 · Keine kritischen Funde</Descriptions.Item>
+        </Descriptions>
+      </Card>
+
+      <Modal title={t.rmt.connectVpn} open={vpnModal} onOk={() => { setVpnModal(false); message.success('VPN-Verbindung hergestellt') }} onCancel={() => setVpnModal(false)} okText={t.actions.connect} cancelText={t.actions.cancel}>
+        <p>VPN-Verbindung zum GA-Netzwerk herstellen?</p>
+        <p style={{ color: '#8c8c8c' }}>Server: vpn.westpark-bms.de:1194 · Zertifikat-basierte Authentifizierung</p>
       </Modal>
     </div>
   )

@@ -2,8 +2,8 @@
 
 import { useI18n } from '@/components/i18n-provider'
 import { useState } from 'react'
-import { Card, Statistic, Table, Tag, Row, Col, Typography, Button, Space, DatePicker, Select, message } from 'antd'
-import { LineChartOutlined, DatabaseOutlined, ClockCircleOutlined, DownloadOutlined } from '@ant-design/icons'
+import { Card, Statistic, Table, Tag, Row, Col, Typography, Button, Space, DatePicker, Select, Descriptions, message } from 'antd'
+import { LineChartOutlined, DatabaseOutlined, DownloadOutlined } from '@ant-design/icons'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 const { Title, Text } = Typography
@@ -13,63 +13,98 @@ function genTrend7d() {
   return Array.from({ length: 168 }, (_, i) => {
     const day = Math.floor(i / 24)
     const hour = i % 24
+    const workHour = hour >= 7 && hour <= 19 && day < 5
     return {
-      time: `D${day+1} ${String(hour).padStart(2,'0')}:00`,
-      temp: 22 + Math.sin(i / 12) * 2 + (Math.random() - 0.5),
-      humidity: 50 + Math.sin(i / 8) * 10 + (Math.random() - 0.5) * 5,
-      co2: 500 + Math.sin(i / 6) * 200 + (Math.random() - 0.5) * 50 + (hour > 8 && hour < 18 ? 150 : 0),
+      time: `T${day+1} ${String(hour).padStart(2,'0')}:00`,
+      temp: +(22 + Math.sin(i / 12) * 1.5 + (workHour ? 0.8 : -0.5) + (Math.random() - 0.5) * 0.4).toFixed(1),
+      humidity: +(48 + Math.sin(i / 8) * 8 + (workHour ? 5 : -3) + (Math.random() - 0.5) * 3).toFixed(0),
+      co2: Math.round(420 + (workHour ? 250 : 30) + Math.sin(i / 6) * 80 + (Math.random() - 0.5) * 40),
     }
   }).filter((_, i) => i % 4 === 0)
 }
 
 const archives = [
-  { key: '1', name: '2026-03 Monthly Report', date: '2026-03-01', size: '12.5 MB', records: '1,234,567', status: 'archived' },
-  { key: '2', name: '2026-02 Monthly Report', date: '2026-02-01', size: '11.8 MB', records: '1,156,432', status: 'archived' },
-  { key: '3', name: '2026-01 Monthly Report', date: '2026-01-01', size: '13.2 MB', records: '1,389,012', status: 'archived' },
+  { key: '1', name: '2026-03 Monatsbericht', period: '2026-03-01 ~ 06', size: '2.8 MB', records: '215,400', points: 1376, status: 'partial' },
+  { key: '2', name: '2026-02 Monatsbericht', period: '2026-02-01 ~ 28', size: '14.2 MB', records: '1,156,432', points: 1376, status: 'archived' },
+  { key: '3', name: '2026-01 Monatsbericht', period: '2026-01-01 ~ 31', size: '15.8 MB', records: '1,389,012', points: 1376, status: 'archived' },
+  { key: '4', name: '2025-12 Monatsbericht', period: '2025-12-01 ~ 31', size: '15.1 MB', records: '1,324,800', points: 1376, status: 'archived' },
+  { key: '5', name: '2025-11 Monatsbericht', period: '2025-11-01 ~ 30', size: '13.9 MB', records: '1,248,000', points: 1376, status: 'archived' },
+  { key: '6', name: '2025-10 Monatsbericht', period: '2025-10-01 ~ 31', size: '14.5 MB', records: '1,310,400', points: 1376, status: 'archived' },
+  { key: '7', name: '2025 Q3 Quartalsbericht', period: '2025-07 ~ 09', size: '42.1 MB', records: '3,801,600', points: 1376, status: 'archived' },
 ]
 
 export default function TrendsPage() {
   const { t } = useI18n()
   const [data] = useState(genTrend7d)
 
+  const totalArchiveSize = '118.4 MB'
+  const totalRecords = '10,445,644'
+
   const archCols = [
     { title: t.common.name, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
-    { title: t.common.date, dataIndex: 'date', key: 'date' },
-    { title: t.common.size, dataIndex: 'size', key: 'size' },
-    { title: t.common.records, dataIndex: 'records', key: 'records' },
-    { title: t.common.status, dataIndex: 'status', key: 'status', render: () => <Tag color="green">{t.trend.archived}</Tag> },
-    { title: t.common.operation, key: 'op', render: () => <Button size="small" icon={<DownloadOutlined />} type="link">{t.common.download}</Button> },
+    { title: t.common.period, dataIndex: 'period', key: 'period' },
+    { title: 'Trendpunkte', dataIndex: 'points', key: 'points', width: 100, render: (v: number) => v.toLocaleString() },
+    { title: t.common.records, dataIndex: 'records', key: 'records', width: 110 },
+    { title: t.common.size, dataIndex: 'size', key: 'size', width: 80 },
+    { title: t.common.status, dataIndex: 'status', key: 'status', width: 90, render: (v: string) => <Tag color={v === 'archived' ? 'green' : 'blue'}>{v === 'archived' ? t.trend.archived : 'Aktuell'}</Tag> },
+    { title: t.common.operation, key: 'op', width: 120, render: () => <Space><Button size="small" icon={<DownloadOutlined />} type="link">CSV</Button><Button size="small" type="link">PDF</Button></Space> },
   ]
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div><Title level={4} style={{ margin: 0 }}>{t.nav.trends}</Title><Text type="secondary">{t.trend.subtitle}</Text></div>
+        <div><Title level={4} style={{ margin: 0 }}>{t.nav.trends}</Title><Text type="secondary">{t.trend.subtitle} · PostgreSQL TimescaleDB</Text></div>
         <Space>
           <RangePicker />
-          <Select defaultValue="temp" options={[{value:'temp',label:t.trend.temperature},{value:'humidity',label:t.trend.humidity},{value:'co2',label:t.trend.co2Label},{value:'energy',label:t.trend.energy}]} style={{width:120}} />
-          <Button type="primary" icon={<DownloadOutlined />} onClick={() => message.success('CSV exported')}>{t.trend.exportCsv}</Button>
+          <Select defaultValue="temp" options={[
+            {value:'temp',label:t.trend.temperature},
+            {value:'humidity',label:t.trend.humidity},
+            {value:'co2',label:'CO₂'},
+            {value:'energy',label:t.trend.energy},
+            {value:'supply_temp',label:'Vorlauf-Temp'},
+            {value:'valve_pos',label:'Ventilstellung'},
+          ]} style={{width:140}} />
+          <Button type="primary" icon={<DownloadOutlined />} onClick={() => message.success('CSV exportiert')}>{t.trend.exportCsv}</Button>
         </Space>
       </div>
+
       <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.trendPoints} value={1376} prefix={<LineChartOutlined />} /><Text type="secondary">{t.trend.activePts}</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.sampleInterval} value="15 min" /><Text type="secondary">{t.trend.defaultCycle}</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.archiveData} value="37.5 MB" prefix={<DatabaseOutlined />} /><Text type="secondary">{t.trend.past5m}</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.exportFormat} value="CSV / PDF" /><Text type="secondary">{t.trend.downloadable}</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.trendPoints} value={1376} prefix={<LineChartOutlined />} /><Text type="secondary">98 Geräte · 6 Protokolle</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.sampleInterval} value="15 min" /><Text type="secondary">COV + 15min Polling</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.archiveData} value={totalArchiveSize} prefix={<DatabaseOutlined />} /><Text type="secondary">{totalRecords} Einträge</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.exportFormat} value="CSV / PDF / Excel" /><Text type="secondary">{t.trend.downloadable}</Text></Card></Col>
       </Row>
-      <Card title={t.trend.trendCurve7d}>
-        <ResponsiveContainer width="100%" height={320}>
+
+      <Card title={t.trend.trendCurve7d} extra={<Text type="secondary">OG1 Großraumbüro Nord · KW10</Text>}>
+        <ResponsiveContainer width="100%" height={340}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="time" fontSize={10} interval={5} /><YAxis yAxisId="t" fontSize={11} domain={[18, 28]} /><YAxis yAxisId="h" orientation="right" fontSize={11} domain={[0, 1200]} />
-            <Tooltip /><Legend />
+            <XAxis dataKey="time" fontSize={10} interval={5} />
+            <YAxis yAxisId="t" fontSize={11} domain={[18, 28]} />
+            <YAxis yAxisId="h" orientation="right" fontSize={11} domain={[0, 1200]} />
+            <Tooltip />
+            <Legend />
             <Line yAxisId="t" type="monotone" dataKey="temp" name={`${t.trend.temperature} (°C)`} stroke="#f5222d" strokeWidth={1.5} dot={false} />
             <Line yAxisId="t" type="monotone" dataKey="humidity" name={`${t.trend.humidity} (%)`} stroke="#1677ff" strokeWidth={1.5} dot={false} />
             <Line yAxisId="h" type="monotone" dataKey="co2" name="CO₂ (ppm)" stroke="#52c41a" strokeWidth={1.5} dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </Card>
-      <Card title={t.trend.archiveManage}><Table columns={archCols} dataSource={archives} pagination={false} size="small" /></Card>
+
+      <Card title={t.trend.archiveManage} extra={<Text type="secondary">Aufbewahrung: 5 Jahre</Text>}>
+        <Table columns={archCols} dataSource={archives} pagination={false} size="small" />
+      </Card>
+
+      <Card title="Archivierungs-Einstellungen" size="small">
+        <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
+          <Descriptions.Item label="Datenbank">PostgreSQL 16.2 + TimescaleDB</Descriptions.Item>
+          <Descriptions.Item label="Aufbewahrung">5 Jahre (Rohwerte: 1 Jahr, Aggregation: 5 Jahre)</Descriptions.Item>
+          <Descriptions.Item label="Komprimierung">TimescaleDB Native · ~60% Einsparung</Descriptions.Item>
+          <Descriptions.Item label="Abtastrate">15 min Standard / COV für kritische Werte</Descriptions.Item>
+          <Descriptions.Item label="Tägliche Rotation">02:30 Uhr (nach Backup)</Descriptions.Item>
+          <Descriptions.Item label="Speicherprognose">~180 MB/Monat · 500 GB reicht ~18 Jahre</Descriptions.Item>
+        </Descriptions>
+      </Card>
     </div>
   )
 }
