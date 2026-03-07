@@ -43,10 +43,10 @@ export default function TrendsPage() {
   const archCols = [
     { title: t.common.name, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
     { title: t.common.period, dataIndex: 'period', key: 'period' },
-    { title: '趋势点位', dataIndex: 'points', key: 'points', width: 100, render: (v: number) => v.toLocaleString() },
+    { title: t.trend.trendPoints, dataIndex: 'points', key: 'points', width: 100, render: (v: number) => v.toLocaleString() },
     { title: t.common.records, dataIndex: 'records', key: 'records', width: 110 },
     { title: t.common.size, dataIndex: 'size', key: 'size', width: 80 },
-    { title: t.common.status, dataIndex: 'status', key: 'status', width: 90, render: (v: string) => <Tag color={v === 'archived' ? 'green' : 'blue'}>{v === 'archived' ? t.trend.archived : '当前'}</Tag> },
+    { title: t.common.status, dataIndex: 'status', key: 'status', width: 90, render: (v: string) => <Tag color={v === 'archived' ? 'green' : 'blue'}>{v === 'archived' ? t.trend.archived : t.trend.currentPeriod}</Tag> },
     { title: t.common.operation, key: 'op', width: 120, render: () => <Space><Button size="small" icon={<DownloadOutlined />} type="link">CSV</Button><Button size="small" type="link">PDF</Button></Space> },
   ]
 
@@ -61,17 +61,17 @@ export default function TrendsPage() {
             {value:'humidity',label:t.trend.humidity},
             {value:'co2',label:'CO₂'},
             {value:'energy',label:t.trend.energy},
-            {value:'supply_temp',label:'供水温度'},
-            {value:'valve_pos',label:'阀位'},
+            {value:'supply_temp',label:t.trend.supplyTempLabel},
+            {value:'valve_pos',label:t.trend.valveLabel},
           ]} style={{width:140}} />
-          <Button type="primary" icon={<DownloadOutlined />} onClick={() => message.success('CSV已导出')}>{t.trend.exportCsv}</Button>
+          <Button type="primary" icon={<DownloadOutlined />} onClick={() => message.success(t.trend.csvExported)}>{t.trend.exportCsv}</Button>
         </Space>
       </div>
 
       <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.trendPoints} value={1376} prefix={<LineChartOutlined />} /><Text type="secondary">98台设备 · 6种协议</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.sampleInterval} value="15 min" /><Text type="secondary">COV + 15分钟轮询</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.archiveData} value={totalArchiveSize} prefix={<DatabaseOutlined />} /><Text type="secondary">{totalRecords} 条记录</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.trendPoints} value={1376} prefix={<LineChartOutlined />} /><Text type="secondary">{t.trend.devicesProtocols}</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.sampleInterval} value="15 min" /><Text type="secondary">{t.trend.covPolling}</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.archiveData} value={totalArchiveSize} prefix={<DatabaseOutlined />} /><Text type="secondary">{totalRecords} {t.trend.recordsCount}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.exportFormat} value="CSV / PDF / Excel" /><Text type="secondary">{t.trend.downloadable}</Text></Card></Col>
       </Row>
 
@@ -91,18 +91,18 @@ export default function TrendsPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.trend.archiveManage} extra={<Text type="secondary">保存期限: 5年</Text>}>
+      <Card title={t.trend.archiveManage} extra={<Text type="secondary">{t.trend.retention}</Text>}>
         <Table columns={archCols} dataSource={archives} pagination={false} size="small" />
       </Card>
 
-      <Card title="归档设置" size="small">
+      <Card title={t.trend.archiveSettings} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
-          <Descriptions.Item label="Datenbank">PostgreSQL 16.2 + TimescaleDB</Descriptions.Item>
-          <Descriptions.Item label="保存期限">5年 (原始数据: 1年, 聚合数据: 5年)</Descriptions.Item>
-          <Descriptions.Item label="压缩">TimescaleDB 原生压缩 · 节省约60%</Descriptions.Item>
-          <Descriptions.Item label="采样率">标准 15分钟 / 关键值 COV</Descriptions.Item>
-          <Descriptions.Item label="每日轮转">02:30 (备份后)</Descriptions.Item>
-          <Descriptions.Item label="存储预测">~180 MB/月 · 500 GB 可用约18年</Descriptions.Item>
+          <Descriptions.Item label={t.trend.dbLabel}>PostgreSQL 16.2 + TimescaleDB</Descriptions.Item>
+          <Descriptions.Item label={t.trend.retentionPolicy}>5年 (原始数据: 1年, 聚合数据: 5年)</Descriptions.Item>
+          <Descriptions.Item label={t.trend.compression}>TimescaleDB 原生压缩 · 节省约60%</Descriptions.Item>
+          <Descriptions.Item label={t.trend.samplingRate}>标准 15分钟 / 关键值 COV</Descriptions.Item>
+          <Descriptions.Item label={t.trend.dailyRotation}>02:30 (备份后)</Descriptions.Item>
+          <Descriptions.Item label={t.trend.storageForecast}>~180 MB/月 · 500 GB 可用约18年</Descriptions.Item>
         </Descriptions>
       </Card>
     </div>

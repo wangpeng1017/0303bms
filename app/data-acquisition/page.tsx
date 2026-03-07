@@ -69,11 +69,11 @@ export default function DataAcquisitionPage() {
 
   const devCols = [
     { title: t.common.name, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
-    { title: '类型', dataIndex: 'type', key: 'type', width: 130 },
+    { title: t.common.deviceType, dataIndex: 'type', key: 'type', width: 130 },
     { title: t.common.protocol, dataIndex: 'protocol', key: 'protocol', width: 110 },
     { title: 'IP', dataIndex: 'address', key: 'address', width: 130, render: (v: string) => <Text code style={{ fontSize: 11 }}>{v}</Text> },
     { title: 'BACnet ID', dataIndex: 'bacnetId', key: 'bacnetId', width: 85, render: (v: number) => v > 0 ? v : '-' },
-    { title: '楼层', dataIndex: 'floor', key: 'floor', width: 60 },
+    { title: t.common.floor, dataIndex: 'floor', key: 'floor', width: 60 },
     { title: t.dataAcq.pointCount, dataIndex: 'points', key: 'points', width: 70, align: 'center' as const },
     { title: t.common.status, dataIndex: 'status', key: 'status', width: 80, render: (v: string) => <Tag color={v === 'online' ? 'green' : v === 'warning' ? 'orange' : 'red'}>{v === 'online' ? t.status.online : v === 'warning' ? t.status.warning : t.status.offline}</Tag> },
     { title: t.common.operation, key: 'op', width: 120, render: () => <Space><Button size="small" type="link">{t.actions.edit}</Button><Button size="small" type="link" danger>{t.actions.delete}</Button></Space> },
@@ -84,13 +84,13 @@ export default function DataAcquisitionPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div><Title level={4} style={{ margin: 0 }}>{t.nav.dataAcquisition}</Title><Text type="secondary">{t.dataAcq.subtitle} · Siemens Desigo CC</Text></div>
         <Space>
-          <Button icon={<SearchOutlined />} onClick={() => { setScanModal(true); setTimeout(() => { setScanModal(false); message.success('网络扫描完成: 发现2台新设备') }, 2000) }}>{t.dataAcq.scanNetwork}</Button>
+          <Button icon={<SearchOutlined />} onClick={() => { setScanModal(true); setTimeout(() => { setScanModal(false); message.success(t.dataAcq.scanComplete) }, 2000) }}>{t.dataAcq.scanNetwork}</Button>
           <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddDeviceModal(true)}>{t.dataAcq.addDevice}</Button>
         </Space>
       </div>
 
       <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.dataAcq.totalDevices} value={devices.length} prefix={<DatabaseOutlined />} /><Text type="secondary">{protocols.length} 个协议</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.dataAcq.totalDevices} value={devices.length} prefix={<DatabaseOutlined />} /><Text type="secondary">{protocols.length} {t.dataAcq.protocols}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.dataAcq.dataPoints} value={totalPoints.toLocaleString()} valueStyle={{ color: '#1677ff' }} /><Text type="secondary">{t.dataAcq.activePoints}: {(totalPoints - 48).toLocaleString()}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.status.online} value={`${onlineDevices}/${devices.length}`} valueStyle={{ color: '#52c41a' }} prefix={<ApiOutlined />} /></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.dataAcq.collectFreq} value={5} suffix={t.dataAcq.secPerCycle} prefix={<ClockCircleOutlined />} /><Text type="secondary">COV + Polling</Text></Card></Col>
@@ -109,31 +109,31 @@ export default function DataAcquisitionPage() {
 
       <Card title={t.dataAcq.protocolStatus}><Table columns={protoCols} dataSource={protocols} pagination={false} size="small" /></Card>
 
-      <Card title={t.dataAcq.deviceList} extra={<Text type="secondary">{devices.length} 台设备 · 5个楼层</Text>}>
+      <Card title={t.dataAcq.deviceList} extra={<Text type="secondary">{devices.length} {t.dataAcq.devicesFloors}</Text>}>
         <Table columns={devCols} dataSource={devices} pagination={{ pageSize: 10, size: 'small' }} size="small" scroll={{ x: 1100 }} />
       </Card>
 
-      <Card title="网络拓扑" size="small">
+      <Card title={t.dataAcq.networkTopology} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
-          <Descriptions.Item label="管理服务器">Siemens Desigo CC · v6.0</Descriptions.Item>
-          <Descriptions.Item label="网络">VLAN 10 (GA) · 192.168.10.0/24</Descriptions.Item>
-          <Descriptions.Item label="BACnet 路由器">Loytec LGATE-950 · 2台</Descriptions.Item>
-          <Descriptions.Item label="数据库">PostgreSQL 16 · 42 GB</Descriptions.Item>
-          <Descriptions.Item label="备份">每日 02:00 · 保留30天</Descriptions.Item>
-          <Descriptions.Item label="采集周期">5秒轮询 / COV订阅</Descriptions.Item>
+          <Descriptions.Item label={t.dataAcq.mgmtServer}>Siemens Desigo CC · v6.0</Descriptions.Item>
+          <Descriptions.Item label={t.dataAcq.network}>VLAN 10 (GA) · 192.168.10.0/24</Descriptions.Item>
+          <Descriptions.Item label={t.dataAcq.bacnetRouter}>Loytec LGATE-950 · 2台</Descriptions.Item>
+          <Descriptions.Item label={t.dataAcq.database}>PostgreSQL 16 · 42 GB</Descriptions.Item>
+          <Descriptions.Item label={t.dataAcq.backupSchedule}>每日 02:00 · 保留30天</Descriptions.Item>
+          <Descriptions.Item label={t.dataAcq.collectCycle}>5秒轮询 / COV订阅</Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Modal title={t.dataAcq.addDevice} open={addDeviceModal} onOk={() => { setAddDeviceModal(false); message.success('设备已添加') }} onCancel={() => setAddDeviceModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
+      <Modal title={t.dataAcq.addDevice} open={addDeviceModal} onOk={() => { setAddDeviceModal(false); message.success(t.dataAcq.deviceAdded) }} onCancel={() => setAddDeviceModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
         <Form layout="vertical">
           <Form.Item label={t.common.name}><Input placeholder="DDC-OG4-01" /></Form.Item>
-          <Form.Item label="设备类型"><Select options={[{value:'Siemens PXC36'},{value:'Siemens PXC50'},{value:'Siemens S7-1200'},{value:'Siemens S7-1500'},{value:'ABB IP Interface'},{value:'Tridonic DALI-2'}]} /></Form.Item>
+          <Form.Item label={t.common.deviceType}><Select options={[{value:'Siemens PXC36'},{value:'Siemens PXC50'},{value:'Siemens S7-1200'},{value:'Siemens S7-1500'},{value:'ABB IP Interface'},{value:'Tridonic DALI-2'}]} /></Form.Item>
           <Form.Item label={t.common.protocol}><Select options={[{value:'BACnet/IP'},{value:'Modbus TCP'},{value:'KNX/IP'},{value:'DALI-2'},{value:'M-Bus'},{value:'OPC UA'}]} /></Form.Item>
-          <Form.Item label="IP 地址"><Input placeholder="192.168.10.xxx" /></Form.Item>
-          <Form.Item label="Etage"><Select options={[{value:'UG'},{value:'EG'},{value:'OG1'},{value:'OG2'},{value:'OG3'}]} /></Form.Item>
+          <Form.Item label={t.dataAcq.ipAddress}><Input placeholder="192.168.10.xxx" /></Form.Item>
+          <Form.Item label={t.common.floor}><Select options={[{value:'UG'},{value:'EG'},{value:'OG1'},{value:'OG2'},{value:'OG3'}]} /></Form.Item>
         </Form>
       </Modal>
-      <Modal title={t.dataAcq.scanNetwork} open={scanModal} footer={null} closable={false}><p>正在扫描网络 (192.168.10.0/24)...</p></Modal>
+      <Modal title={t.dataAcq.scanNetwork} open={scanModal} footer={null} closable={false}><p>{t.dataAcq.scanning} (192.168.10.0/24)...</p></Modal>
     </div>
   )
 }

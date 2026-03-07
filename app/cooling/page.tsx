@@ -65,10 +65,10 @@ export default function CoolingPage() {
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.cool.chilledSupply} value={6.8} suffix="°C" valueStyle={{ color: '#1677ff' }} prefix={<ExperimentOutlined />} /><Text type="secondary">{t.cool.returnWater} 12.3°C · ΔT 5.5°C</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.cool.coolingPower} value={totalCoolingPower} suffix="kW" /><Text type="secondary">{t.cool.totalCapacity} 260kW</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.cool.coolingZones} value={`${coolingZones}/${zones.length}`} valueStyle={{ color: '#13c2c2' }} /><Text type="secondary">{t.common.running}</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.cool.cop} value={4.35} valueStyle={{ color: '#52c41a' }} prefix={<DashboardOutlined />} /><Text type="secondary">额定COP: 4.8</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.cool.cop} value={4.35} valueStyle={{ color: '#52c41a' }} prefix={<DashboardOutlined />} /><Text type="secondary">{t.cool.ratedCop}: 4.8</Text></Card></Col>
       </Row>
 
-      <Card title={t.cool.pidCurve} extra={<Text type="secondary">区域: OG2 会议室 2.10 · 采样周期 15s</Text>}>
+      <Card title={t.cool.pidCurve} extra={<Text type="secondary">区域: OG2 会议室 2.10 · {t.cool.samplingCycle}</Text>}>
         <ResponsiveContainer width="100%" height={320}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -84,24 +84,24 @@ export default function CoolingPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.cool.pidParams} extra={<Text type="secondary">{zones.length} 个控制区域 · Siemens PXC Compact</Text>}>
+      <Card title={t.cool.pidParams} extra={<Text type="secondary">{zones.length} {t.cool.controlZones}</Text>}>
         <Table columns={cols} dataSource={zones} pagination={false} size="small" scroll={{ x: 1100 }} />
       </Card>
 
-      <Card title="制冷设备" size="small">
+      <Card title={t.cool.chillerEquip} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
-          <Descriptions.Item label="1号冷水机组">Carrier 30RB-262 · 130kW · <Tag color="green">Betrieb</Tag></Descriptions.Item>
-          <Descriptions.Item label="2号冷水机组">Carrier 30RB-262 · 130kW · <Tag color="orange">待机</Tag></Descriptions.Item>
-          <Descriptions.Item label="制冷剂">R-410A · 充注量 28kg/台</Descriptions.Item>
-          <Descriptions.Item label="冷却塔">冷却塔 BAC FXT-18 · 32°C</Descriptions.Item>
-          <Descriptions.Item label="蓄冷水箱">1.500L · 7.2°C</Descriptions.Item>
-          <Descriptions.Item label="运行时数">6,820h / 3,140h</Descriptions.Item>
-          <Descriptions.Item label="下次维保">2026-05-10</Descriptions.Item>
-          <Descriptions.Item label="压缩机负载">75% / 0%</Descriptions.Item>
+          <Descriptions.Item label={t.cool.chiller1}>Carrier 30RB-262 · 130kW · <Tag color="green">Betrieb</Tag></Descriptions.Item>
+          <Descriptions.Item label={t.cool.chiller2}>Carrier 30RB-262 · 130kW · <Tag color="orange">{t.cool.standbyLabel}</Tag></Descriptions.Item>
+          <Descriptions.Item label={t.cool.refrigerant}>R-410A · 充注量 28kg/台</Descriptions.Item>
+          <Descriptions.Item label={t.cool.coolingTower}>冷却塔 BAC FXT-18 · 32°C</Descriptions.Item>
+          <Descriptions.Item label={t.cool.coldStorage}>1.500L · 7.2°C</Descriptions.Item>
+          <Descriptions.Item label={t.cool.operatingHours}>6,820h / 3,140h</Descriptions.Item>
+          <Descriptions.Item label={t.cool.nextMaint}>2026-05-10</Descriptions.Item>
+          <Descriptions.Item label={t.cool.compressorLoad}>75% / 0%</Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Modal title={`${t.cool.adjustPid} - ${selectedZone?.name || ''}`} open={pidModal} onOk={() => { setPidModal(false); message.success('PID参数已更新') }} onCancel={() => setPidModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
+      <Modal title={`${t.cool.adjustPid} - ${selectedZone?.name || ''}`} open={pidModal} onOk={() => { setPidModal(false); message.success(t.cool.pidUpdated) }} onCancel={() => setPidModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
         <Form layout="vertical">
           <Form.Item label={`${t.cool.proportional} (Kp)`}><InputNumber defaultValue={selectedZone?.kp} step={0.1} min={0.5} max={10} style={{ width: '100%' }} /></Form.Item>
           <Form.Item label={`${t.cool.integral} (Ki)`}><InputNumber defaultValue={selectedZone?.ki} step={0.1} min={0} max={5} style={{ width: '100%' }} /></Form.Item>

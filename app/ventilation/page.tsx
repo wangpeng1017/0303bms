@@ -13,7 +13,7 @@ function genAir() {
     const workHour = i >= 7 && i <= 19
     const peakHour = i >= 9 && i <= 17
     return {
-      hour: `${String(i).padStart(2, '0')}:00`,
+      hour: `${String(i).padStart(2, '00')}:00`,
       supply: Math.round((workHour ? 12000 : 3500) + (peakHour ? 4000 : 0) + (Math.random() - 0.5) * 1500),
       exhaust: Math.round((workHour ? 11200 : 3200) + (peakHour ? 3800 : 0) + (Math.random() - 0.5) * 1400),
       co2: Math.round(400 + (workHour ? 180 : 20) + (peakHour ? 120 : 0) + (Math.random() - 0.5) * 60),
@@ -48,7 +48,7 @@ export default function VentilationPage() {
     { title: t.vent.unit, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
     { title: `${t.vent.supplyAir} (m³/h)`, dataIndex: 'supply', key: 'supply', width: 100, render: (v: number) => v > 0 ? v.toLocaleString() : '-' },
     { title: `${t.vent.exhaustAir} (m³/h)`, dataIndex: 'exhaust', key: 'exhaust', width: 100, render: (v: number) => v > 0 ? v.toLocaleString() : '-' },
-    { title: '送风温度 °C', dataIndex: 'supplyTemp', key: 'supplyTemp', width: 80, render: (v: number) => v > 0 ? `${v}°C` : '-' },
+    { title: `${t.vent.supplyAirTemp} °C`, dataIndex: 'supplyTemp', key: 'supplyTemp', width: 80, render: (v: number) => v > 0 ? `${v}°C` : '-' },
     { title: 'CO₂ (ppm)', dataIndex: 'co2', key: 'co2', width: 80, render: (v: number) => v > 0 ? <Text style={{ color: v > 800 ? '#f5222d' : v > 600 ? '#fa8c16' : '#52c41a' }}>{v}</Text> : '-' },
     { title: 'VFD Hz', dataIndex: 'freq', key: 'freq', width: 70, render: (v: number) => v > 0 ? `${v} Hz` : '-' },
     { title: 'WRG %', dataIndex: 'hrEff', key: 'hrEff', width: 70, render: (v: number) => v > 0 ? `${v}%` : '-' },
@@ -66,18 +66,18 @@ export default function VentilationPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div><Title level={4} style={{ margin: 0 }}>{t.nav.ventilation}</Title><Text type="secondary">{t.vent.subtitle} · 8台空调机组 · 热回收</Text></div>
+        <div><Title level={4} style={{ margin: 0 }}>{t.nav.ventilation}</Title><Text type="secondary">{t.vent.subtitle} · 8{t.vent.units} · {t.vent.heatRecovery}</Text></div>
         <Text type="secondary"><ClockCircleOutlined /> {new Date().toLocaleString()}</Text>
       </div>
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.totalSupply} value={totalSupply.toLocaleString()} suffix="m³/h" prefix={<CloudOutlined />} valueStyle={{ color: '#1677ff' }} /></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.totalExhaust} value={totalExhaust.toLocaleString()} suffix="m³/h" /></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.avgCo2} value={avgCo2} suffix="ppm" valueStyle={{ color: avgCo2 > 800 ? '#f5222d' : '#52c41a' }} prefix={<ExperimentOutlined />} /><Text type="secondary">限值: 1000 ppm</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.filterWarning} value={filterWarnings} valueStyle={{ color: filterWarnings > 0 ? '#fa8c16' : '#52c41a' }} prefix={<AlertOutlined />} /><Text type="secondary">{filterWarnings > 0 ? t.vent.needReplace : '全部正常'}</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.avgCo2} value={avgCo2} suffix="ppm" valueStyle={{ color: avgCo2 > 800 ? '#f5222d' : '#52c41a' }} prefix={<ExperimentOutlined />} /><Text type="secondary">{t.vent.limit}: 1000 ppm</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.filterWarning} value={filterWarnings} valueStyle={{ color: filterWarnings > 0 ? '#fa8c16' : '#52c41a' }} prefix={<AlertOutlined />} /><Text type="secondary">{filterWarnings > 0 ? t.vent.needReplace : t.common.allNormal}</Text></Card></Col>
       </Row>
 
-      <Card title={t.vent.trendTitle} extra={<Text type="secondary">总换气次数: ~3.2 次/h</Text>}>
+      <Card title={t.vent.trendTitle} extra={<Text type="secondary">{t.vent.airChanges}: ~3.2 次/h</Text>}>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={trend}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -93,24 +93,24 @@ export default function VentilationPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.vent.ahuStatus} extra={<Space><Text>{t.vent.co2Link}</Text><Switch defaultChecked /><Text type="secondary">{runningAhus.length}/{ahus.length} 活跃</Text></Space>}>
+      <Card title={t.vent.ahuStatus} extra={<Space><Text>{t.vent.co2Link}</Text><Switch defaultChecked /><Text type="secondary">{runningAhus.length}/{ahus.length} {t.light.groupActive}</Text></Space>}>
         <Table columns={cols} dataSource={ahus} pagination={false} size="small" scroll={{ x: 1300 }} />
       </Card>
 
-      <Card title="空调机组详情" size="small">
+      <Card title={t.vent.ahuDetails} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
-          <Descriptions.Item label="制造商">Kampmann / Wolf GmbH</Descriptions.Item>
-          <Descriptions.Item label="过滤器等级">F7 (送风) / G4 (排风)</Descriptions.Item>
-          <Descriptions.Item label="热回收类型">交叉流板式换热器</Descriptions.Item>
-          <Descriptions.Item label="热回收平均效率">77.2%</Descriptions.Item>
-          <Descriptions.Item label="变频器总功率">8× Siemens SINAMICS G120</Descriptions.Item>
-          <Descriptions.Item label="下次过滤器维保">2026-03-20</Descriptions.Item>
+          <Descriptions.Item label={t.vent.mfr}>Kampmann / Wolf GmbH</Descriptions.Item>
+          <Descriptions.Item label={t.vent.filterGrade}>F7 (送风) / G4 (排风)</Descriptions.Item>
+          <Descriptions.Item label={t.vent.heatRecoveryType}>交叉流板式换热器</Descriptions.Item>
+          <Descriptions.Item label={t.vent.heatRecoveryEff}>77.2%</Descriptions.Item>
+          <Descriptions.Item label={t.vent.vfdPower}>8× Siemens SINAMICS G120</Descriptions.Item>
+          <Descriptions.Item label={t.vent.nextFilterMaint}>2026-03-20</Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Modal title={`${t.vent.changeFilter} - ${selectedUnit}`} open={filterModal} onOk={() => { setFilterModal(false); message.success(`${selectedUnit} 过滤器已复位`) }} onCancel={() => setFilterModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
-        <p>确认更换过滤器: {selectedUnit}</p>
-        <p style={{ color: '#8c8c8c' }}>压差计数器将被重置。下次计划更换时间为6个月后。</p>
+      <Modal title={`${t.vent.changeFilter} - ${selectedUnit}`} open={filterModal} onOk={() => { setFilterModal(false); message.success(`${selectedUnit} ${t.vent.filterReset}`) }} onCancel={() => setFilterModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
+        <p>{t.vent.filterResetConfirm}: {selectedUnit}</p>
+        <p style={{ color: '#8c8c8c' }}>{t.vent.filterResetNote}</p>
       </Modal>
     </div>
   )

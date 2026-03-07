@@ -21,11 +21,11 @@ const userList = [
 ]
 
 const roles = [
-  { key: '1', role: 'Administrator', permissions: '完全访问 (配置+控制+管理)', users: 1, level: '第4级' },
-  { key: '2', role: 'Engineer', permissions: '配置+控制+确认+监控', users: 2, level: '第3级' },
-  { key: '3', role: 'Operator', permissions: '控制+确认+监控', users: 3, level: '第2级' },
-  { key: '4', role: 'Viewer', permissions: '仅监控 (只读)', users: 2, level: '第1级' },
-  { key: '5', role: 'Vendor', permissions: '受限访问 (限时, VPN)', users: 2, level: '供应商级' },
+  { key: '1', role: 'Administrator', permissions: 'fullAccess', users: 1, level: 'level4' },
+  { key: '2', role: 'Engineer', permissions: 'configCtrlAck', users: 2, level: 'level3' },
+  { key: '3', role: 'Operator', permissions: 'ctrlAck', users: 3, level: 'level2' },
+  { key: '4', role: 'Viewer', permissions: 'viewOnly', users: 2, level: 'level1' },
+  { key: '5', role: 'Vendor', permissions: 'vendorAccess', users: 2, level: 'vendorLevel' },
 ]
 
 const auditLog = [
@@ -48,10 +48,26 @@ export default function UsersPage() {
 
   const onlineUsers = userList.filter(u => u.status === 'online').length
 
+  const permMap: Record<string, string> = {
+    fullAccess: t.usr.fullAccess,
+    configCtrlAck: t.usr.configCtrlAck,
+    ctrlAck: t.usr.ctrlAck,
+    viewOnly: t.usr.viewOnly,
+    vendorAccess: t.usr.vendorAccess,
+  }
+
+  const levelMap: Record<string, string> = {
+    level4: t.usr.level4,
+    level3: t.usr.level3,
+    level2: t.usr.level2,
+    level1: t.usr.level1,
+    vendorLevel: t.usr.vendorLevel,
+  }
+
   const userCols = [
     { title: t.usr.user, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
     { title: t.usr.role, dataIndex: 'role', key: 'role', width: 110, render: (v: string) => <Tag color={v === 'Administrator' ? 'red' : v === 'Engineer' ? 'blue' : v === 'Operator' ? 'green' : v === 'Vendor' ? 'purple' : 'default'}>{v}</Tag> },
-    { title: '部门', dataIndex: 'dept', key: 'dept', width: 140 },
+    { title: t.common.department, dataIndex: 'dept', key: 'dept', width: 140 },
     { title: t.usr.email, dataIndex: 'email', key: 'email' },
     { title: t.usr.lastLogin, dataIndex: 'lastLogin', key: 'lastLogin', width: 140 },
     { title: t.common.status, dataIndex: 'status', key: 'status', width: 80, render: (v: string) => <Tag color={v === 'online' ? 'green' : 'default'}>{v === 'online' ? t.status.online : t.status.offline}</Tag> },
@@ -60,8 +76,8 @@ export default function UsersPage() {
 
   const roleCols = [
     { title: t.usr.role, dataIndex: 'role', key: 'role', render: (v: string) => <Text strong>{v}</Text> },
-    { title: '等级', dataIndex: 'level', key: 'level', width: 80 },
-    { title: t.usr.permissions, dataIndex: 'permissions', key: 'permissions' },
+    { title: t.common.rank, dataIndex: 'level', key: 'level', width: 80, render: (v: string) => levelMap[v] || v },
+    { title: t.usr.permissions, dataIndex: 'permissions', key: 'permissions', render: (v: string) => permMap[v] || v },
     { title: t.usr.userCount, dataIndex: 'users', key: 'users', width: 80, align: 'center' as const },
     { title: t.common.operation, key: 'op', width: 100, render: () => <Button size="small" type="link" onClick={() => setEditRoleModal(true)}>{t.usr.editRole}</Button> },
   ]
@@ -84,29 +100,29 @@ export default function UsersPage() {
       </div>
 
       <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.usr.totalUsers} value={userList.length} prefix={<TeamOutlined />} /><Text type="secondary">含 {userList.filter(u => u.role === 'Vendor').length} 外部人员</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.usr.totalUsers} value={userList.length} prefix={<TeamOutlined />} /><Text type="secondary">{t.common.externalStaff}: {userList.filter(u => u.role === 'Vendor').length}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.usr.onlineUsers} value={onlineUsers} valueStyle={{ color: '#52c41a' }} prefix={<UserOutlined />} /><Text type="secondary">{t.usr.currentOnline}</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.usr.roleCount} value={roles.length} prefix={<SafetyOutlined />} /><Text type="secondary">VDI 3814 等级</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.usr.roleCount} value={roles.length} prefix={<SafetyOutlined />} /><Text type="secondary">{t.usr.vdiLevel}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.usr.todayOps} value={auditLog.length} prefix={<ClockCircleOutlined />} /></Card></Col>
       </Row>
 
       <Card title={t.usr.userList}><Table columns={userCols} dataSource={userList} pagination={false} size="small" scroll={{ x: 900 }} /></Card>
-      <Card title={t.usr.rolePerms} extra={<Text type="secondary">依据 VDI 3814 操作层级</Text>}><Table columns={roleCols} dataSource={roles} pagination={false} size="small" /></Card>
+      <Card title={t.usr.rolePerms} extra={<Text type="secondary">{t.usr.vdiLevelRef}</Text>}><Table columns={roleCols} dataSource={roles} pagination={false} size="small" /></Card>
       <Card title={t.usr.auditLog} extra={<Text type="secondary">Heute · {auditLog.length} 条记录</Text>}><Table columns={auditCols} dataSource={auditLog} pagination={false} size="small" scroll={{ x: 700 }} /></Card>
 
-      <Modal title={t.usr.addUser} open={addUserModal} onOk={() => { setAddUserModal(false); message.success('用户已创建') }} onCancel={() => setAddUserModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
+      <Modal title={t.usr.addUser} open={addUserModal} onOk={() => { setAddUserModal(false); message.success(t.usr.userCreated) }} onCancel={() => setAddUserModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
         <Form layout="vertical">
           <Form.Item label={t.common.name}><Input placeholder="姓, 名" /></Form.Item>
           <Form.Item label={t.usr.email}><Input type="email" /></Form.Item>
-          <Form.Item label="Abteilung"><Input /></Form.Item>
-          <Form.Item label={t.usr.role}><Select options={roles.map(r => ({ value: r.role, label: `${r.role} (${r.level})` }))} /></Form.Item>
+          <Form.Item label={t.common.department}><Input /></Form.Item>
+          <Form.Item label={t.usr.role}><Select options={roles.map(r => ({ value: r.role, label: `${r.role} (${levelMap[r.level] || r.level})` }))} /></Form.Item>
         </Form>
       </Modal>
 
-      <Modal title={t.usr.editRole} open={editRoleModal} onOk={() => { setEditRoleModal(false); message.success('角色已更新') }} onCancel={() => setEditRoleModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
+      <Modal title={t.usr.editRole} open={editRoleModal} onOk={() => { setEditRoleModal(false); message.success(t.usr.roleUpdated) }} onCancel={() => setEditRoleModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
         <Form layout="vertical">
           <Form.Item label={t.usr.role}><Input /></Form.Item>
-          <Form.Item label={t.usr.permissions}><Select mode="multiple" options={[{value:'view',label:'监控'},{value:'acknowledge',label:'确认报警'},{value:'control',label:'控制操作'},{value:'config',label:'参数配置'},{value:'admin',label:'系统管理'}]} /></Form.Item>
+          <Form.Item label={t.usr.permissions}><Select mode="multiple" options={[{value:'view',label:t.usr.permView},{value:'acknowledge',label:t.usr.permAck},{value:'control',label:t.usr.permCtrl},{value:'config',label:t.usr.permConfig},{value:'admin',label:t.usr.permAdmin}]} /></Form.Item>
         </Form>
       </Modal>
     </div>

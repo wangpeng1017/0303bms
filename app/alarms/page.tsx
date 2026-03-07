@@ -20,20 +20,20 @@ const alarmList = [
   { key: '10', time: '02:00:00', device: 'BMS Server', deviceAddr: 'Server-01', content: '自动备份失败 (磁盘占用 92%)', level: 'B', status: 'recovered', floor: 'UG' },
 ]
 
-const thresholds = [
-  { key: '1', param: '室内温度', lower: 18, upper: 28, unit: '°C', level: 'B', hysteresis: 1.0 },
-  { key: '2', param: 'CO₂浓度', lower: 0, upper: 1000, unit: 'ppm', level: 'B', hysteresis: 50 },
-  { key: '3', param: '相对湿度', lower: 30, upper: 70, unit: '%', level: 'C', hysteresis: 5 },
-  { key: '4', param: '供暖供水温度', lower: 30, upper: 70, unit: '°C', level: 'A', hysteresis: 2.0 },
-  { key: '5', param: '制冷供水温度', lower: 4, upper: 14, unit: '°C', level: 'A', hysteresis: 1.0 },
-  { key: '6', param: '生活热水', lower: 55, upper: 65, unit: '°C', level: 'A', hysteresis: 2.0 },
-  { key: '7', param: '过滤器压差', lower: 0, upper: 250, unit: 'Pa', level: 'C', hysteresis: 20 },
-  { key: '8', param: '室外温度', lower: -20, upper: 40, unit: '°C', level: 'C', hysteresis: 2.0 },
-]
-
 export default function AlarmsPage() {
   const { t } = useI18n()
   const [thresholdModal, setThresholdModal] = useState(false)
+
+  const thresholds = [
+    { key: '1', param: '室内温度', lower: 18, upper: 28, unit: '°C', level: 'B', hysteresis: 1.0 },
+    { key: '2', param: 'CO₂浓度', lower: 0, upper: 1000, unit: 'ppm', level: 'B', hysteresis: 50 },
+    { key: '3', param: '相对湿度', lower: 30, upper: 70, unit: '%', level: 'C', hysteresis: 5 },
+    { key: '4', param: '供暖供水温度', lower: 30, upper: 70, unit: '°C', level: 'A', hysteresis: 2.0 },
+    { key: '5', param: '制冷供水温度', lower: 4, upper: 14, unit: '°C', level: 'A', hysteresis: 1.0 },
+    { key: '6', param: '生活热水', lower: 55, upper: 65, unit: '°C', level: 'A', hysteresis: 2.0 },
+    { key: '7', param: '过滤器压差', lower: 0, upper: 250, unit: 'Pa', level: 'C', hysteresis: 20 },
+    { key: '8', param: '室外温度', lower: -20, upper: 40, unit: '°C', level: 'C', hysteresis: 2.0 },
+  ]
 
   const activeAlarms = alarmList.filter(a => a.status === 'active')
   const aLevel = activeAlarms.filter(a => a.level === 'A').length
@@ -44,8 +44,8 @@ export default function AlarmsPage() {
   const cols = [
     { title: t.common.time, dataIndex: 'time', key: 'time', width: 90 },
     { title: t.common.device, dataIndex: 'device', key: 'device', width: 140 },
-    { title: '地址', dataIndex: 'deviceAddr', key: 'addr', width: 130, render: (v: string) => <Text code style={{ fontSize: 10 }}>{v}</Text> },
-    { title: '楼层', dataIndex: 'floor', key: 'floor', width: 60 },
+    { title: t.common.address, dataIndex: 'deviceAddr', key: 'addr', width: 130, render: (v: string) => <Text code style={{ fontSize: 10 }}>{v}</Text> },
+    { title: t.common.floor, dataIndex: 'floor', key: 'floor', width: 60 },
     { title: t.common.content, dataIndex: 'content', key: 'content' },
     { title: t.common.level, dataIndex: 'level', key: 'level', width: 110, render: (v: string) => {
       const map: Record<string, {color: string, icon: React.ReactNode, label: string}> = {
@@ -74,7 +74,7 @@ export default function AlarmsPage() {
     { title: t.alm.lowerLimit, dataIndex: 'lower', key: 'lower', width: 90 },
     { title: t.alm.upperLimit, dataIndex: 'upper', key: 'upper', width: 90 },
     { title: t.common.unit, dataIndex: 'unit', key: 'unit', width: 60 },
-    { title: '滞后值', dataIndex: 'hysteresis', key: 'hyst', width: 80 },
+    { title: t.alm.hysteresis, dataIndex: 'hysteresis', key: 'hyst', width: 80 },
     { title: t.alm.alarmLevel, dataIndex: 'level', key: 'level', width: 80, render: (v: string) => <Tag color={v === 'A' ? 'red' : v === 'B' ? 'orange' : 'blue'}>{v}</Tag> },
     { title: t.common.operation, key: 'op', width: 80, render: () => <Button size="small" type="link">{t.actions.edit}</Button> },
   ]
@@ -97,20 +97,20 @@ export default function AlarmsPage() {
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.alm.acknowledged} value={ackCount} valueStyle={{ color: '#52c41a' }} prefix={<CheckCircleOutlined />} /><Text type="secondary">{t.alm.responded}</Text></Card></Col>
       </Row>
 
-      <Card title={t.alm.alarmList} extra={<Text type="secondary">{alarmList.length} 条记录 · 今日</Text>}>
+      <Card title={t.alm.alarmList} extra={<Text type="secondary">{alarmList.length} {t.alm.recordsToday}</Text>}>
         <Table columns={cols} dataSource={alarmList} pagination={false} size="small" scroll={{ x: 1200 }} />
       </Card>
 
-      <Card title={t.alm.thresholdConfig} extra={<Text type="secondary">{thresholds.length} 个参数已配置</Text>}>
+      <Card title={t.alm.thresholdConfig} extra={<Text type="secondary">{thresholds.length} {t.alm.paramsConfigured}</Text>}>
         <Table columns={thCols} dataSource={thresholds} pagination={false} size="small" />
       </Card>
 
-      <Modal title={t.alm.configThreshold} open={thresholdModal} onOk={() => { setThresholdModal(false); message.success('阈值已保存') }} onCancel={() => setThresholdModal(false)} okText={t.actions.save} cancelText={t.actions.cancel} width={500}>
+      <Modal title={t.alm.configThreshold} open={thresholdModal} onOk={() => { setThresholdModal(false); message.success(t.alm.thresholdSaved) }} onCancel={() => setThresholdModal(false)} okText={t.actions.save} cancelText={t.actions.cancel} width={500}>
         <Form layout="vertical">
           <Form.Item label={t.alm.param}><Select options={thresholds.map(th => ({ value: th.param, label: `${th.param} (${th.unit})` }))} /></Form.Item>
           <Space style={{ width: '100%' }}><Form.Item label={t.alm.lowerLimit} style={{ flex: 1 }}><InputNumber style={{ width: '100%' }} /></Form.Item><Form.Item label={t.alm.upperLimit} style={{ flex: 1 }}><InputNumber style={{ width: '100%' }} /></Form.Item></Space>
           <Form.Item label="Hysterese"><InputNumber style={{ width: '100%' }} /></Form.Item>
-          <Form.Item label={t.alm.alarmLevel}><Select options={[{value:'A',label:'A - 紧急'},{value:'B',label:'B - 重要'},{value:'C',label:'C - 提示'}]} /></Form.Item>
+          <Form.Item label={t.alm.alarmLevel}><Select options={[{value:'A',label:t.sched.urgentA},{value:'B',label:t.sched.importantB},{value:'C',label:t.sched.infoC}]} /></Form.Item>
         </Form>
       </Modal>
     </div>

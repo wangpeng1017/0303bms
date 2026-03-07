@@ -45,8 +45,8 @@ export default function InterfacesPage() {
     { title: t.common.status, dataIndex: 'status', key: 'status', width: 80, render: (v: string) => <Tag color={v === 'online' ? 'green' : 'red'}>{v === 'online' ? t.status.online : t.status.offline}</Tag> },
     { title: t.common.operation, key: 'op', width: 180, render: (_: any, r: any) => (
       <Space>
-        <Button size="small" type="link" icon={<ReloadOutlined />} onClick={() => message.info(`${r.name} 正在重启...`)}>{t.iface.restartIface}</Button>
-        <Button size="small" type="link" icon={<SearchOutlined />} onClick={() => message.info(`扫描 ${r.name}...`)}>{t.iface.scanDevices}</Button>
+        <Button size="small" type="link" icon={<ReloadOutlined />} onClick={() => message.info(`${r.name} ${t.iface.restarting}...`)}>{t.iface.restartIface}</Button>
+        <Button size="small" type="link" icon={<SearchOutlined />} onClick={() => message.info(`${t.iface.scanningLabel} ${r.name}...`)}>{t.iface.scanDevices}</Button>
       </Space>
     )},
   ]
@@ -68,26 +68,26 @@ export default function InterfacesPage() {
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.totalProtocols} value={ifaces.length} prefix={<ApiOutlined />} /><Text type="secondary">{t.iface.configured}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.onlineDevices} value={totalDevices} valueStyle={{ color: '#52c41a' }} prefix={<CheckCircleOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.offlineIface} value={offlineIfaces} valueStyle={{ color: offlineIfaces > 0 ? '#f5222d' : '#52c41a' }} prefix={<WarningOutlined />} /><Text type="secondary">{offlineIfaces > 0 ? t.iface.needFix : '全部正常'}</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.offlineIface} value={offlineIfaces} valueStyle={{ color: offlineIfaces > 0 ? '#f5222d' : '#52c41a' }} prefix={<WarningOutlined />} /><Text type="secondary">{offlineIfaces > 0 ? t.iface.needFix : t.common.allNormal}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.iface.dataThroughput} value={totalRate} suffix={t.iface.msgPerSec} /></Card></Col>
       </Row>
 
-      <Card title={t.iface.ifaceStatus} extra={<Text type="secondary">{onlineIfaces}/{ifaces.length} 活跃</Text>}>
+      <Card title={t.iface.ifaceStatus} extra={<Text type="secondary">{onlineIfaces}/{ifaces.length} {t.iface.activeCount}</Text>}>
         <Table columns={ifaceCols} dataSource={ifaces} pagination={false} size="small" scroll={{ x: 1000 }} />
       </Card>
 
-      <Card title={t.iface.eventLog} extra={<Text type="secondary">今日</Text>}>
+      <Card title={t.iface.eventLog} extra={<Text type="secondary">{t.iface.todayLabel}</Text>}>
         <Table columns={eventCols} dataSource={events} pagination={false} size="small" scroll={{ x: 800 }} />
       </Card>
 
-      <Card title="网络基础设施" size="small">
+      <Card title={t.iface.networkInfra} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
-          <Descriptions.Item label="楼宇自控网络">VLAN 10 · 192.168.10.0/24 · 1 Gbit</Descriptions.Item>
-          <Descriptions.Item label="管理网络">VLAN 20 · 192.168.20.0/24</Descriptions.Item>
-          <Descriptions.Item label="交换机">Cisco Catalyst 2960-L · 2× PoE</Descriptions.Item>
-          <Descriptions.Item label="BACnet 路由器">Loytec LGATE-950 · 2台</Descriptions.Item>
-          <Descriptions.Item label="Modbus 网关">HMS Anybus X-gw · 1台</Descriptions.Item>
-          <Descriptions.Item label="防火墙">自控网络隔离 · 仅443端口对外</Descriptions.Item>
+          <Descriptions.Item label={t.iface.baNetwork}>VLAN 10 · 192.168.10.0/24 · 1 Gbit</Descriptions.Item>
+          <Descriptions.Item label={t.iface.mgmtNetwork}>VLAN 20 · 192.168.20.0/24</Descriptions.Item>
+          <Descriptions.Item label={t.iface.switchLabel}>Cisco Catalyst 2960-L · 2× PoE</Descriptions.Item>
+          <Descriptions.Item label={t.iface.bacnetRouterLabel}>Loytec LGATE-950 · 2台</Descriptions.Item>
+          <Descriptions.Item label={t.iface.modbusGw}>HMS Anybus X-gw · 1台</Descriptions.Item>
+          <Descriptions.Item label={t.iface.firewall}>自控网络隔离 · 仅443端口对外</Descriptions.Item>
         </Descriptions>
       </Card>
     </div>

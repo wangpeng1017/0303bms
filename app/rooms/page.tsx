@@ -44,7 +44,7 @@ export default function RoomsPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div><Title level={4} style={{ margin: 0 }}>{t.nav.rooms}</Title><Text type="secondary">{t.room.subtitle} · {roomList.length} 个房间 · 5个楼层</Text></div>
+        <div><Title level={4} style={{ margin: 0 }}>{t.nav.rooms}</Title><Text type="secondary">{t.room.subtitle} · {roomList.length} {t.room.roomsLabel} · 5{t.room.floorsLabel}</Text></div>
         <Space>
           <Select value={selectedFloor} onChange={setSelectedFloor} options={floors.map(f => ({ value: f, label: f }))} style={{ width: 100 }} />
           <Button type="primary" icon={<SettingOutlined />} onClick={() => setBatchModal(true)}>{t.room.batchConfig}</Button>
@@ -53,7 +53,7 @@ export default function RoomsPage() {
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.room.totalRooms} value={roomList.length} prefix={<HomeOutlined />} /><Text type="secondary">~8.500 m² BGF</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.room.occupiedRooms} value={occupiedRooms} prefix={<TeamOutlined />} valueStyle={{ color: '#1677ff' }} /><Text type="secondary">{totalPersons} 人</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.room.occupiedRooms} value={occupiedRooms} prefix={<TeamOutlined />} valueStyle={{ color: '#1677ff' }} /><Text type="secondary">{totalPersons} {t.common.persons}</Text></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.room.avgTemp} value={avgTemp} suffix="°C" valueStyle={{ color: '#52c41a' }} /></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.room.avgCo2} value={avgCo2} suffix="ppm" valueStyle={{ color: avgCo2 > 800 ? '#fa8c16' : '#52c41a' }} /></Card></Col>
       </Row>
@@ -100,17 +100,17 @@ export default function RoomsPage() {
         ))}
       </Row>
 
-      <Modal title={`${t.room.adjustRoom} - ${selectedRoom?.name || ''}`} open={adjustModal} onOk={() => { setAdjustModal(false); message.success('房间参数已更新') }} onCancel={() => setAdjustModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
+      <Modal title={`${t.room.adjustRoom} - ${selectedRoom?.name || ''}`} open={adjustModal} onOk={() => { setAdjustModal(false); message.success(t.room.paramsUpdated) }} onCancel={() => setAdjustModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
         <Form layout="vertical">
           <Form.Item label={`${t.room.setpointLabel} (°C)`}><Slider min={18} max={28} step={0.5} defaultValue={selectedRoom?.setpoint || 22} marks={{18:'18°C',20:'20',22:'22',24:'24',26:'26',28:'28°C'}} /></Form.Item>
-          <Form.Item label={t.room.lightCtrl}><Slider min={0} max={100} defaultValue={selectedRoom?.light || 0} marks={{0:'关',50:'50%',100:'100%'}} /></Form.Item>
-          <Form.Item label={t.room.shadingPos}><Slider min={0} max={100} defaultValue={selectedRoom?.shade || 0} marks={{0:'打开',50:'50%',100:'关闭'}} /></Form.Item>
+          <Form.Item label={t.room.lightCtrl}><Slider min={0} max={100} defaultValue={selectedRoom?.light || 0} marks={{0:t.room.sliderOff,50:'50%',100:'100%'}} /></Form.Item>
+          <Form.Item label={t.room.shadingPos}><Slider min={0} max={100} defaultValue={selectedRoom?.shade || 0} marks={{0:t.room.sliderOpen,50:'50%',100:t.room.sliderClose}} /></Form.Item>
         </Form>
       </Modal>
 
-      <Modal title={t.room.batchConfig} open={batchModal} onOk={() => { setBatchModal(false); message.success('批量配置已应用') }} onCancel={() => setBatchModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
+      <Modal title={t.room.batchConfig} open={batchModal} onOk={() => { setBatchModal(false); message.success(t.room.batchApplied) }} onCancel={() => setBatchModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
         <Form layout="vertical">
-          <Form.Item label="目标楼层"><Select defaultValue="Alle" options={floors.map(f => ({ value: f, label: f }))} style={{ width: '100%' }} /></Form.Item>
+          <Form.Item label={t.common.targetFloor}><Select defaultValue="Alle" options={floors.map(f => ({ value: f, label: f }))} style={{ width: '100%' }} /></Form.Item>
           <Form.Item label={`${t.room.allRooms} - ${t.room.setpointLabel}`}><Slider min={18} max={28} step={0.5} defaultValue={22} /></Form.Item>
           <Form.Item label={`${t.room.allRooms} - ${t.room.lightCtrl}`}><Slider min={0} max={100} defaultValue={80} /></Form.Item>
         </Form>

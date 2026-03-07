@@ -32,11 +32,11 @@ export default function RemotePage() {
 
   const connCols = [
     { title: t.rmt.connection, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
-    { title: '用户', dataIndex: 'user', key: 'user', width: 140 },
+    { title: t.common.user, dataIndex: 'user', key: 'user', width: 140 },
     { title: t.rmt.target, dataIndex: 'target', key: 'target' },
     { title: 'VPN IP', dataIndex: 'ip', key: 'ip', width: 90 },
     { title: t.rmt.latency, dataIndex: 'latency', key: 'latency', width: 70 },
-    { title: '开始', dataIndex: 'since', key: 'since', width: 60 },
+    { title: t.common.startTime, dataIndex: 'since', key: 'since', width: 60 },
     { title: t.common.status, dataIndex: 'status', key: 'status', width: 100, render: (v: string) => <Tag color={v === 'connected' ? 'green' : 'default'}>{v === 'connected' ? t.common.connected : t.status.offline}</Tag> },
     { title: t.common.operation, key: 'op', width: 120, render: (_: any, r: any) => (
       <Button size="small" type={r.status === 'connected' ? 'default' : 'primary'} danger={r.status === 'connected'} onClick={() => message.info(r.status === 'connected' ? t.rmt.disconnectVpn : t.rmt.connectVpn)}>
@@ -47,10 +47,10 @@ export default function RemotePage() {
 
   const updateCols = [
     { title: t.rmt.component, dataIndex: 'component', key: 'component', render: (v: string) => <Text strong>{v}</Text> },
-    { title: '影响范围', dataIndex: 'affected', key: 'affected', width: 100 },
+    { title: t.common.scope, dataIndex: 'affected', key: 'affected', width: 100 },
     { title: t.rmt.currentVer, dataIndex: 'current', key: 'current', width: 90 },
     { title: t.rmt.availableVer, dataIndex: 'available', key: 'available', width: 90 },
-    { title: '说明', dataIndex: 'note', key: 'note' },
+    { title: t.common.note, dataIndex: 'note', key: 'note' },
     { title: t.rmt.severity, dataIndex: 'severity', key: 'severity', width: 120, render: (v: string) => {
       const map: Record<string, {color: string, label: string}> = {
         security: { color: 'red', label: t.rmt.securityUpdate },
@@ -74,32 +74,32 @@ export default function RemotePage() {
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.activeConn} value={activeConn} prefix={<LaptopOutlined />} valueStyle={{ color: '#52c41a' }} /></Card></Col>
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.remoteSessions} value={activeConn} prefix={<WifiOutlined />} /><Text type="secondary">{t.rmt.inProgress}</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.pendingUpdates} value={pendingUpdates} valueStyle={{ color: pendingUpdates > 0 ? '#fa8c16' : '#52c41a' }} prefix={<CloudUploadOutlined />} /><Text type="secondary">其中1个安全更新</Text></Card></Col>
-        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.securityStatus} value={t.status.normal} valueStyle={{ color: '#52c41a' }} prefix={<SafetyOutlined />} /><Text type="secondary">上次渗透测试: 2026-01-15</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.pendingUpdates} value={pendingUpdates} valueStyle={{ color: pendingUpdates > 0 ? '#fa8c16' : '#52c41a' }} prefix={<CloudUploadOutlined />} /><Text type="secondary">{t.rmt.securityUpdatesCount}</Text></Card></Col>
+        <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.rmt.securityStatus} value={t.status.normal} valueStyle={{ color: '#52c41a' }} prefix={<SafetyOutlined />} /><Text type="secondary">{t.rmt.lastPentest}</Text></Card></Col>
       </Row>
 
-      <Card title={t.rmt.remoteConn} extra={<Text type="secondary">{activeConn} 个活跃连接</Text>}>
+      <Card title={t.rmt.remoteConn} extra={<Text type="secondary">{activeConn} {t.rmt.activeConns}</Text>}>
         <Table columns={connCols} dataSource={connections} pagination={false} size="small" scroll={{ x: 900 }} />
       </Card>
 
-      <Card title={t.rmt.updateManage} extra={<Text type="secondary">{pendingUpdates} 个更新可用</Text>}>
+      <Card title={t.rmt.updateManage} extra={<Text type="secondary">{pendingUpdates} {t.rmt.updatesAvailable}</Text>}>
         <Table columns={updateCols} dataSource={updates} pagination={false} size="small" scroll={{ x: 900 }} />
       </Card>
 
-      <Card title="IT安全" size="small">
+      <Card title={t.rmt.itSecurity} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
-          <Descriptions.Item label="VPN 服务器">OpenVPN 2.6 · Port 1194/UDP</Descriptions.Item>
-          <Descriptions.Item label="加密方式">AES-256-GCM · TLS 1.3</Descriptions.Item>
-          <Descriptions.Item label="身份认证">证书 + 双因素认证 (TOTP)</Descriptions.Item>
-          <Descriptions.Item label="防火墙">自控网络隔离 · 白名单</Descriptions.Item>
-          <Descriptions.Item label="供应商访问">限时 · 仅限指定设备</Descriptions.Item>
-          <Descriptions.Item label="上次渗透测试">2026-01-15 · 无严重漏洞</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.vpnServer}>OpenVPN 2.6 · Port 1194/UDP</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.encryption}>AES-256-GCM · TLS 1.3</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.authentication}>证书 + 双因素认证 (TOTP)</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.firewallLabel}>自控网络隔离 · 白名单</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.vendorAccessLabel}>限时 · 仅限指定设备</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.lastPentestLabel}>2026-01-15 · 无严重漏洞</Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Modal title={t.rmt.connectVpn} open={vpnModal} onOk={() => { setVpnModal(false); message.success('VPN连接已建立') }} onCancel={() => setVpnModal(false)} okText={t.actions.connect} cancelText={t.actions.cancel}>
-        <p>是否连接到楼宇自控VPN网络?</p>
-        <p style={{ color: '#8c8c8c' }}>服务器: vpn.westpark-bms.de:1194 · 基于证书的身份认证</p>
+      <Modal title={t.rmt.connectVpn} open={vpnModal} onOk={() => { setVpnModal(false); message.success(t.rmt.vpnConnected) }} onCancel={() => setVpnModal(false)} okText={t.actions.connect} cancelText={t.actions.cancel}>
+        <p>{t.rmt.vpnConfirm}</p>
+        <p style={{ color: '#8c8c8c' }}>{t.rmt.vpnServerAddr}</p>
       </Modal>
     </div>
   )

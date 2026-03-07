@@ -1,7 +1,7 @@
 'use client'
 
 import { useI18n } from '@/components/i18n-provider'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, Statistic, Table, Tag, Row, Col, Typography, Button, Space, Modal, InputNumber, Form, Descriptions, message } from 'antd'
 import { ThunderboltOutlined, FireOutlined, ExperimentOutlined, LineChartOutlined, ExportOutlined } from '@ant-design/icons'
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
@@ -19,17 +19,6 @@ function genTrend() {
       water: +(0.8 + (workHour ? 2.5 : 0.2) + (Math.random() - 0.5) * 0.6).toFixed(1),
     }
   })
-}
-
-function genMonthly() {
-  const months = ['10月', '11月', '12月', '1月', '2月', '3月']
-  const heatingFactor = [0.6, 0.85, 1.0, 1.0, 0.9, 0.7]
-  return months.map((m, i) => ({
-    month: m,
-    elec: Math.round(2200 + Math.random() * 300 + (i > 2 ? -200 : 0)),
-    heat: Math.round((1800 + Math.random() * 200) * heatingFactor[i]),
-    water: Math.round(180 + Math.random() * 40),
-  }))
 }
 
 const meters = [
@@ -52,16 +41,26 @@ const meters = [
 export default function EnergyPage() {
   const { t } = useI18n()
   const [trend] = useState(genTrend)
-  const [monthly] = useState(genMonthly)
   const [targetModal, setTargetModal] = useState(false)
   const [exportModal, setExportModal] = useState(false)
+
+  const monthly = useMemo(() => {
+    const months = [t.nrg.oct, t.nrg.nov, t.nrg.dec, t.nrg.jan, t.nrg.feb, t.nrg.mar]
+    const heatingFactor = [0.6, 0.85, 1.0, 1.0, 0.9, 0.7]
+    return months.map((m, i) => ({
+      month: m,
+      elec: Math.round(2200 + Math.random() * 300 + (i > 2 ? -200 : 0)),
+      heat: Math.round((1800 + Math.random() * 200) * heatingFactor[i]),
+      water: Math.round(180 + Math.random() * 40),
+    }))
+  }, [t])
 
   const meterCols = [
     { title: t.nrg.meterId, dataIndex: 'id', key: 'id', width: 90 },
     { title: t.nrg.meterName, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
-    { title: '制造商', dataIndex: 'manufacturer', key: 'manufacturer', width: 150, render: (v: string) => <Text type="secondary" style={{ fontSize: 11 }}>{v}</Text> },
+    { title: t.common.manufacturer, dataIndex: 'manufacturer', key: 'manufacturer', width: 150, render: (v: string) => <Text type="secondary" style={{ fontSize: 11 }}>{v}</Text> },
     { title: t.nrg.meterType, dataIndex: 'type', key: 'type', width: 70, render: (v: string) => <Tag color={v === 'elec' ? 'blue' : v === 'heat' ? 'red' : 'cyan'}>{v === 'elec' ? t.nrg.elec : v === 'heat' ? t.nrg.heat : t.nrg.water}</Tag> },
-    { title: '区域', dataIndex: 'floor', key: 'floor', width: 80 },
+    { title: t.common.area, dataIndex: 'floor', key: 'floor', width: 80 },
     { title: t.nrg.currentVal, dataIndex: 'value', key: 'value', width: 100 },
     { title: t.nrg.dailyAccum, dataIndex: 'daily', key: 'daily', width: 100 },
     { title: t.common.status, dataIndex: 'status', key: 'status', width: 70, render: (v: string) => <Tag color={v === 'online' ? 'green' : 'red'}>{v === 'online' ? t.status.online : t.status.offline}</Tag> },
@@ -96,7 +95,7 @@ export default function EnergyPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.nrg.monthlyCompare} extra={<Text type="secondary">供暖季 2025年10月 - 2026年3月</Text>}>
+      <Card title={t.nrg.monthlyCompare} extra={<Text type="secondary">{t.nrg.heatingSeasonLabel}</Text>}>
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={monthly}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -109,24 +108,24 @@ export default function EnergyPage() {
         </ResponsiveContainer>
       </Card>
 
-      <Card title={t.nrg.meterStatus} extra={<Text type="secondary">{meters.length} 块表计 · 全部在线</Text>}>
+      <Card title={t.nrg.meterStatus} extra={<Text type="secondary">{meters.length} {t.nrg.allOnline}</Text>}>
         <Table columns={meterCols} dataSource={meters} pagination={{ pageSize: 8, size: 'small' }} size="small" scroll={{ x: 1000 }} />
       </Card>
 
-      <Card title="能效指标" size="small">
+      <Card title={t.nrg.efficiencyMetrics} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
-          <Descriptions.Item label="电力/m²·a">142 kWh</Descriptions.Item>
-          <Descriptions.Item label="热力/m²·a">85 kWh</Descriptions.Item>
-          <Descriptions.Item label="用水/m²·a">0.45 m³</Descriptions.Item>
-          <Descriptions.Item label="CO₂排放">~185 t/a</Descriptions.Item>
-          <Descriptions.Item label="能效等级">B (EnEV)</Descriptions.Item>
-          <Descriptions.Item label="一次能源">218 kWh/m²·a</Descriptions.Item>
-          <Descriptions.Item label="电力峰值负荷">185 kW</Descriptions.Item>
-          <Descriptions.Item label="热力峰值负荷">320 kW</Descriptions.Item>
+          <Descriptions.Item label={t.nrg.elecPerSqm}>142 kWh</Descriptions.Item>
+          <Descriptions.Item label={t.nrg.heatPerSqm}>85 kWh</Descriptions.Item>
+          <Descriptions.Item label={t.nrg.waterPerSqm}>0.45 m³</Descriptions.Item>
+          <Descriptions.Item label={t.nrg.co2Emission}>~185 t/a</Descriptions.Item>
+          <Descriptions.Item label={t.nrg.energyClass}>B (EnEV)</Descriptions.Item>
+          <Descriptions.Item label={t.nrg.primaryEnergy}>218 kWh/m²·a</Descriptions.Item>
+          <Descriptions.Item label={t.nrg.elecPeakLoad}>185 kW</Descriptions.Item>
+          <Descriptions.Item label={t.nrg.heatPeakLoad}>320 kW</Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Modal title={t.nrg.setTarget} open={targetModal} onOk={() => { setTargetModal(false); message.success('目标值已保存') }} onCancel={() => setTargetModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
+      <Modal title={t.nrg.setTarget} open={targetModal} onOk={() => { setTargetModal(false); message.success(t.nrg.targetSaved) }} onCancel={() => setTargetModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
         <Form layout="vertical">
           <Form.Item label={`${t.nrg.elec} (kWh/Tag)`}><InputNumber style={{ width: '100%' }} defaultValue={3200} /></Form.Item>
           <Form.Item label={`${t.nrg.heat} (kWh/Tag)`}><InputNumber style={{ width: '100%' }} defaultValue={1800} /></Form.Item>
@@ -134,9 +133,9 @@ export default function EnergyPage() {
         </Form>
       </Modal>
 
-      <Modal title={t.nrg.exportReport} open={exportModal} onOk={() => { setExportModal(false); message.success('报告已导出') }} onCancel={() => setExportModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
-        <p>导出格式: PDF / Excel / CSV</p>
-        <p style={{ color: '#8c8c8c' }}>时段: 当前月份 (2026年3月)</p>
+      <Modal title={t.nrg.exportReport} open={exportModal} onOk={() => { setExportModal(false); message.success(t.nrg.reportExported) }} onCancel={() => setExportModal(false)} okText={t.actions.confirm} cancelText={t.actions.cancel}>
+        <p>{t.nrg.exportFormat}</p>
+        <p style={{ color: '#8c8c8c' }}>{t.nrg.periodLabel}</p>
       </Modal>
     </div>
   )
