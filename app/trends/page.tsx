@@ -23,19 +23,19 @@ function genTrend7d() {
   }).filter((_, i) => i % 4 === 0)
 }
 
-const archives = [
-  { key: '1', name: '2026-03 月度报告', period: '2026-03-01 ~ 06', size: '2.8 MB', records: '215,400', points: 1376, status: 'partial' },
-  { key: '2', name: '2026-02 月度报告', period: '2026-02-01 ~ 28', size: '14.2 MB', records: '1,156,432', points: 1376, status: 'archived' },
-  { key: '3', name: '2026-01 月度报告', period: '2026-01-01 ~ 31', size: '15.8 MB', records: '1,389,012', points: 1376, status: 'archived' },
-  { key: '4', name: '2025-12 月度报告', period: '2025-12-01 ~ 31', size: '15.1 MB', records: '1,324,800', points: 1376, status: 'archived' },
-  { key: '5', name: '2025-11 月度报告', period: '2025-11-01 ~ 30', size: '13.9 MB', records: '1,248,000', points: 1376, status: 'archived' },
-  { key: '6', name: '2025-10 月度报告', period: '2025-10-01 ~ 31', size: '14.5 MB', records: '1,310,400', points: 1376, status: 'archived' },
-  { key: '7', name: '2025 Q3 季度报告', period: '2025-07 ~ 09', size: '42.1 MB', records: '3,801,600', points: 1376, status: 'archived' },
-]
-
 export default function TrendsPage() {
   const { t } = useI18n()
   const [data] = useState(genTrend7d)
+
+  const archives = [
+    { key: '1', name: `2026-03 ${t.trend_data.archMonthly}`, period: '2026-03-01 ~ 06', size: '2.8 MB', records: '215,400', points: 1376, status: 'partial' },
+    { key: '2', name: `2026-02 ${t.trend_data.archMonthly}`, period: '2026-02-01 ~ 28', size: '14.2 MB', records: '1,156,432', points: 1376, status: 'archived' },
+    { key: '3', name: `2026-01 ${t.trend_data.archMonthly}`, period: '2026-01-01 ~ 31', size: '15.8 MB', records: '1,389,012', points: 1376, status: 'archived' },
+    { key: '4', name: `2025-12 ${t.trend_data.archMonthly}`, period: '2025-12-01 ~ 31', size: '15.1 MB', records: '1,324,800', points: 1376, status: 'archived' },
+    { key: '5', name: `2025-11 ${t.trend_data.archMonthly}`, period: '2025-11-01 ~ 30', size: '13.9 MB', records: '1,248,000', points: 1376, status: 'archived' },
+    { key: '6', name: `2025-10 ${t.trend_data.archMonthly}`, period: '2025-10-01 ~ 31', size: '14.5 MB', records: '1,310,400', points: 1376, status: 'archived' },
+    { key: '7', name: `2025 Q3 ${t.trend_data.archQuarterly}`, period: '2025-07 ~ 09', size: '42.1 MB', records: '3,801,600', points: 1376, status: 'archived' },
+  ]
 
   const totalArchiveSize = '118.4 MB'
   const totalRecords = '10,445,644'
@@ -75,7 +75,7 @@ export default function TrendsPage() {
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.trend.exportFormat} value="CSV / PDF / Excel" /><Text type="secondary">{t.trend.downloadable}</Text></Card></Col>
       </Row>
 
-      <Card title={t.trend.trendCurve7d} extra={<Text type="secondary">OG1 北侧开放办公区 · 第10周</Text>}>
+      <Card title={t.trend.trendCurve7d} extra={<Text type="secondary">{t.trend_data.chartExtra}</Text>}>
         <ResponsiveContainer width="100%" height={340}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -98,11 +98,11 @@ export default function TrendsPage() {
       <Card title={t.trend.archiveSettings} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
           <Descriptions.Item label={t.trend.dbLabel}>PostgreSQL 16.2 + TimescaleDB</Descriptions.Item>
-          <Descriptions.Item label={t.trend.retentionPolicy}>5年 (原始数据: 1年, 聚合数据: 5年)</Descriptions.Item>
-          <Descriptions.Item label={t.trend.compression}>TimescaleDB 原生压缩 · 节省约60%</Descriptions.Item>
-          <Descriptions.Item label={t.trend.samplingRate}>标准 15分钟 / 关键值 COV</Descriptions.Item>
-          <Descriptions.Item label={t.trend.dailyRotation}>02:30 (备份后)</Descriptions.Item>
-          <Descriptions.Item label={t.trend.storageForecast}>~180 MB/月 · 500 GB 可用约18年</Descriptions.Item>
+          <Descriptions.Item label={t.trend.retentionPolicy}>{t.trend_data.retentionDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.trend.compression}>{t.trend_data.compressionDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.trend.samplingRate}>{t.trend_data.samplingDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.trend.dailyRotation}>{t.trend_data.rotationTime}</Descriptions.Item>
+          <Descriptions.Item label={t.trend.storageForecast}>{t.trend_data.storageDetail}</Descriptions.Item>
         </Descriptions>
       </Card>
     </div>

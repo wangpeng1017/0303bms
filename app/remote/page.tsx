@@ -7,25 +7,25 @@ import { LaptopOutlined, WifiOutlined, CloudUploadOutlined, SafetyOutlined } fro
 
 const { Title, Text } = Typography
 
-const connections = [
-  { key: '1', name: 'VPN-Weber-MSR', user: 'Weber, Michael', target: 'DDC 网络 (VLAN 10)', ip: '10.8.0.2', latency: '8ms', since: '07:45', status: 'connected' },
-  { key: '2', name: 'VPN-Müller-MSR', user: 'Müller, Sabine', target: 'DDC 网络 (VLAN 10)', ip: '10.8.0.3', latency: '12ms', since: '09:00', status: 'connected' },
-  { key: '3', name: 'VPN-Siemens-Service', user: 'Siemens Service', target: 'DDC-OG2-02 (维保)', ip: '-', latency: '-', since: '-', status: 'disconnected' },
-  { key: '4', name: 'VPN-Kampmann-RLT', user: 'Kampmann Service', target: 'RLT控制器 (Port 502)', ip: '-', latency: '-', since: '-', status: 'disconnected' },
-]
-
-const updates = [
-  { key: '1', component: 'DDC Firmware (PXC)', current: 'v3.02.18', available: 'v3.03.02', severity: 'security', affected: '9台设备', note: 'BACnet 安全补丁' },
-  { key: '2', component: 'Desigo CC Server', current: 'v6.0.2', available: 'v6.0.4', severity: 'recommended', affected: 'Server', note: '稳定性+性能优化' },
-  { key: '3', component: 'DALI-2 Gateway FW', current: 'v2.1.0', available: 'v2.1.0', severity: 'latest', affected: '4台网关', note: '-' },
-  { key: '4', component: 'KNX IP Router', current: 'v1.5.2', available: 'v1.5.3', severity: 'optional', affected: '2台路由', note: '小问题修复' },
-  { key: '5', component: 'Loytec BACnet Router', current: 'v8.2.0', available: 'v8.3.1', severity: 'recommended', affected: '2台路由', note: 'BACnet Rev.14 支持' },
-  { key: '6', component: 'HMS Modbus Gateway', current: 'v4.0.1', available: 'v4.0.1', severity: 'latest', affected: '1台网关', note: '-' },
-]
-
 export default function RemotePage() {
   const { t } = useI18n()
   const [vpnModal, setVpnModal] = useState(false)
+
+  const connections = [
+    { key: '1', name: 'VPN-Weber-MSR', user: 'Weber, Michael', target: t.rmt_data.targetDdc, ip: '10.8.0.2', latency: '8ms', since: '07:45', status: 'connected' },
+    { key: '2', name: 'VPN-Müller-MSR', user: 'Müller, Sabine', target: t.rmt_data.targetDdc, ip: '10.8.0.3', latency: '12ms', since: '09:00', status: 'connected' },
+    { key: '3', name: 'VPN-Siemens-Service', user: 'Siemens Service', target: t.rmt_data.targetMaint, ip: '-', latency: '-', since: '-', status: 'disconnected' },
+    { key: '4', name: 'VPN-Kampmann-RLT', user: 'Kampmann Service', target: t.rmt_data.targetRlt, ip: '-', latency: '-', since: '-', status: 'disconnected' },
+  ]
+
+  const updates = [
+    { key: '1', component: 'DDC Firmware (PXC)', current: 'v3.02.18', available: 'v3.03.02', severity: 'security', affected: t.rmt_data.aff9dev, note: t.rmt_data.noteBacnetPatch },
+    { key: '2', component: 'Desigo CC Server', current: 'v6.0.2', available: 'v6.0.4', severity: 'recommended', affected: t.rmt_data.affServer, note: t.rmt_data.noteStability },
+    { key: '3', component: 'DALI-2 Gateway FW', current: 'v2.1.0', available: 'v2.1.0', severity: 'latest', affected: t.rmt_data.aff4gw, note: '-' },
+    { key: '4', component: 'KNX IP Router', current: 'v1.5.2', available: 'v1.5.3', severity: 'optional', affected: t.rmt_data.aff2router, note: t.rmt_data.noteMinorFix },
+    { key: '5', component: 'Loytec BACnet Router', current: 'v8.2.0', available: 'v8.3.1', severity: 'recommended', affected: t.rmt_data.aff2routerB, note: t.rmt_data.noteBacnetRev },
+    { key: '6', component: 'HMS Modbus Gateway', current: 'v4.0.1', available: 'v4.0.1', severity: 'latest', affected: t.rmt_data.aff1gw, note: '-' },
+  ]
 
   const activeConn = connections.filter(c => c.status === 'connected').length
   const pendingUpdates = updates.filter(u => u.current !== u.available).length
@@ -90,10 +90,10 @@ export default function RemotePage() {
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
           <Descriptions.Item label={t.rmt.vpnServer}>OpenVPN 2.6 · Port 1194/UDP</Descriptions.Item>
           <Descriptions.Item label={t.rmt.encryption}>AES-256-GCM · TLS 1.3</Descriptions.Item>
-          <Descriptions.Item label={t.rmt.authentication}>证书 + 双因素认证 (TOTP)</Descriptions.Item>
-          <Descriptions.Item label={t.rmt.firewallLabel}>自控网络隔离 · 白名单</Descriptions.Item>
-          <Descriptions.Item label={t.rmt.vendorAccessLabel}>限时 · 仅限指定设备</Descriptions.Item>
-          <Descriptions.Item label={t.rmt.lastPentestLabel}>2026-01-15 · 无严重漏洞</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.authentication}>{t.rmt_data.authDesc}</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.firewallLabel}>{t.rmt_data.firewallDesc}</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.vendorAccessLabel}>{t.rmt_data.vendorDesc}</Descriptions.Item>
+          <Descriptions.Item label={t.rmt.lastPentestLabel}>{t.rmt_data.pentestDesc}</Descriptions.Item>
         </Descriptions>
       </Card>
 

@@ -1,39 +1,39 @@
 'use client'
 
 import { useI18n } from '@/components/i18n-provider'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, Statistic, Table, Tag, Row, Col, Typography, Button, Space, Modal, Form, InputNumber, Select, message } from 'antd'
 import { AlertOutlined, WarningOutlined, InfoCircleOutlined, CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons'
 
 const { Title, Text } = Typography
 
-const alarmList = [
-  { key: '1', time: '14:23:05', device: 'RLT-03 / VFD', deviceAddr: 'DDC-OG2-01.DI5', content: '送风机变频器故障 (故障码 F31)', level: 'A', status: 'active', floor: 'OG2' },
-  { key: '2', time: '13:45:12', device: 'KM-02 / VL-Temp', deviceAddr: 'PLC-Kälte.AI3', content: '冷水供水温度 >14°C (限值: 12°C)', level: 'B', status: 'active', floor: 'UG' },
-  { key: '3', time: '12:10:30', device: 'Raum 3.12 / CO₂', deviceAddr: 'DDC-OG3-02.AI2', content: 'CO₂浓度 >1000ppm (当前: 1050ppm)', level: 'C', status: 'active', floor: 'OG3' },
-  { key: '4', time: '11:30:00', device: 'Kessel-01 / Brenner', deviceAddr: 'PLC-Heizung.DI8', content: '燃烧器火焰监控故障 - 需要手动复位', level: 'B', status: 'acknowledged', floor: 'UG' },
-  { key: '5', time: '10:52:18', device: 'DALI-GW-OG1', deviceAddr: '192.168.10.61', content: '总线通讯故障 - 第3组不可达', level: 'C', status: 'active', floor: 'OG1' },
-  { key: '6', time: '09:15:44', device: 'Kühlturm KT-01', deviceAddr: 'PLC-Kälte.DI12', content: '风机电机过温 (热继电器)', level: 'B', status: 'acknowledged', floor: '屋顶' },
-  { key: '7', time: '08:42:10', device: 'DDC-OG2-02', deviceAddr: '192.168.10.122', content: '通讯超时 (>30s 无响应)', level: 'B', status: 'recovered', floor: 'OG2' },
-  { key: '8', time: '07:30:00', device: 'HK-07 TWW', deviceAddr: 'PLC-Heizung.AI15', content: '生活热水 <55°C (军团菌限值)', level: 'A', status: 'recovered', floor: 'UG' },
-  { key: '9', time: '06:15:22', device: 'Raum 2.10 / Temp', deviceAddr: 'DDC-OG2-02.AI1', content: '室温 >26°C (夜间散热失败)', level: 'C', status: 'recovered', floor: 'OG2' },
-  { key: '10', time: '02:00:00', device: 'BMS Server', deviceAddr: 'Server-01', content: '自动备份失败 (磁盘占用 92%)', level: 'B', status: 'recovered', floor: 'UG' },
-]
-
 export default function AlarmsPage() {
   const { t } = useI18n()
   const [thresholdModal, setThresholdModal] = useState(false)
 
-  const thresholds = [
-    { key: '1', param: '室内温度', lower: 18, upper: 28, unit: '°C', level: 'B', hysteresis: 1.0 },
-    { key: '2', param: 'CO₂浓度', lower: 0, upper: 1000, unit: 'ppm', level: 'B', hysteresis: 50 },
-    { key: '3', param: '相对湿度', lower: 30, upper: 70, unit: '%', level: 'C', hysteresis: 5 },
-    { key: '4', param: '供暖供水温度', lower: 30, upper: 70, unit: '°C', level: 'A', hysteresis: 2.0 },
-    { key: '5', param: '制冷供水温度', lower: 4, upper: 14, unit: '°C', level: 'A', hysteresis: 1.0 },
-    { key: '6', param: '生活热水', lower: 55, upper: 65, unit: '°C', level: 'A', hysteresis: 2.0 },
-    { key: '7', param: '过滤器压差', lower: 0, upper: 250, unit: 'Pa', level: 'C', hysteresis: 20 },
-    { key: '8', param: '室外温度', lower: -20, upper: 40, unit: '°C', level: 'C', hysteresis: 2.0 },
-  ]
+  const alarmList = useMemo(() => [
+    { key: '1', time: '14:23:05', device: 'RLT-03 / VFD', deviceAddr: 'DDC-OG2-01.DI5', content: t.alm.alm1Content, level: 'A', status: 'active', floor: 'OG2' },
+    { key: '2', time: '13:45:12', device: 'KM-02 / VL-Temp', deviceAddr: 'PLC-Kälte.AI3', content: t.alm.alm2Content, level: 'B', status: 'active', floor: 'UG' },
+    { key: '3', time: '12:10:30', device: 'Raum 3.12 / CO₂', deviceAddr: 'DDC-OG3-02.AI2', content: t.alm.alm3Content, level: 'C', status: 'active', floor: 'OG3' },
+    { key: '4', time: '11:30:00', device: 'Kessel-01 / Brenner', deviceAddr: 'PLC-Heizung.DI8', content: t.alm.alm4Content, level: 'B', status: 'acknowledged', floor: 'UG' },
+    { key: '5', time: '10:52:18', device: 'DALI-GW-OG1', deviceAddr: '192.168.10.61', content: t.alm.alm5Content, level: 'C', status: 'active', floor: 'OG1' },
+    { key: '6', time: '09:15:44', device: 'Kühlturm KT-01', deviceAddr: 'PLC-Kälte.DI12', content: t.alm.alm6Content, level: 'B', status: 'acknowledged', floor: t.alm.floorRoof },
+    { key: '7', time: '08:42:10', device: 'DDC-OG2-02', deviceAddr: '192.168.10.122', content: t.alm.alm7Content, level: 'B', status: 'recovered', floor: 'OG2' },
+    { key: '8', time: '07:30:00', device: 'HK-07 TWW', deviceAddr: 'PLC-Heizung.AI15', content: t.alm.alm8Content, level: 'A', status: 'recovered', floor: 'UG' },
+    { key: '9', time: '06:15:22', device: 'Raum 2.10 / Temp', deviceAddr: 'DDC-OG2-02.AI1', content: t.alm.alm9Content, level: 'C', status: 'recovered', floor: 'OG2' },
+    { key: '10', time: '02:00:00', device: 'BMS Server', deviceAddr: 'Server-01', content: t.alm.alm10Content, level: 'B', status: 'recovered', floor: 'UG' },
+  ], [t])
+
+  const thresholds = useMemo(() => [
+    { key: '1', param: t.alm.paramIndoorTemp, lower: 18, upper: 28, unit: '°C', level: 'B', hysteresis: 1.0 },
+    { key: '2', param: t.alm.paramCo2, lower: 0, upper: 1000, unit: 'ppm', level: 'B', hysteresis: 50 },
+    { key: '3', param: t.alm.paramHumidity, lower: 30, upper: 70, unit: '%', level: 'C', hysteresis: 5 },
+    { key: '4', param: t.alm.paramHeatSupply, lower: 30, upper: 70, unit: '°C', level: 'A', hysteresis: 2.0 },
+    { key: '5', param: t.alm.paramCoolSupply, lower: 4, upper: 14, unit: '°C', level: 'A', hysteresis: 1.0 },
+    { key: '6', param: t.alm.paramDhw, lower: 55, upper: 65, unit: '°C', level: 'A', hysteresis: 2.0 },
+    { key: '7', param: t.alm.paramFilterDP, lower: 0, upper: 250, unit: 'Pa', level: 'C', hysteresis: 20 },
+    { key: '8', param: t.alm.paramOutdoorTemp, lower: -20, upper: 40, unit: '°C', level: 'C', hysteresis: 2.0 },
+  ], [t])
 
   const activeAlarms = alarmList.filter(a => a.status === 'active')
   const aLevel = activeAlarms.filter(a => a.level === 'A').length

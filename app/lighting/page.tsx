@@ -1,7 +1,7 @@
 'use client'
 
 import { useI18n } from '@/components/i18n-provider'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, Statistic, Table, Tag, Slider, Row, Col, Typography, Button, Space, Switch, Descriptions, message } from 'antd'
 import { BulbOutlined, DashboardOutlined, ClockCircleOutlined, ThunderboltOutlined } from '@ant-design/icons'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
@@ -20,28 +20,28 @@ export default function LightingPage() {
   const { t } = useI18n()
   const [trend] = useState(genLux)
 
-  const groups = [
-    { key: '1', name: 'DALI-G1 EG 前台/门厅', lights: 32, brightness: 90, lux: 520, power: 1.8, mode: 'auto', status: 'on', floor: 'EG' },
-    { key: '2', name: 'DALI-G2 EG 食堂', lights: 24, brightness: 100, lux: 580, power: 1.4, mode: 'auto', status: 'on', floor: 'EG' },
-    { key: '3', name: 'DALI-G3 OG1 北侧开放区', lights: 48, brightness: 82, lux: 505, power: 2.8, mode: 'auto', status: 'on', floor: 'OG1' },
-    { key: '4', name: 'DALI-G4 OG1 南侧开放区', lights: 42, brightness: 78, lux: 490, power: 2.4, mode: 'auto', status: 'on', floor: 'OG1' },
-    { key: '5', name: 'DALI-G5 OG2 办公室', lights: 36, brightness: 75, lux: 480, power: 2.0, mode: 'auto', status: 'on', floor: 'OG2' },
-    { key: '6', name: 'DALI-G6 OG2 会议室', lights: 16, brightness: 100, lux: 650, power: 1.2, mode: 'scene', status: 'on', floor: 'OG2' },
-    { key: '7', name: 'DALI-G7 OG3 办公室', lights: 36, brightness: 70, lux: 460, power: 1.8, mode: 'auto', status: 'on', floor: 'OG3' },
-    { key: '8', name: 'DALI-G8 OG3 会议室', lights: 16, brightness: 100, lux: 640, power: 1.2, mode: 'scene', status: 'on', floor: 'OG3' },
-    { key: '9', name: 'DALI-G9 走廊/楼梯', lights: 28, brightness: 55, lux: 280, power: 0.9, mode: 'auto', status: 'on', floor: t.common.all },
-    { key: '10', name: 'DALI-G10 地下车库', lights: 22, brightness: 0, lux: 0, power: 0, mode: 'auto', status: 'off', floor: 'UG' },
-    { key: '11', name: 'DALI-G11 室外照明', lights: 12, brightness: 0, lux: 0, power: 0, mode: 'timer', status: 'off', floor: t.shade.outdoorTemp },
-  ]
+  const groups = useMemo(() => [
+    { key: '1', name: `DALI-G1 ${t.light.groupLobby}`, lights: 32, brightness: 90, lux: 520, power: 1.8, mode: 'auto', status: 'on', floor: 'EG' },
+    { key: '2', name: `DALI-G2 ${t.light.groupCanteen}`, lights: 24, brightness: 100, lux: 580, power: 1.4, mode: 'auto', status: 'on', floor: 'EG' },
+    { key: '3', name: `DALI-G3 ${t.light.groupNorthOpen1}`, lights: 48, brightness: 82, lux: 505, power: 2.8, mode: 'auto', status: 'on', floor: 'OG1' },
+    { key: '4', name: `DALI-G4 ${t.light.groupSouthOpen1}`, lights: 42, brightness: 78, lux: 490, power: 2.4, mode: 'auto', status: 'on', floor: 'OG1' },
+    { key: '5', name: `DALI-G5 ${t.light.groupOffice2}`, lights: 36, brightness: 75, lux: 480, power: 2.0, mode: 'auto', status: 'on', floor: 'OG2' },
+    { key: '6', name: `DALI-G6 ${t.light.groupMeeting2}`, lights: 16, brightness: 100, lux: 650, power: 1.2, mode: 'scene', status: 'on', floor: 'OG2' },
+    { key: '7', name: `DALI-G7 ${t.light.groupOffice3}`, lights: 36, brightness: 70, lux: 460, power: 1.8, mode: 'auto', status: 'on', floor: 'OG3' },
+    { key: '8', name: `DALI-G8 ${t.light.groupMeeting3}`, lights: 16, brightness: 100, lux: 640, power: 1.2, mode: 'scene', status: 'on', floor: 'OG3' },
+    { key: '9', name: `DALI-G9 ${t.light.groupCorridor}`, lights: 28, brightness: 55, lux: 280, power: 0.9, mode: 'auto', status: 'on', floor: t.common.all },
+    { key: '10', name: `DALI-G10 ${t.light.groupGarage}`, lights: 22, brightness: 0, lux: 0, power: 0, mode: 'auto', status: 'off', floor: 'UG' },
+    { key: '11', name: `DALI-G11 ${t.light.groupOutdoor}`, lights: 12, brightness: 0, lux: 0, power: 0, mode: 'timer', status: 'off', floor: '—' },
+  ], [t])
 
-  const scenes = [
+  const scenes = useMemo(() => [
     { key: '1', name: t.light.sceneOffice, brightness: 85, colorTemp: '4000K', lux: 500, usage: t.light.usageStandard },
     { key: '2', name: t.light.sceneMeeting, brightness: 100, colorTemp: '4500K', lux: 650, usage: t.light.usageMeeting },
     { key: '3', name: t.light.scenePresentation, brightness: 35, colorTemp: '3000K', lux: 200, usage: t.light.usageProjector },
     { key: '4', name: t.light.sceneCleaning, brightness: 100, colorTemp: '5000K', lux: 750, usage: t.light.usageCleaning },
     { key: '5', name: t.light.sceneNight, brightness: 15, colorTemp: '2700K', lux: 50, usage: t.light.usageNight },
     { key: '6', name: t.light.sceneLobby, brightness: 90, colorTemp: '3500K', lux: 400, usage: t.light.usageLobby },
-  ]
+  ], [t])
 
   const totalLights = groups.reduce((a, b) => a + b.lights, 0)
   const totalPower = groups.reduce((a, b) => a + b.power, 0).toFixed(1)

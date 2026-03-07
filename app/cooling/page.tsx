@@ -1,23 +1,12 @@
 'use client'
 
 import { useI18n } from '@/components/i18n-provider'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, Statistic, Table, Tag, Progress, Row, Col, Typography, Button, Space, Modal, InputNumber, Form, Descriptions, message } from 'antd'
 import { ExperimentOutlined, DashboardOutlined, ClockCircleOutlined } from '@ant-design/icons'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 const { Title, Text } = Typography
-
-const zones = [
-  { key: '1', name: 'OG1 北侧开放办公区', actual: 23.4, setpoint: 23.0, valve: 68, kp: 2.5, ki: 0.8, kd: 0.3, status: 'cooling', ddcAddr: 'DDC-OG1-01.AO3' },
-  { key: '2', name: 'OG1 南侧开放办公区', actual: 22.8, setpoint: 23.0, valve: 12, kp: 2.5, ki: 0.8, kd: 0.3, status: 'idle', ddcAddr: 'DDC-OG1-01.AO4' },
-  { key: '3', name: 'OG2 西侧办公区', actual: 24.1, setpoint: 23.0, valve: 82, kp: 2.2, ki: 0.7, kd: 0.2, status: 'cooling', ddcAddr: 'DDC-OG2-01.AO3' },
-  { key: '4', name: 'OG2 会议室 2.10', actual: 25.2, setpoint: 23.0, valve: 95, kp: 3.0, ki: 1.0, kd: 0.4, status: 'cooling', ddcAddr: 'DDC-OG2-02.AO1' },
-  { key: '5', name: 'OG3 东侧办公区', actual: 22.6, setpoint: 23.0, valve: 8, kp: 2.0, ki: 0.6, kd: 0.2, status: 'idle', ddcAddr: 'DDC-OG3-01.AO3' },
-  { key: '6', name: 'OG3 会议室 3.12', actual: 24.8, setpoint: 23.0, valve: 88, kp: 3.0, ki: 1.0, kd: 0.4, status: 'cooling', ddcAddr: 'DDC-OG3-02.AO1' },
-  { key: '7', name: 'EG 前台区域', actual: 23.2, setpoint: 23.0, valve: 22, kp: 2.0, ki: 0.6, kd: 0.2, status: 'idle', ddcAddr: 'DDC-EG-01.AO3' },
-  { key: '8', name: 'UG 机房', actual: 21.1, setpoint: 21.0, valve: 35, kp: 1.5, ki: 0.5, kd: 0.1, status: 'cooling', ddcAddr: 'DDC-UG-01.AO1' },
-]
 
 function genPid() {
   return Array.from({ length: 61 }, (_, i) => {
@@ -37,6 +26,17 @@ export default function CoolingPage() {
   const [data] = useState(genPid)
   const [pidModal, setPidModal] = useState(false)
   const [selectedZone, setSelectedZone] = useState<any>(null)
+
+  const zones = useMemo(() => [
+    { key: '1', name: t.cool.zoneNorthOpen, actual: 23.4, setpoint: 23.0, valve: 68, kp: 2.5, ki: 0.8, kd: 0.3, status: 'cooling', ddcAddr: 'DDC-OG1-01.AO3' },
+    { key: '2', name: t.cool.zoneSouthOpen, actual: 22.8, setpoint: 23.0, valve: 12, kp: 2.5, ki: 0.8, kd: 0.3, status: 'idle', ddcAddr: 'DDC-OG1-01.AO4' },
+    { key: '3', name: t.cool.zoneWestOffice, actual: 24.1, setpoint: 23.0, valve: 82, kp: 2.2, ki: 0.7, kd: 0.2, status: 'cooling', ddcAddr: 'DDC-OG2-01.AO3' },
+    { key: '4', name: t.cool.zoneMeeting210, actual: 25.2, setpoint: 23.0, valve: 95, kp: 3.0, ki: 1.0, kd: 0.4, status: 'cooling', ddcAddr: 'DDC-OG2-02.AO1' },
+    { key: '5', name: t.cool.zoneEastOffice, actual: 22.6, setpoint: 23.0, valve: 8, kp: 2.0, ki: 0.6, kd: 0.2, status: 'idle', ddcAddr: 'DDC-OG3-01.AO3' },
+    { key: '6', name: t.cool.zoneMeeting312, actual: 24.8, setpoint: 23.0, valve: 88, kp: 3.0, ki: 1.0, kd: 0.4, status: 'cooling', ddcAddr: 'DDC-OG3-02.AO1' },
+    { key: '7', name: t.cool.zoneLobby, actual: 23.2, setpoint: 23.0, valve: 22, kp: 2.0, ki: 0.6, kd: 0.2, status: 'idle', ddcAddr: 'DDC-EG-01.AO3' },
+    { key: '8', name: t.cool.zoneServerRoom, actual: 21.1, setpoint: 21.0, valve: 35, kp: 1.5, ki: 0.5, kd: 0.1, status: 'cooling', ddcAddr: 'DDC-UG-01.AO1' },
+  ], [t])
 
   const coolingZones = zones.filter(z => z.status === 'cooling').length
   const totalCoolingPower = Math.round(zones.reduce((a, z) => a + z.valve * 1.8, 0))
@@ -68,7 +68,7 @@ export default function CoolingPage() {
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.cool.cop} value={4.35} valueStyle={{ color: '#52c41a' }} prefix={<DashboardOutlined />} /><Text type="secondary">{t.cool.ratedCop}: 4.8</Text></Card></Col>
       </Row>
 
-      <Card title={t.cool.pidCurve} extra={<Text type="secondary">区域: OG2 会议室 2.10 · {t.cool.samplingCycle}</Text>}>
+      <Card title={t.cool.pidCurve} extra={<Text type="secondary">{t.cool.pidZoneLabel} · {t.cool.samplingCycle}</Text>}>
         <ResponsiveContainer width="100%" height={320}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -92,8 +92,8 @@ export default function CoolingPage() {
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
           <Descriptions.Item label={t.cool.chiller1}>Carrier 30RB-262 · 130kW · <Tag color="green">Betrieb</Tag></Descriptions.Item>
           <Descriptions.Item label={t.cool.chiller2}>Carrier 30RB-262 · 130kW · <Tag color="orange">{t.cool.standbyLabel}</Tag></Descriptions.Item>
-          <Descriptions.Item label={t.cool.refrigerant}>R-410A · 充注量 28kg/台</Descriptions.Item>
-          <Descriptions.Item label={t.cool.coolingTower}>冷却塔 BAC FXT-18 · 32°C</Descriptions.Item>
+          <Descriptions.Item label={t.cool.refrigerant}>{t.cool.refrigerantDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.cool.coolingTower}>{t.cool.coolingTowerDetail}</Descriptions.Item>
           <Descriptions.Item label={t.cool.coldStorage}>1.500L · 7.2°C</Descriptions.Item>
           <Descriptions.Item label={t.cool.operatingHours}>6,820h / 3,140h</Descriptions.Item>
           <Descriptions.Item label={t.cool.nextMaint}>2026-05-10</Descriptions.Item>

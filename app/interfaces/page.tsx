@@ -15,19 +15,19 @@ const ifaces = [
   { key: '6', name: 'OPC UA', port: 4840, devices: 6, rate: '35 msg/s', status: 'online', uptime: '99.98%', version: 'v1.04', router: 'Siemens Desigo CC' },
 ]
 
-const events = [
-  { key: '1', time: '14:23:05', iface: 'DALI-2 / IP', event: '连接丢失 - OG3网关 (192.168.10.63) 不可达', level: 'error' },
-  { key: '2', time: '14:20:00', iface: 'BACnet/IP', event: '设备 DDC-OG2-02 超时 (30s) - 5s后重试成功', level: 'warning' },
-  { key: '3', time: '13:45:10', iface: 'Modbus TCP', event: 'PLC-Kälte 寄存器 40001-40010 CRC校验错误 (重试1次成功)', level: 'warning' },
-  { key: '4', time: '13:00:00', iface: 'M-Bus', event: '抄表完成: 14块表计, 168个数据点', level: 'info' },
-  { key: '5', time: '12:30:15', iface: 'BACnet/IP', event: 'COV订阅已更新: DDC-OG1-01 (128个对象)', level: 'info' },
-  { key: '6', time: '12:00:00', iface: 'KNX/IP', event: '组报文已接收: 320个地址活跃', level: 'info' },
-  { key: '7', time: '11:15:30', iface: 'OPC UA', event: '会话已延续: Siemens S7-1500 (证书认证)', level: 'info' },
-  { key: '8', time: '08:00:00', iface: 'Alle', event: '日统计: 98台设备在线, 2710个数据点活跃, 0.02%错误率', level: 'info' },
-]
-
 export default function InterfacesPage() {
   const { t } = useI18n()
+
+  const events = [
+    { key: '1', time: '14:23:05', iface: 'DALI-2 / IP', event: t.iface_data.ev1, level: 'error' },
+    { key: '2', time: '14:20:00', iface: 'BACnet/IP', event: t.iface_data.ev2, level: 'warning' },
+    { key: '3', time: '13:45:10', iface: 'Modbus TCP', event: t.iface_data.ev3, level: 'warning' },
+    { key: '4', time: '13:00:00', iface: 'M-Bus', event: t.iface_data.ev4, level: 'info' },
+    { key: '5', time: '12:30:15', iface: 'BACnet/IP', event: t.iface_data.ev5, level: 'info' },
+    { key: '6', time: '12:00:00', iface: 'KNX/IP', event: t.iface_data.ev6, level: 'info' },
+    { key: '7', time: '11:15:30', iface: 'OPC UA', event: t.iface_data.ev7, level: 'info' },
+    { key: '8', time: '08:00:00', iface: 'Alle', event: t.iface_data.ev8, level: 'info' },
+  ]
 
   const totalDevices = ifaces.reduce((a, b) => a + b.devices, 0)
   const onlineIfaces = ifaces.filter(i => i.status === 'online').length
@@ -85,9 +85,9 @@ export default function InterfacesPage() {
           <Descriptions.Item label={t.iface.baNetwork}>VLAN 10 · 192.168.10.0/24 · 1 Gbit</Descriptions.Item>
           <Descriptions.Item label={t.iface.mgmtNetwork}>VLAN 20 · 192.168.20.0/24</Descriptions.Item>
           <Descriptions.Item label={t.iface.switchLabel}>Cisco Catalyst 2960-L · 2× PoE</Descriptions.Item>
-          <Descriptions.Item label={t.iface.bacnetRouterLabel}>Loytec LGATE-950 · 2台</Descriptions.Item>
-          <Descriptions.Item label={t.iface.modbusGw}>HMS Anybus X-gw · 1台</Descriptions.Item>
-          <Descriptions.Item label={t.iface.firewall}>自控网络隔离 · 仅443端口对外</Descriptions.Item>
+          <Descriptions.Item label={t.iface.bacnetRouterLabel}>Loytec LGATE-950 · {t.iface_data.bacnetRouterDesc}</Descriptions.Item>
+          <Descriptions.Item label={t.iface.modbusGw}>HMS Anybus X-gw · {t.iface_data.modbusGwDesc}</Descriptions.Item>
+          <Descriptions.Item label={t.iface.firewall}>{t.iface_data.firewallDesc}</Descriptions.Item>
         </Descriptions>
       </Card>
     </div>

@@ -56,16 +56,16 @@ export default function SettingsPage() {
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 2 }}>
           <Descriptions.Item label="BMS Software">Siemens Desigo CC v6.0.2</Descriptions.Item>
           <Descriptions.Item label="Server">Linux Ubuntu 22.04 / 8 Core Xeon / 32GB ECC</Descriptions.Item>
-          <Descriptions.Item label={t.set.database}>PostgreSQL 16.2 · 42 GB (趋势数据: 38 GB)</Descriptions.Item>
-          <Descriptions.Item label={t.set.sysRuntime}>428 天 (自2025-01-03起)</Descriptions.Item>
-          <Descriptions.Item label={t.set.cpuUsage}>18% (24h均值: 22%)</Descriptions.Item>
+          <Descriptions.Item label={t.set.database}>{t.set_data.dbDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.set.sysRuntime}>{t.set_data.runtimeDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.set.cpuUsage}>{t.set_data.cpuDetail}</Descriptions.Item>
           <Descriptions.Item label={t.set.memory}>12.4 / 32 GB (39%)</Descriptions.Item>
           <Descriptions.Item label={t.set.disk}>142 / 500 GB SSD RAID-1 (28%)</Descriptions.Item>
           <Descriptions.Item label={t.set.networkLabel}>1 Gbit LAN · GA-VLAN 10</Descriptions.Item>
-          <Descriptions.Item label={t.set.tlsCert}>Let's Encrypt · 有效期至 2026-06-15</Descriptions.Item>
-          <Descriptions.Item label={t.set.license}>Desigo CC Enterprise · 3.000 数据点</Descriptions.Item>
-          <Descriptions.Item label={t.set.ddcFirmware}>Siemens PXC v3.02.18 (9台设备)</Descriptions.Item>
-          <Descriptions.Item label={t.set.ups}>APC Smart-UPS 3000 · 45分钟自主供电</Descriptions.Item>
+          <Descriptions.Item label={t.set.tlsCert}>{t.set_data.tlsCertDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.set.license}>{t.set_data.licenseDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.set.ddcFirmware}>{t.set_data.ddcFwDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.set.ups}>{t.set_data.upsDetail}</Descriptions.Item>
         </Descriptions>
       </Card>
 
@@ -75,7 +75,7 @@ export default function SettingsPage() {
 
       <Card title={t.set.maintenancePlan} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
-          <Descriptions.Item label={t.set.rltFilter}>2026-03-20 (到期)</Descriptions.Item>
+          <Descriptions.Item label={t.set.rltFilter}>2026-03-20 {t.set_data.dueSuffix}</Descriptions.Item>
           <Descriptions.Item label={t.set.boilerMaint}>2026-04-15</Descriptions.Item>
           <Descriptions.Item label={t.set.chillerMaint}>2026-05-10</Descriptions.Item>
           <Descriptions.Item label={t.set.upsBattery}>2026-04-01</Descriptions.Item>

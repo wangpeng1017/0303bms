@@ -1,7 +1,7 @@
 'use client'
 
 import { useI18n } from '@/components/i18n-provider'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, Statistic, Table, Tag, Slider, Row, Col, Typography, Button, Space, Descriptions, message } from 'antd'
 import { BlockOutlined, ClockCircleOutlined } from '@ant-design/icons'
 
@@ -10,20 +10,20 @@ const { Title, Text } = Typography
 export default function ShadingPage() {
   const { t } = useI18n()
 
-  const blinds = [
-    { key: '1', name: 'EG 南立面', facade: t.shade.zones.split(',')[0] || '南', floor: 'EG', count: 8, position: 75, angle: 45, mode: 'auto', status: 'ok' },
-    { key: '2', name: 'EG 东立面', facade: '东', floor: 'EG', count: 6, position: 40, angle: 30, mode: 'auto', status: 'ok' },
-    { key: '3', name: 'OG1 南立面', facade: '南', floor: 'OG1', count: 12, position: 100, angle: 60, mode: 'auto', status: 'ok' },
-    { key: '4', name: 'OG1 东立面', facade: '东', floor: 'OG1', count: 8, position: 50, angle: 35, mode: 'auto', status: 'ok' },
-    { key: '5', name: 'OG1 西立面', facade: '西', floor: 'OG1', count: 8, position: 20, angle: 15, mode: 'auto', status: 'ok' },
-    { key: '6', name: 'OG2 南立面', facade: '南', floor: 'OG2', count: 12, position: 100, angle: 60, mode: 'auto', status: 'ok' },
-    { key: '7', name: 'OG2 东立面', facade: '东', floor: 'OG2', count: 8, position: 55, angle: 35, mode: 'auto', status: 'ok' },
-    { key: '8', name: 'OG2 西立面', facade: '西', floor: 'OG2', count: 8, position: 25, angle: 15, mode: 'manual', status: 'ok' },
-    { key: '9', name: 'OG3 南立面', facade: '南', floor: 'OG3', count: 12, position: 100, angle: 60, mode: 'auto', status: 'ok' },
-    { key: '10', name: 'OG3 东立面', facade: '东', floor: 'OG3', count: 8, position: 60, angle: 40, mode: 'auto', status: 'ok' },
-    { key: '11', name: 'OG3 西立面', facade: '西', floor: 'OG3', count: 8, position: 0, angle: 0, mode: 'auto', status: 'stuck' },
-    { key: '12', name: '屋顶采光罩', facade: '屋顶', floor: '屋顶', count: 4, position: 80, angle: 0, mode: 'auto', status: 'ok' },
-  ]
+  const blinds = useMemo(() => [
+    { key: '1', name: t.shade.blindNameEgSouth, facade: t.shade.facadeSouth, floor: 'EG', count: 8, position: 75, angle: 45, mode: 'auto', status: 'ok' },
+    { key: '2', name: t.shade.blindNameEgEast, facade: t.shade.facadeEast, floor: 'EG', count: 6, position: 40, angle: 30, mode: 'auto', status: 'ok' },
+    { key: '3', name: t.shade.blindNameOg1South, facade: t.shade.facadeSouth, floor: 'OG1', count: 12, position: 100, angle: 60, mode: 'auto', status: 'ok' },
+    { key: '4', name: t.shade.blindNameOg1East, facade: t.shade.facadeEast, floor: 'OG1', count: 8, position: 50, angle: 35, mode: 'auto', status: 'ok' },
+    { key: '5', name: t.shade.blindNameOg1West, facade: t.shade.facadeWest, floor: 'OG1', count: 8, position: 20, angle: 15, mode: 'auto', status: 'ok' },
+    { key: '6', name: t.shade.blindNameOg2South, facade: t.shade.facadeSouth, floor: 'OG2', count: 12, position: 100, angle: 60, mode: 'auto', status: 'ok' },
+    { key: '7', name: t.shade.blindNameOg2East, facade: t.shade.facadeEast, floor: 'OG2', count: 8, position: 55, angle: 35, mode: 'auto', status: 'ok' },
+    { key: '8', name: t.shade.blindNameOg2West, facade: t.shade.facadeWest, floor: 'OG2', count: 8, position: 25, angle: 15, mode: 'manual', status: 'ok' },
+    { key: '9', name: t.shade.blindNameOg3South, facade: t.shade.facadeSouth, floor: 'OG3', count: 12, position: 100, angle: 60, mode: 'auto', status: 'ok' },
+    { key: '10', name: t.shade.blindNameOg3East, facade: t.shade.facadeEast, floor: 'OG3', count: 8, position: 60, angle: 40, mode: 'auto', status: 'ok' },
+    { key: '11', name: t.shade.blindNameOg3West, facade: t.shade.facadeWest, floor: 'OG3', count: 8, position: 0, angle: 0, mode: 'auto', status: 'stuck' },
+    { key: '12', name: t.shade.blindNameRoof, facade: t.shade.facadeRoof, floor: t.shade.facadeRoof, count: 4, position: 80, angle: 0, mode: 'auto', status: 'ok' },
+  ], [t])
 
   const totalBlinds = blinds.reduce((a, b) => a + b.count, 0)
   const stuckCount = blinds.filter(b => b.status === 'stuck').length
@@ -69,14 +69,14 @@ export default function ShadingPage() {
 
       <Card title={t.shade.weatherAutoCtrl} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
-          <Descriptions.Item label={t.shade.weatherStation}>Elsner P04 (屋顶)</Descriptions.Item>
-          <Descriptions.Item label={t.shade.sunSensor}>3 (东/南/西)</Descriptions.Item>
-          <Descriptions.Item label={t.shade.windMonitor}>2 (限值: 50 km/h)</Descriptions.Item>
-          <Descriptions.Item label={t.shade.rainSensor}>1 (自动收回)</Descriptions.Item>
+          <Descriptions.Item label={t.shade.weatherStation}>{t.shade.weatherStationNote}</Descriptions.Item>
+          <Descriptions.Item label={t.shade.sunSensor}>{t.shade.sunSensorNote}</Descriptions.Item>
+          <Descriptions.Item label={t.shade.windMonitor}>{t.shade.windMonitorNote}</Descriptions.Item>
+          <Descriptions.Item label={t.shade.rainSensor}>{t.shade.rainSensorNote}</Descriptions.Item>
           <Descriptions.Item label={t.shade.knxDrive}>Warema / Somfy · {totalBlinds}</Descriptions.Item>
-          <Descriptions.Item label={t.shade.antiGlare}>25000 lux 以上自动启动</Descriptions.Item>
-          <Descriptions.Item label={t.shade.frostProtect}>低于 -5°C 自动收回</Descriptions.Item>
-          <Descriptions.Item label={t.shade.duskMode}>低于 100 lux 自动收回</Descriptions.Item>
+          <Descriptions.Item label={t.shade.antiGlare}>{t.shade.antiGlareNote}</Descriptions.Item>
+          <Descriptions.Item label={t.shade.frostProtect}>{t.shade.frostProtectNote}</Descriptions.Item>
+          <Descriptions.Item label={t.shade.duskMode}>{t.shade.duskModeNote}</Descriptions.Item>
         </Descriptions>
       </Card>
     </div>

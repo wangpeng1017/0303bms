@@ -7,19 +7,6 @@ import { TeamOutlined, UserOutlined, SafetyOutlined, ClockCircleOutlined, PlusOu
 
 const { Title, Text } = Typography
 
-const userList = [
-  { key: '1', name: 'Schulz, Thomas', role: 'Administrator', email: 't.schulz@westpark-fm.de', dept: '设施管理', lastLogin: '2026-03-06 08:15', status: 'online' },
-  { key: '2', name: 'Weber, Michael', role: 'Engineer', email: 'm.weber@westpark-fm.de', dept: 'MSR技术', lastLogin: '2026-03-06 07:45', status: 'online' },
-  { key: '3', name: 'Müller, Sabine', role: 'Engineer', email: 's.mueller@westpark-fm.de', dept: 'MSR技术', lastLogin: '2026-03-06 09:00', status: 'online' },
-  { key: '4', name: 'Schmidt, Lars', role: 'Operator', email: 'l.schmidt@westpark-fm.de', dept: '楼宇运维', lastLogin: '2026-03-06 06:00', status: 'online' },
-  { key: '5', name: 'Fischer, Anna', role: 'Operator', email: 'a.fischer@westpark-fm.de', dept: '楼宇运维', lastLogin: '2026-03-05 18:00', status: 'offline' },
-  { key: '6', name: 'Bauer, Klaus', role: 'Operator', email: 'k.bauer@westpark-fm.de', dept: '楼宇运维', lastLogin: '2026-03-06 06:30', status: 'online' },
-  { key: '7', name: 'Klein, Petra', role: 'Viewer', email: 'p.klein@westpark.de', dept: '行政管理', lastLogin: '2026-03-05 16:30', status: 'offline' },
-  { key: '8', name: 'Wagner, Stefan', role: 'Viewer', email: 's.wagner@westpark.de', dept: '管理层', lastLogin: '2026-03-04 11:00', status: 'offline' },
-  { key: '9', name: 'Siemens Service', role: 'Vendor', email: 'service@siemens.com', dept: '外部 (维保)', lastLogin: '2026-02-28 10:00', status: 'offline' },
-  { key: '10', name: 'Kampmann Service', role: 'Vendor', email: 'support@kampmann.de', dept: '外部 (空调)', lastLogin: '2026-02-15 14:00', status: 'offline' },
-]
-
 const roles = [
   { key: '1', role: 'Administrator', permissions: 'fullAccess', users: 1, level: 'level4' },
   { key: '2', role: 'Engineer', permissions: 'configCtrlAck', users: 2, level: 'level3' },
@@ -28,23 +15,36 @@ const roles = [
   { key: '5', role: 'Vendor', permissions: 'vendorAccess', users: 2, level: 'vendorLevel' },
 ]
 
-const auditLog = [
-  { key: '1', time: '14:23:08', user: 'Weber, Michael', action: '报警确认: RLT-03 变频器故障 (A级报警)', level: 'alarm' },
-  { key: '2', time: '13:30:12', user: 'Müller, Sabine', action: 'PID参数修改: OG2会议区 (Kp: 2.5→3.0)', level: 'config' },
-  { key: '3', time: '11:45:00', user: 'Schulz, Thomas', action: '新增用户: Kampmann Service (供应商)', level: 'admin' },
-  { key: '4', time: '09:15:00', user: 'Schmidt, Lars', action: '设定值修改: HK-03 供水温度 52°C→54°C', level: 'config' },
-  { key: '5', time: '09:00:00', user: 'Müller, Sabine', action: '登录 (IP: 192.168.20.15)', level: 'auth' },
-  { key: '6', time: '08:15:00', user: 'Schulz, Thomas', action: '登录 (IP: 192.168.20.10)', level: 'auth' },
-  { key: '7', time: '07:45:00', user: 'Weber, Michael', action: '登录 (IP: 192.168.20.12)', level: 'auth' },
-  { key: '8', time: '06:30:00', user: 'Bauer, Klaus', action: '登录 (IP: 192.168.20.18)', level: 'auth' },
-  { key: '9', time: '06:00:00', user: 'Schmidt, Lars', action: '登录 (IP: 192.168.20.16)', level: 'auth' },
-  { key: '10', time: '02:00:05', user: 'System', action: '自动数据备份完成 (268 MB)', level: 'system' },
-]
-
 export default function UsersPage() {
   const { t } = useI18n()
   const [addUserModal, setAddUserModal] = useState(false)
   const [editRoleModal, setEditRoleModal] = useState(false)
+
+  const userList = [
+    { key: '1', name: 'Schulz, Thomas', role: 'Administrator', email: 't.schulz@westpark-fm.de', dept: t.usr_data.deptFm, lastLogin: '2026-03-06 08:15', status: 'online' },
+    { key: '2', name: 'Weber, Michael', role: 'Engineer', email: 'm.weber@westpark-fm.de', dept: t.usr_data.deptMsr, lastLogin: '2026-03-06 07:45', status: 'online' },
+    { key: '3', name: 'Müller, Sabine', role: 'Engineer', email: 's.mueller@westpark-fm.de', dept: t.usr_data.deptMsr, lastLogin: '2026-03-06 09:00', status: 'online' },
+    { key: '4', name: 'Schmidt, Lars', role: 'Operator', email: 'l.schmidt@westpark-fm.de', dept: t.usr_data.deptOps, lastLogin: '2026-03-06 06:00', status: 'online' },
+    { key: '5', name: 'Fischer, Anna', role: 'Operator', email: 'a.fischer@westpark-fm.de', dept: t.usr_data.deptOps, lastLogin: '2026-03-05 18:00', status: 'offline' },
+    { key: '6', name: 'Bauer, Klaus', role: 'Operator', email: 'k.bauer@westpark-fm.de', dept: t.usr_data.deptOps, lastLogin: '2026-03-06 06:30', status: 'online' },
+    { key: '7', name: 'Klein, Petra', role: 'Viewer', email: 'p.klein@westpark.de', dept: t.usr_data.deptAdmin, lastLogin: '2026-03-05 16:30', status: 'offline' },
+    { key: '8', name: 'Wagner, Stefan', role: 'Viewer', email: 's.wagner@westpark.de', dept: t.usr_data.deptMgmt, lastLogin: '2026-03-04 11:00', status: 'offline' },
+    { key: '9', name: 'Siemens Service', role: 'Vendor', email: 'service@siemens.com', dept: t.usr_data.deptExt1, lastLogin: '2026-02-28 10:00', status: 'offline' },
+    { key: '10', name: 'Kampmann Service', role: 'Vendor', email: 'support@kampmann.de', dept: t.usr_data.deptExt2, lastLogin: '2026-02-15 14:00', status: 'offline' },
+  ]
+
+  const auditLog = [
+    { key: '1', time: '14:23:08', user: 'Weber, Michael', action: t.usr_data.act1, level: 'alarm' },
+    { key: '2', time: '13:30:12', user: 'Müller, Sabine', action: t.usr_data.act2, level: 'config' },
+    { key: '3', time: '11:45:00', user: 'Schulz, Thomas', action: t.usr_data.act3, level: 'admin' },
+    { key: '4', time: '09:15:00', user: 'Schmidt, Lars', action: t.usr_data.act4, level: 'config' },
+    { key: '5', time: '09:00:00', user: 'Müller, Sabine', action: t.usr_data.act5, level: 'auth' },
+    { key: '6', time: '08:15:00', user: 'Schulz, Thomas', action: t.usr_data.act6, level: 'auth' },
+    { key: '7', time: '07:45:00', user: 'Weber, Michael', action: t.usr_data.act7, level: 'auth' },
+    { key: '8', time: '06:30:00', user: 'Bauer, Klaus', action: t.usr_data.act8, level: 'auth' },
+    { key: '9', time: '06:00:00', user: 'Schmidt, Lars', action: t.usr_data.act9, level: 'auth' },
+    { key: '10', time: '02:00:05', user: 'System', action: t.usr_data.act10, level: 'system' },
+  ]
 
   const onlineUsers = userList.filter(u => u.status === 'online').length
 
@@ -108,11 +108,11 @@ export default function UsersPage() {
 
       <Card title={t.usr.userList}><Table columns={userCols} dataSource={userList} pagination={false} size="small" scroll={{ x: 900 }} /></Card>
       <Card title={t.usr.rolePerms} extra={<Text type="secondary">{t.usr.vdiLevelRef}</Text>}><Table columns={roleCols} dataSource={roles} pagination={false} size="small" /></Card>
-      <Card title={t.usr.auditLog} extra={<Text type="secondary">Heute · {auditLog.length} 条记录</Text>}><Table columns={auditCols} dataSource={auditLog} pagination={false} size="small" scroll={{ x: 700 }} /></Card>
+      <Card title={t.usr.auditLog} extra={<Text type="secondary">Heute · {auditLog.length} {t.usr_data.recordsLabel}</Text>}><Table columns={auditCols} dataSource={auditLog} pagination={false} size="small" scroll={{ x: 700 }} /></Card>
 
       <Modal title={t.usr.addUser} open={addUserModal} onOk={() => { setAddUserModal(false); message.success(t.usr.userCreated) }} onCancel={() => setAddUserModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
         <Form layout="vertical">
-          <Form.Item label={t.common.name}><Input placeholder="姓, 名" /></Form.Item>
+          <Form.Item label={t.common.name}><Input placeholder={t.usr_data.namePlaceholder} /></Form.Item>
           <Form.Item label={t.usr.email}><Input type="email" /></Form.Item>
           <Form.Item label={t.common.department}><Input /></Form.Item>
           <Form.Item label={t.usr.role}><Select options={roles.map(r => ({ value: r.role, label: `${r.role} (${levelMap[r.level] || r.level})` }))} /></Form.Item>

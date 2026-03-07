@@ -117,10 +117,10 @@ export default function DataAcquisitionPage() {
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
           <Descriptions.Item label={t.dataAcq.mgmtServer}>Siemens Desigo CC · v6.0</Descriptions.Item>
           <Descriptions.Item label={t.dataAcq.network}>VLAN 10 (GA) · 192.168.10.0/24</Descriptions.Item>
-          <Descriptions.Item label={t.dataAcq.bacnetRouter}>Loytec LGATE-950 · 2台</Descriptions.Item>
+          <Descriptions.Item label={t.dataAcq.bacnetRouter}>{t.dataAcq_data.bacnetRouterDesc}</Descriptions.Item>
           <Descriptions.Item label={t.dataAcq.database}>PostgreSQL 16 · 42 GB</Descriptions.Item>
-          <Descriptions.Item label={t.dataAcq.backupSchedule}>每日 02:00 · 保留30天</Descriptions.Item>
-          <Descriptions.Item label={t.dataAcq.collectCycle}>5秒轮询 / COV订阅</Descriptions.Item>
+          <Descriptions.Item label={t.dataAcq.backupSchedule}>{t.dataAcq_data.backupDetail}</Descriptions.Item>
+          <Descriptions.Item label={t.dataAcq.collectCycle}>{t.dataAcq_data.collectCycleDetail}</Descriptions.Item>
         </Descriptions>
       </Card>
 

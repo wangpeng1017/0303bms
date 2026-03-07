@@ -13,32 +13,32 @@ export default function SchedulesPage() {
   const [holidayModal, setHolidayModal] = useState(false)
 
   const programs = [
-    { key: '1', name: 'RLT 正常运行', target: 'RLT-01 至 RLT-04', schedule: '周一至周五 06:00-20:00', priority: 10, status: 'active' },
-    { key: '2', name: 'RLT 夜间散热', target: 'RLT-01 至 RLT-04', schedule: '周一至周五 22:00-06:00 (>26°C)', priority: 8, status: 'active' },
-    { key: '3', name: '供暖夜间回降', target: 'HK-01 至 HK-06', schedule: '每日 22:00-05:00', priority: 10, status: 'active' },
-    { key: '4', name: '供暖周末模式', target: 'HK-01 至 HK-06', schedule: '周六日全天 (回降)', priority: 5, status: 'active' },
-    { key: '5', name: '办公照明', target: 'DALI-G3 至 G8', schedule: '周一至周五 07:00-19:30', priority: 10, status: 'active' },
-    { key: '6', name: '保洁照明', target: '全部 DALI 组', schedule: '周一至周五 19:30-21:00', priority: 6, status: 'active' },
-    { key: '7', name: '室外照明', target: 'DALI-G11', schedule: '每日 黄昏-22:00', priority: 8, status: 'active' },
-    { key: '8', name: '遮阳自动模式', target: '全部百叶窗', schedule: '每日 06:00-21:00', priority: 10, status: 'active' },
-    { key: '9', name: '地下车库通风', target: 'RLT-05', schedule: '周一至周五 07:00-09:00, 17:00-19:00', priority: 8, status: 'active' },
-    { key: '10', name: '节能模式', target: '全部系统', schedule: '周六日全天', priority: 3, status: 'paused' },
+    { key: '1', name: t.sched_data.prog1Name, target: t.sched_data.prog1Target, schedule: t.sched_data.prog1Schedule, priority: 10, status: 'active' },
+    { key: '2', name: t.sched_data.prog2Name, target: t.sched_data.prog1Target, schedule: t.sched_data.prog2Schedule, priority: 8, status: 'active' },
+    { key: '3', name: t.sched_data.prog3Name, target: t.sched_data.prog3Target, schedule: t.sched_data.prog3Schedule, priority: 10, status: 'active' },
+    { key: '4', name: t.sched_data.prog4Name, target: t.sched_data.prog3Target, schedule: t.sched_data.prog4Schedule, priority: 5, status: 'active' },
+    { key: '5', name: t.sched_data.prog5Name, target: t.sched_data.prog5Target, schedule: t.sched_data.prog5Schedule, priority: 10, status: 'active' },
+    { key: '6', name: t.sched_data.prog6Name, target: t.sched_data.prog6Target, schedule: t.sched_data.prog6Schedule, priority: 6, status: 'active' },
+    { key: '7', name: t.sched_data.prog7Name, target: t.sched_data.prog7Target, schedule: t.sched_data.prog7Schedule, priority: 8, status: 'active' },
+    { key: '8', name: t.sched_data.prog8Name, target: t.sched_data.prog8Target, schedule: t.sched_data.prog8Schedule, priority: 10, status: 'active' },
+    { key: '9', name: t.sched_data.prog9Name, target: t.sched_data.prog9Target, schedule: t.sched_data.prog9Schedule, priority: 8, status: 'active' },
+    { key: '10', name: t.sched_data.prog10Name, target: t.sched_data.prog10Target, schedule: t.sched_data.prog10Schedule, priority: 3, status: 'paused' },
   ]
 
   const holidays = [
-    { key: '1', name: '元旦', date: '2026-01-01', mode: 'closed' },
-    { key: '2', name: '三王节', date: '2026-01-06', mode: 'closed' },
-    { key: '3', name: '耶稣受难日', date: '2026-04-03', mode: 'holiday' },
-    { key: '4', name: '复活节周一', date: '2026-04-06', mode: 'holiday' },
-    { key: '5', name: '劳动节', date: '2026-05-01', mode: 'closed' },
-    { key: '6', name: '耶稣升天节', date: '2026-05-14', mode: 'holiday' },
-    { key: '7', name: '圣灵降临节周一', date: '2026-05-25', mode: 'holiday' },
-    { key: '8', name: '基督圣体节', date: '2026-06-04', mode: 'holiday' },
-    { key: '9', name: '圣母升天节', date: '2026-08-15', mode: 'closed' },
-    { key: '10', name: '德国统一日', date: '2026-10-03', mode: 'closed' },
-    { key: '11', name: '万圣节', date: '2026-11-01', mode: 'closed' },
-    { key: '12', name: '圣诞节', date: '2026-12-24 ~ 12-26', mode: 'holiday' },
-    { key: '13', name: '公司假期', date: '2026-12-27 ~ 2027-01-02', mode: 'closed' },
+    { key: '1', name: t.sched_data.hol1, date: '2026-01-01', mode: 'closed' },
+    { key: '2', name: t.sched_data.hol2, date: '2026-01-06', mode: 'closed' },
+    { key: '3', name: t.sched_data.hol3, date: '2026-04-03', mode: 'holiday' },
+    { key: '4', name: t.sched_data.hol4, date: '2026-04-06', mode: 'holiday' },
+    { key: '5', name: t.sched_data.hol5, date: '2026-05-01', mode: 'closed' },
+    { key: '6', name: t.sched_data.hol6, date: '2026-05-14', mode: 'holiday' },
+    { key: '7', name: t.sched_data.hol7, date: '2026-05-25', mode: 'holiday' },
+    { key: '8', name: t.sched_data.hol8, date: '2026-06-04', mode: 'holiday' },
+    { key: '9', name: t.sched_data.hol9, date: '2026-08-15', mode: 'closed' },
+    { key: '10', name: t.sched_data.hol10, date: '2026-10-03', mode: 'closed' },
+    { key: '11', name: t.sched_data.hol11, date: '2026-11-01', mode: 'closed' },
+    { key: '12', name: t.sched_data.hol12, date: '2026-12-24 ~ 12-26', mode: 'holiday' },
+    { key: '13', name: t.sched_data.hol13, date: '2026-12-27 ~ 2027-01-02', mode: 'closed' },
   ]
 
   const activePrograms = programs.filter(p => p.status === 'active').length
@@ -101,7 +101,15 @@ export default function SchedulesPage() {
       <Modal title={t.sched.addProgram} open={addModal} onOk={() => { setAddModal(false); message.success(t.sched.programCreated) }} onCancel={() => setAddModal(false)} okText={t.actions.save} cancelText={t.actions.cancel}>
         <Form layout="vertical">
           <Form.Item label={t.sched.programName}><Input /></Form.Item>
-          <Form.Item label={t.sched.targetSystem}><Select options={[{value:'RLT (全部)'},{value:'供暖回路'},{value:'DALI 照明'},{value:'百叶窗'},{value:'全部系统'}]} /></Form.Item>
+          <Form.Item label={t.sched.targetSystem}>
+            <Select options={[
+              {value: t.sched_data.optRlt, label: t.sched_data.optRlt},
+              {value: t.sched_data.optHeat, label: t.sched_data.optHeat},
+              {value: t.sched_data.optDali, label: t.sched_data.optDali},
+              {value: t.sched_data.optBlind, label: t.sched_data.optBlind},
+              {value: t.sched_data.optAllSys, label: t.sched_data.optAllSys},
+            ]} />
+          </Form.Item>
           <Form.Item label={t.sched.timeArrange}><Space><TimePicker format="HH:mm" /><Text>~</Text><TimePicker format="HH:mm" /></Space></Form.Item>
           <Form.Item label="Priorität"><Select options={[{value:10,label:t.sched.priorityHigh},{value:8,label:'8'},{value:5,label:t.sched.priorityMid},{value:3,label:t.sched.priorityLow}]} /></Form.Item>
         </Form>

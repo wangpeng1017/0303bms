@@ -1,7 +1,7 @@
 'use client'
 
 import { useI18n } from '@/components/i18n-provider'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, Statistic, Table, Tag, Progress, Row, Col, Typography, Button, Space, Modal, Slider, Descriptions, message } from 'antd'
 import { FireOutlined, DashboardOutlined, ClockCircleOutlined, SettingOutlined } from '@ant-design/icons'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
@@ -22,23 +22,23 @@ function genTemp() {
   })
 }
 
-const circuits = [
-  { key: '1', name: 'HK-01 北翼 EG-OG1', supply: 55.3, return_: 40.2, setpoint: 55, valve: 78, pump: 82, mode: 'auto', status: 'running', curve: '1.4' },
-  { key: '2', name: 'HK-02 南翼 EG-OG1', supply: 54.1, return_: 39.8, setpoint: 55, valve: 65, pump: 75, mode: 'auto', status: 'running', curve: '1.4' },
-  { key: '3', name: 'HK-03 北翼 OG2-OG3', supply: 53.8, return_: 41.0, setpoint: 54, valve: 72, pump: 70, mode: 'auto', status: 'running', curve: '1.2' },
-  { key: '4', name: 'HK-04 南翼 OG2-OG3', supply: 52.5, return_: 38.5, setpoint: 54, valve: 58, pump: 68, mode: 'auto', status: 'running', curve: '1.2' },
-  { key: '5', name: 'HK-05 RLT 再加热', supply: 50.2, return_: 37.8, setpoint: 50, valve: 45, pump: 60, mode: 'auto', status: 'running', curve: '1.0' },
-  { key: '6', name: 'HK-06 地暖 前台区域', supply: 35.0, return_: 28.5, setpoint: 35, valve: 88, pump: 55, mode: 'auto', status: 'running', curve: '0.6' },
-  { key: '7', name: 'HK-07 生活热水', supply: 60.2, return_: 45.3, setpoint: 60, valve: 92, pump: 90, mode: 'auto', status: 'running', curve: '-' },
-  { key: '8', name: 'HK-08 地下层特殊区域', supply: 40.0, return_: 33.0, setpoint: 40, valve: 30, pump: 42, mode: 'manual', status: 'running', curve: '0.8' },
-]
-
 export default function HeatingPage() {
   const { t } = useI18n()
   const [trend] = useState(genTemp)
   const [setpointModal, setSetpointModal] = useState(false)
   const [selectedCircuit, setSelectedCircuit] = useState<string>('')
   const [tempValue, setTempValue] = useState(55)
+
+  const circuits = useMemo(() => [
+    { key: '1', name: `HK-01 ${t.heat.circuitNorthEg}`, supply: 55.3, return_: 40.2, setpoint: 55, valve: 78, pump: 82, mode: 'auto', status: 'running', curve: '1.4' },
+    { key: '2', name: `HK-02 ${t.heat.circuitSouthEg}`, supply: 54.1, return_: 39.8, setpoint: 55, valve: 65, pump: 75, mode: 'auto', status: 'running', curve: '1.4' },
+    { key: '3', name: `HK-03 ${t.heat.circuitNorthOg}`, supply: 53.8, return_: 41.0, setpoint: 54, valve: 72, pump: 70, mode: 'auto', status: 'running', curve: '1.2' },
+    { key: '4', name: `HK-04 ${t.heat.circuitSouthOg}`, supply: 52.5, return_: 38.5, setpoint: 54, valve: 58, pump: 68, mode: 'auto', status: 'running', curve: '1.2' },
+    { key: '5', name: `HK-05 ${t.heat.circuitReheat}`, supply: 50.2, return_: 37.8, setpoint: 50, valve: 45, pump: 60, mode: 'auto', status: 'running', curve: '1.0' },
+    { key: '6', name: `HK-06 ${t.heat.circuitFloorLobby}`, supply: 35.0, return_: 28.5, setpoint: 35, valve: 88, pump: 55, mode: 'auto', status: 'running', curve: '0.6' },
+    { key: '7', name: `HK-07 ${t.heat.circuitDhw}`, supply: 60.2, return_: 45.3, setpoint: 60, valve: 92, pump: 90, mode: 'auto', status: 'running', curve: '-' },
+    { key: '8', name: `HK-08 ${t.heat.circuitUgSpecial}`, supply: 40.0, return_: 33.0, setpoint: 40, valve: 30, pump: 42, mode: 'manual', status: 'running', curve: '0.8' },
+  ], [t])
 
   const cols = [
     { title: t.heat.circuit, dataIndex: 'name', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
@@ -96,7 +96,7 @@ export default function HeatingPage() {
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
           <Descriptions.Item label={t.heat.boiler1}>Viessmann Vitocrossal 300 · 200kW · <Tag color="green">{t.heat.running}</Tag></Descriptions.Item>
           <Descriptions.Item label={t.heat.boiler2}>Viessmann Vitocrossal 300 · 200kW · <Tag color="green">{t.heat.running}</Tag></Descriptions.Item>
-          <Descriptions.Item label={t.heat.fuel}>天然气 H · 12.3 m³/h</Descriptions.Item>
+          <Descriptions.Item label={t.heat.fuel}>{t.heat.naturalGas} · 12.3 m³/h</Descriptions.Item>
           <Descriptions.Item label={t.heat.exhaustTemp}>128°C / 135°C</Descriptions.Item>
           <Descriptions.Item label={t.heat.operatingHours}>12,450h / 8,230h</Descriptions.Item>
           <Descriptions.Item label={t.heat.nextMaint}>2026-04-15</Descriptions.Item>

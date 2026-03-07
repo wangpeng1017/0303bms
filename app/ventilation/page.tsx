@@ -1,7 +1,7 @@
 'use client'
 
 import { useI18n } from '@/components/i18n-provider'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, Statistic, Table, Tag, Progress, Row, Col, Typography, Button, Space, Modal, Switch, Descriptions, message } from 'antd'
 import { CloudOutlined, ExperimentOutlined, AlertOutlined, ClockCircleOutlined } from '@ant-design/icons'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
@@ -21,22 +21,22 @@ function genAir() {
   })
 }
 
-const ahus = [
-  { key: '1', name: 'RLT-01 EG 前台/门厅', supply: 4200, exhaust: 3900, supplyTemp: 21.5, co2: 485, filter: 82, hrEff: 78, mode: 'auto', status: 'running', freq: 38 },
-  { key: '2', name: 'RLT-02 OG1 开放办公区', supply: 6800, exhaust: 6400, supplyTemp: 21.2, co2: 620, filter: 65, hrEff: 81, mode: 'auto', status: 'running', freq: 42 },
-  { key: '3', name: 'RLT-03 OG2 办公/会议', supply: 5500, exhaust: 5200, supplyTemp: 21.8, co2: 580, filter: 38, hrEff: 76, mode: 'auto', status: 'running', freq: 35 },
-  { key: '4', name: 'RLT-04 OG3 办公/会议', supply: 4800, exhaust: 4500, supplyTemp: 22.0, co2: 540, filter: 71, hrEff: 79, mode: 'auto', status: 'running', freq: 32 },
-  { key: '5', name: 'RLT-05 UG 地下车库', supply: 2200, exhaust: 2800, supplyTemp: 15.0, co2: 0, filter: 55, hrEff: 0, mode: 'auto', status: 'running', freq: 25 },
-  { key: '6', name: 'RLT-06 UG 机房', supply: 1800, exhaust: 1800, supplyTemp: 18.5, co2: 390, filter: 92, hrEff: 0, mode: 'manual', status: 'running', freq: 45 },
-  { key: '7', name: 'RLT-07 食堂/厨房', supply: 3200, exhaust: 4500, supplyTemp: 20.5, co2: 0, filter: 45, hrEff: 72, mode: 'auto', status: 'running', freq: 40 },
-  { key: '8', name: 'RLT-08 设备中心', supply: 0, exhaust: 0, supplyTemp: 0, co2: 0, filter: 12, hrEff: 0, mode: 'auto', status: 'stopped', freq: 0 },
-]
-
 export default function VentilationPage() {
   const { t } = useI18n()
   const [trend] = useState(genAir)
   const [filterModal, setFilterModal] = useState(false)
   const [selectedUnit, setSelectedUnit] = useState('')
+
+  const ahus = useMemo(() => [
+    { key: '1', name: `RLT-01 ${t.vent.ahuLobby}`, supply: 4200, exhaust: 3900, supplyTemp: 21.5, co2: 485, filter: 82, hrEff: 78, mode: 'auto', status: 'running', freq: 38 },
+    { key: '2', name: `RLT-02 ${t.vent.ahuOpenOffice}`, supply: 6800, exhaust: 6400, supplyTemp: 21.2, co2: 620, filter: 65, hrEff: 81, mode: 'auto', status: 'running', freq: 42 },
+    { key: '3', name: `RLT-03 ${t.vent.ahuOfficeMtg1}`, supply: 5500, exhaust: 5200, supplyTemp: 21.8, co2: 580, filter: 38, hrEff: 76, mode: 'auto', status: 'running', freq: 35 },
+    { key: '4', name: `RLT-04 ${t.vent.ahuOfficeMtg2}`, supply: 4800, exhaust: 4500, supplyTemp: 22.0, co2: 540, filter: 71, hrEff: 79, mode: 'auto', status: 'running', freq: 32 },
+    { key: '5', name: `RLT-05 ${t.vent.ahuGarage}`, supply: 2200, exhaust: 2800, supplyTemp: 15.0, co2: 0, filter: 55, hrEff: 0, mode: 'auto', status: 'running', freq: 25 },
+    { key: '6', name: `RLT-06 ${t.vent.ahuServerRoom}`, supply: 1800, exhaust: 1800, supplyTemp: 18.5, co2: 390, filter: 92, hrEff: 0, mode: 'manual', status: 'running', freq: 45 },
+    { key: '7', name: `RLT-07 ${t.vent.ahuCanteen}`, supply: 3200, exhaust: 4500, supplyTemp: 20.5, co2: 0, filter: 45, hrEff: 72, mode: 'auto', status: 'running', freq: 40 },
+    { key: '8', name: `RLT-08 ${t.vent.ahuEquipCenter}`, supply: 0, exhaust: 0, supplyTemp: 0, co2: 0, filter: 12, hrEff: 0, mode: 'auto', status: 'stopped', freq: 0 },
+  ], [t])
 
   const totalSupply = ahus.reduce((a, b) => a + b.supply, 0)
   const totalExhaust = ahus.reduce((a, b) => a + b.exhaust, 0)
@@ -77,7 +77,7 @@ export default function VentilationPage() {
         <Col xs={24} sm={12} lg={6}><Card hoverable><Statistic title={t.vent.filterWarning} value={filterWarnings} valueStyle={{ color: filterWarnings > 0 ? '#fa8c16' : '#52c41a' }} prefix={<AlertOutlined />} /><Text type="secondary">{filterWarnings > 0 ? t.vent.needReplace : t.common.allNormal}</Text></Card></Col>
       </Row>
 
-      <Card title={t.vent.trendTitle} extra={<Text type="secondary">{t.vent.airChanges}: ~3.2 次/h</Text>}>
+      <Card title={t.vent.trendTitle} extra={<Text type="secondary">{t.vent.airChanges}: ~3.2 {t.vent.timesPerH}</Text>}>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={trend}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -100,8 +100,8 @@ export default function VentilationPage() {
       <Card title={t.vent.ahuDetails} size="small">
         <Descriptions bordered size="small" column={{ xs: 1, sm: 2, lg: 4 }}>
           <Descriptions.Item label={t.vent.mfr}>Kampmann / Wolf GmbH</Descriptions.Item>
-          <Descriptions.Item label={t.vent.filterGrade}>F7 (送风) / G4 (排风)</Descriptions.Item>
-          <Descriptions.Item label={t.vent.heatRecoveryType}>交叉流板式换热器</Descriptions.Item>
+          <Descriptions.Item label={t.vent.filterGrade}>F7 / G4</Descriptions.Item>
+          <Descriptions.Item label={t.vent.heatRecoveryType}>{t.vent.crossFlowHE}</Descriptions.Item>
           <Descriptions.Item label={t.vent.heatRecoveryEff}>77.2%</Descriptions.Item>
           <Descriptions.Item label={t.vent.vfdPower}>8× Siemens SINAMICS G120</Descriptions.Item>
           <Descriptions.Item label={t.vent.nextFilterMaint}>2026-03-20</Descriptions.Item>

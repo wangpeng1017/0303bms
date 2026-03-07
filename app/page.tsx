@@ -30,21 +30,21 @@ export default function DashboardPage() {
   const [energy] = useState(genEnergy)
   const [exportModal, setExportModal] = useState(false)
 
-  const systemModules = [
+  const systemModules = useMemo(() => [
     { name: t.dash.ddcStation, count: 12, online: 12 },
     { name: t.dash.rltUnit, count: 6, online: 6 },
     { name: t.dash.heatingCircuit, count: 8, online: 8 },
     { name: t.dash.chillerUnit, count: 3, online: 2 },
     { name: t.dash.daliGateway, count: 4, online: 3 },
     { name: t.dash.energyMeter, count: 14, online: 14 },
-  ]
+  ], [t])
 
-  const energyDistribution = [
+  const energyDistribution = useMemo(() => [
     { name: t.dash.hvac, value: 48, color: '#1677ff' },
     { name: t.dash.lightingLabel, value: 22, color: '#faad14' },
     { name: t.dash.itServer, value: 18, color: '#52c41a' },
     { name: t.dash.others, value: 12, color: '#d9d9d9' },
-  ]
+  ], [t])
 
   const weekly = useMemo(() => [
     { day: t.dash.mon, thisWeek: Math.round(920 + Math.random() * 180), lastWeek: Math.round(960 + Math.random() * 200) },
@@ -56,25 +56,25 @@ export default function DashboardPage() {
     { day: t.dash.sun, thisWeek: Math.round(280 + Math.random() * 120), lastWeek: Math.round(310 + Math.random() * 100) },
   ], [t])
 
-  const alarms = [
-    { key: '1', time: '14:23:05', module: 'RLT-OG2', content: '送风机变频器故障 (F31)', level: 'A', device: 'AHU-03' },
-    { key: '2', time: '13:45:12', module: '制冷', content: '冷水供水温度 >14°C (阈值: 12°C)', level: 'B', device: 'KM-02' },
-    { key: '3', time: '12:10:30', module: 'OG3 房间', content: '会议室 3.12 CO₂ >1000ppm', level: 'C', device: 'DDC-OG3-02' },
-    { key: '4', time: '11:30:00', module: '供暖', content: '1号锅炉燃烧器故障 - 火焰监控异常', level: 'B', device: 'Kessel-01' },
-    { key: '5', time: '10:52:18', module: 'DALI', content: 'OG1 网关总线通讯故障', level: 'C', device: 'DALI-GW-02' },
-    { key: '6', time: '09:15:44', module: '制冷', content: '冷却塔风机过温 (热继电器)', level: 'B', device: 'KT-01' },
-  ]
+  const alarms = useMemo(() => [
+    { key: '1', time: '14:23:05', module: 'RLT-OG2', content: t.dash.almDash1, level: 'A', device: 'AHU-03' },
+    { key: '2', time: '13:45:12', module: t.dash.modCooling, content: t.dash.almDash2, level: 'B', device: 'KM-02' },
+    { key: '3', time: '12:10:30', module: t.dash.modOg3Room, content: t.dash.almDash3, level: 'C', device: 'DDC-OG3-02' },
+    { key: '4', time: '11:30:00', module: t.dash.modHeating, content: t.dash.almDash4, level: 'B', device: 'Kessel-01' },
+    { key: '5', time: '10:52:18', module: 'DALI', content: t.dash.almDash5, level: 'C', device: 'DALI-GW-02' },
+    { key: '6', time: '09:15:44', module: t.dash.modCooling, content: t.dash.almDash6, level: 'B', device: 'KT-01' },
+  ], [t])
 
-  const rooms = [
-    { key: '1', name: 'EG - 前台接待', temp: 22.3, humidity: 44, co2: 485, persons: 3, setpoint: 22 },
-    { key: '2', name: 'OG1 - 开放办公区', temp: 22.8, humidity: 47, co2: 620, persons: 28, setpoint: 22 },
-    { key: '3', name: 'OG1 - 会议室 1.04', temp: 23.4, humidity: 51, co2: 780, persons: 12, setpoint: 23 },
-    { key: '4', name: 'OG2 - 办公室 2.01', temp: 22.1, humidity: 43, co2: 520, persons: 4, setpoint: 22 },
-    { key: '5', name: 'OG2 - 会议室 2.10', temp: 24.2, humidity: 56, co2: 940, persons: 18, setpoint: 23 },
-    { key: '6', name: 'OG3 - 办公室 3.05', temp: 21.9, humidity: 42, co2: 410, persons: 2, setpoint: 22 },
-    { key: '7', name: 'OG3 - 会议室 3.12', temp: 25.1, humidity: 58, co2: 1050, persons: 22, setpoint: 23 },
-    { key: '8', name: 'UG - 机房', temp: 21.0, humidity: 38, co2: 390, persons: 0, setpoint: 21 },
-  ]
+  const rooms = useMemo(() => [
+    { key: '1', name: t.dash.roomEgLobby, temp: 22.3, humidity: 44, co2: 485, persons: 3, setpoint: 22 },
+    { key: '2', name: t.dash.roomOg1Open, temp: 22.8, humidity: 47, co2: 620, persons: 28, setpoint: 22 },
+    { key: '3', name: t.dash.roomOg1Mtg, temp: 23.4, humidity: 51, co2: 780, persons: 12, setpoint: 23 },
+    { key: '4', name: t.dash.roomOg2Office, temp: 22.1, humidity: 43, co2: 520, persons: 4, setpoint: 22 },
+    { key: '5', name: t.dash.roomOg2Mtg, temp: 24.2, humidity: 56, co2: 940, persons: 18, setpoint: 23 },
+    { key: '6', name: t.dash.roomOg3Office, temp: 21.9, humidity: 42, co2: 410, persons: 2, setpoint: 22 },
+    { key: '7', name: t.dash.roomOg3Mtg, temp: 25.1, humidity: 58, co2: 1050, persons: 22, setpoint: 23 },
+    { key: '8', name: t.dash.roomUgServer, temp: 21.0, humidity: 38, co2: 390, persons: 0, setpoint: 21 },
+  ], [t])
 
   const totalOnline = useMemo(() => systemModules.reduce((a, b) => a + b.online, 0), [systemModules])
   const totalDevices = useMemo(() => systemModules.reduce((a, b) => a + b.count, 0), [systemModules])
