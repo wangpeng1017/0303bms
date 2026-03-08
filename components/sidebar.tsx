@@ -58,41 +58,43 @@ export function Sidebar() {
   return (
     <Sider
       width={240}
-      theme="light"
+      theme="dark"
       style={{
         height: '100vh',
         position: 'fixed',
         left: 0,
         top: 0,
         zIndex: 50,
-        borderRight: '1px solid #f0f0f0',
+        borderRight: '1px solid #334155',
+        background: '#1e293b',
       }}
     >
-      <div style={{ padding: '16px 20px', borderBottom: '1px solid #f0f0f0' }}>
+      <div style={{ padding: '16px 20px', borderBottom: '1px solid #334155', background: '#1e293b' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
-            width: 36, height: 36, background: '#1677ff', borderRadius: 8,
+            width: 36, height: 36, background: '#52c41a', borderRadius: 8,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <ThunderboltOutlined style={{ color: '#fff', fontSize: 18 }} />
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 16, color: '#1f1f1f' }}>MSR BMS</div>
-            <div style={{ fontSize: 11, color: '#8c8c8c' }}>Building Management</div>
+            <div style={{ fontWeight: 700, fontSize: 16, color: '#f8fafc' }}>MSR BMS</div>
+            <div style={{ fontSize: 11, color: '#94a3b8' }}>Building Management</div>
           </div>
         </div>
       </div>
       <Menu
+        theme="dark"
         mode="inline"
         selectedKeys={[pathname]}
         items={menuItems}
         onClick={({ key }) => router.push(key)}
-        style={{ borderRight: 'none', paddingTop: 8 }}
+        style={{ borderRight: 'none', paddingTop: 8, background: '#1e293b' }}
       />
       <div style={{
         position: 'absolute', bottom: 0, width: '100%',
         padding: '12px 0', textAlign: 'center',
-        borderTop: '1px solid #f0f0f0', fontSize: 11, color: '#8c8c8c',
+        borderTop: '1px solid #334155', fontSize: 11, color: '#94a3b8', background: '#1e293b'
       }}>
         v1.0.0
       </div>

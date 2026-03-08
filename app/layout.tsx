@@ -17,21 +17,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh">
-      <body className="antialiased" style={{ background: '#f5f5f5' }}>
+      <body className="antialiased" style={{ background: '#0f172a', color: '#f8fafc' }}>
         <I18nProvider>
           <AntdProvider>
             <div style={{ display: 'flex', minHeight: '100vh' }}>
               <Sidebar />
-              <div style={{ marginLeft: 240, flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+              <div style={{ marginLeft: 240, flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#0f172a' }}>
                 <header style={{
                   position: 'sticky', top: 0, zIndex: 40,
-                  background: '#fff', borderBottom: '1px solid #f0f0f0',
+                  background: '#1e293b', borderBottom: '1px solid #334155',
                   padding: '12px 24px',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
-                      <h1 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#1f1f1f' }}>MSR BMS</h1>
-                      <p style={{ margin: 0, fontSize: 12, color: '#8c8c8c' }}>Building Automation Management System</p>
+                      <h1 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#f8fafc' }}>MSR BMS</h1>
+                      <p style={{ margin: 0, fontSize: 12, color: '#94a3b8' }}>Building Automation Management System</p>
                     </div>
                     <LanguageSelector />
                   </div>

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f1f5f9;
-  --foreground: #1e293b;
+  --background: #0f172a;
+  --foreground: #f8fafc;
 }
 
 @theme inline {
@@ -17,8 +17,8 @@
 }
 
 body {
-  background: #f1f5f9;
-  color: #1e293b;
+  background: #0f172a;
+  color: #f8fafc;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
@@ -31,24 +31,24 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #e2e8f0;
+  background: #1e293b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #94a3b8;
+  background: #334155;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+  background: #475569;
 }
 
 /* Card style */
 .card {
-  background: #ffffff;
+  background: #1e293b;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #334155;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 /* Card hover effects */
@@ -58,8 +58,8 @@ body {
 
 .card-hover:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  border-color: #475569;
 }
 
 /* Status indicators */
