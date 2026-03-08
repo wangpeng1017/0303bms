@@ -146,7 +146,7 @@ export default function DashboardPage() {
             <div style={{ color: '#f8fafc', fontWeight: 600, fontSize: 16, marginBottom: 16 }}>{t.dash.energyDist}</div>
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
-                <Pie data={energyDistribution} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={4} dataKey="value" stroke="none" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                <Pie data={energyDistribution} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={4} dataKey="value" stroke="none" label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}>
                   {energyDistribution.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
