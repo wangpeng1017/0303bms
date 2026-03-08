@@ -92,7 +92,7 @@ export default function DashboardPage() {
           {/* 4 Gauges (Restored back to global data) */}
           <Row gutter={[16, 16]}>
             <Col xs={12} md={6}>
-              <CircularGauge title={t.systemStatus} value={totalOnline} unit={`/ ${totalDevices}`} color="#52c41a" max={totalDevices} />
+              <CircularGauge title={t.systemStatus} value={`${totalOnline} / ${totalDevices}`} unit="" color="#52c41a" max={totalDevices} />
             </Col>
             <Col xs={12} md={6}>
               <CircularGauge title={t.dash.currentPower} value={148.5} unit="kW" color="#0ea5e9" max={200} />
@@ -106,8 +106,7 @@ export default function DashboardPage() {
           </Row>
 
           {/* Alarms Table */}
-          <div style={{ background: '#1e293b', borderRadius: 8, border: '1px solid #334155', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ padding: '16px 20px', borderBottom: '1px solid #334155', color: '#f8fafc', fontWeight: 600 }}>{t.dash.latestAlarms}</div>
+          <div style={{ background: '#172236', borderRadius: 8, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
             <Table
               columns={alarmCols}
               dataSource={alarms}
@@ -121,7 +120,7 @@ export default function DashboardPage() {
         {/* Right Column */}
         <Col xs={24} xl={8} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* Energy Trend Chart */}
-          <div style={{ background: '#1e293b', borderRadius: 8, padding: 20, border: '1px solid #334155', flex: 1, display: 'flex', flexDirection: 'column', minHeight: 300 }}>
+          <div style={{ background: '#172236', borderRadius: 8, padding: 20, flex: 1, display: 'flex', flexDirection: 'column', minHeight: 300 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
               <div style={{ color: '#f8fafc', fontWeight: 600, fontSize: 16 }}>{t.dash.energyTrend24h}</div>
               <div style={{ display: 'flex', gap: 16, fontSize: 12, color: '#94a3b8' }}>
@@ -131,18 +130,18 @@ export default function DashboardPage() {
             </div>
             <ResponsiveContainer width="100%" height={240}>
               <AreaChart data={energy}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={true} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#2a3854" vertical={true} />
                 <XAxis dataKey="hour" stroke="#94a3b8" fontSize={11} tickMargin={10} />
                 <YAxis stroke="#94a3b8" fontSize={11} width={30} />
-                <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #334155', color: '#f8fafc' }} />
-                <Area type="monotone" dataKey="elec" name={t.dash.elecKw} stroke="#0ea5e9" fill="#0ea5e9" fillOpacity={0.2} strokeWidth={2} />
-                <Area type="monotone" dataKey="heat" name={t.dash.heatKw} stroke="#ef4444" fill="#ef4444" fillOpacity={0.2} strokeWidth={2} />
+                <Tooltip contentStyle={{ background: '#0f172a', border: 'none', color: '#f8fafc' }} />
+                <Area type="monotone" dataKey="elec" name={t.dash.elecKw} stroke="#0ea5e9" fill="#0ea5e9" fillOpacity={0.1} strokeWidth={2} />
+                <Area type="monotone" dataKey="heat" name={t.dash.heatKw} stroke="#ef4444" fill="#ef4444" fillOpacity={0.1} strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
 
           {/* Energy Distribution Chart */}
-          <div style={{ background: '#1e293b', borderRadius: 8, padding: 20, border: '1px solid #334155', flex: 1, display: 'flex', flexDirection: 'column', minHeight: 300 }}>
+          <div style={{ background: '#172236', borderRadius: 8, padding: 20, flex: 1, display: 'flex', flexDirection: 'column', minHeight: 300 }}>
             <div style={{ color: '#f8fafc', fontWeight: 600, fontSize: 16, marginBottom: 16 }}>{t.dash.energyDist}</div>
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
@@ -151,18 +150,18 @@ export default function DashboardPage() {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #334155', color: '#f8fafc', borderRadius: 8 }} itemStyle={{ color: '#f8fafc' }} />
+                <Tooltip contentStyle={{ background: '#0f172a', border: 'none', color: '#f8fafc', borderRadius: 8 }} itemStyle={{ color: '#f8fafc' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
 
           {/* System Overview Tiny Stats */}
-          <div style={{ background: '#1e293b', borderRadius: 8, padding: 20, border: '1px solid #334155' }}>
+          <div style={{ background: '#172236', borderRadius: 8, padding: 20 }}>
             <div style={{ color: '#f8fafc', fontWeight: 600, fontSize: 16, marginBottom: 16 }}>{t.dash.systemOverview}</div>
             <Row gutter={[16, 16]}>
               {systemModules.map((mod, i) => (
                 <Col xs={12} sm={8} key={i}>
-                  <div style={{ background: '#0f172a', padding: 12, borderRadius: 6, border: '1px solid #334155' }}>
+                  <div style={{ background: '#0f172a', padding: 12, borderRadius: 6 }}>
                     <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 4 }}>{mod.name}</div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
                       <span style={{ color: mod.online === mod.count ? '#52c41a' : '#f59e0b', fontSize: 18, fontWeight: 600 }}>{mod.online}</span>
@@ -185,16 +184,19 @@ export default function DashboardPage() {
           color: #f8fafc;
         }
         .ant-table-wrapper .ant-table-thead > tr > th {
-          background: #0f172a !important;
+          background: #172236 !important;
           color: #94a3b8 !important;
-          border-bottom: 1px solid #334155 !important;
+          border-bottom: 1px solid #2a3854 !important;
         }
         .ant-table-wrapper .ant-table-tbody > tr > td {
-          border-bottom: 1px solid #334155 !important;
-          color: #f8fafc !important;
+          border-bottom: 1px solid #2a3854 !important;
+          color: #e2e8f0 !important;
         }
         .ant-table-wrapper .ant-table-tbody > tr:hover > td {
-          background: #334155 !important;
+          background: rgba(255, 255, 255, 0.04) !important;
+        }
+        .ant-table-wrapper .ant-table-tbody > tr.dark-table-row > td {
+          padding: 12px 16px !important;
         }
       `}} />
     </div>
